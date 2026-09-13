@@ -26,8 +26,10 @@
         @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0px); } }
         .animate-float { animation: float 5s ease-in-out infinite; }
     </style>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
+
 <body class="text-brand-900 antialiased selection:bg-pink-200">
 
     <!-- Minimal Cart Navbar -->
@@ -35,12 +37,15 @@
         <a href="index.html" class="text-sm font-medium hover:text-pink-500 transition-colors">
             ← Continue Shopping.
         </a>
+
         <span class="text-xl font-bold tracking-wide">Your Cart</span>
+
         <span class="font-semibold text-pink-500" id="nav-total">₹0</span>
     </nav>
 
     <!-- Cart Layout -->
     <main class="max-w-4xl mx-auto px-4 py-16">
+
         <div class="bg-white/80 backdrop-blur-md p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] shadow-xl border border-white animate-float">
             
             <!-- Dynamic Cart Items Container -->
@@ -50,267 +55,757 @@
             
             <!-- Checkout Bottom Bar -->
             <div class="border-t border-gray-200/50 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
+
                 <div>
                     <p class="text-sm text-gray-500 mb-1">Subtotal (Taxes included)</p>
-                    <div class="text-3xl font-semibold">Total: <span id="bottom-total" class="text-pink-500">₹0</span></div>
+
+                    <div class="text-3xl font-semibold">
+                        Total:
+                        <span id="bottom-total" class="text-pink-500">₹0</span>
+                    </div>
                 </div>
+
                 <button onclick="processCheckout()" class="w-full md:w-auto px-12 py-4 bg-brand-900 text-white rounded-full font-medium text-lg hover:bg-pink-500 transition-colors shadow-lg">
                     Checkout Securely
                 </button>
+
             </div>
 
         </div>
+
     </main>
     
+    <!-- Checkout Modal -->
     <div id="checkout-modal" class="fixed inset-0 z-[70] hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div class="bg-white w-full max-w-lg rounded-3xl p-6 md:p-8 shadow-2xl">
-        <div class="flex justify-between items-center mb-5"><h2 class="text-2xl font-semibold">Delivery Details</h2><button onclick="closeCheckout()" class="text-gray-400 text-xl">✕</button></div>
-        <form id="checkout-form" class="space-y-4">
-          <input name="name" required placeholder="Full name" class="w-full px-4 py-3 border rounded-xl">
-          <input name="phone" required placeholder="Phone number" class="w-full px-4 py-3 border rounded-xl">
-          <textarea name="address" required rows="3" placeholder="Full delivery address" class="w-full px-4 py-3 border rounded-xl"></textarea>
-          <div class="grid grid-cols-2 gap-3"><input name="city" required placeholder="City" class="w-full px-4 py-3 border rounded-xl"><input name="pincode" required placeholder="PIN code" class="w-full px-4 py-3 border rounded-xl"></div>
-          <button class="w-full bg-brand-900 text-white py-3 rounded-xl">Place Order</button>
-        </form>
-      </div>
+
+        <div class="bg-white w-full max-w-lg rounded-3xl p-6 md:p-8 shadow-2xl">
+
+            <div class="flex justify-between items-center mb-5">
+
+                <h2 class="text-2xl font-semibold">Delivery Details</h2>
+
+                <button onclick="closeCheckout()" class="text-gray-400 text-xl">
+                    ✕
+                </button>
+
+            </div>
+
+            <form id="checkout-form" class="space-y-4">
+
+                <input 
+                    name="name" 
+                    required 
+                    placeholder="Full name" 
+                    class="w-full px-4 py-3 border rounded-xl"
+                >
+
+                <input 
+                    name="phone" 
+                    required 
+                    placeholder="Phone number" 
+                    class="w-full px-4 py-3 border rounded-xl"
+                >
+
+                <textarea 
+                    name="address" 
+                    required 
+                    rows="3" 
+                    placeholder="Full delivery address" 
+                    class="w-full px-4 py-3 border rounded-xl"
+                ></textarea>
+
+                <div class="grid grid-cols-2 gap-3">
+
+                    <input 
+                        name="city" 
+                        required 
+                        placeholder="City" 
+                        class="w-full px-4 py-3 border rounded-xl"
+                    >
+
+                    <input 
+                        name="pincode" 
+                        required 
+                        placeholder="PIN code" 
+                        class="w-full px-4 py-3 border rounded-xl"
+                    >
+
+                </div>
+
+                <button 
+                    type="submit"
+                    class="w-full bg-brand-900 text-white py-3 rounded-xl"
+                >
+                    Place Order
+                </button>
+
+            </form>
+
+        </div>
+
     </div>
 
-    <script>
-const supabaseUrl = 'https://cmxhngjykgoqblobyefh.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjbXhobmdqa2dvcWJsb2J5ZWZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyNDAwNTMsImV4cCI6MjEwNDgxNjA1M30.puMa5Ty4NTWxzTM9gnSHzqAVMzgMhgAfTPu-8sIVgPM';
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+<script>
+
+/* =========================
+   SUPABASE CONNECTION
+   ========================= */
+
+const supabaseUrl = 'https://cmxhngjykgoqblobyefh4.supabase.co';
+
+/*
+ IMPORTANT:
+ Put your CURRENT Supabase publishable key here.
+
+ It should start with:
+
+ sb_publishable_
+
+Do NOT put the old eyJhbGci... key here.
+*/
+
+const supabaseKey = 'sb_publishable_05GBhGfDMBLN009-tv5soQ_XkQ_7jPc';
+
+
+/*
+ IMPORTANT:
+ We use supabaseClient instead of supabase
+ to avoid the duplicate global declaration error.
+*/
+
+const supabaseClient = window.supabase.createClient(
+    supabaseUrl,
+    supabaseKey
+);
+
 
 let cart = [];
 let currentUser = null;
 let checkoutBusy = false;
 
+
+/* =========================
+   ESCAPE HTML
+   ========================= */
+
 function escapeHtml(value = '') {
+
     return String(value).replace(/[&<>'"]/g, ch => ({
-        '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;'
+        '&':'&amp;',
+        '<':'&lt;',
+        '>':'&gt;',
+        "'":'&#39;',
+        '"':'&quot;'
     }[ch]));
+
 }
+
+
+/* =========================
+   GET LOCAL CART
+   ========================= */
 
 function getLocalCart() {
+
     try {
-        const value = JSON.parse(localStorage.getItem('pepekun_cart') || '[]');
+
+        const value = JSON.parse(
+            localStorage.getItem('pepekun_cart') || '[]'
+        );
+
         return Array.isArray(value) ? value : [];
+
     } catch (_) {
+
         return [];
+
     }
+
 }
+
+
+/* =========================
+   SAVE LOCAL CART
+   ========================= */
 
 function saveLocalCart() {
-    localStorage.setItem('pepekun_cart', JSON.stringify(cart));
+
+    localStorage.setItem(
+        'pepekun_cart',
+        JSON.stringify(cart)
+    );
+
 }
+
+
+/* =========================
+   MERGE CARTS
+   ========================= */
 
 function mergeCarts(saved, local) {
-    const merged = (saved || []).map(item => ({...item, quantity: Number(item.quantity) || 1}));
+
+    const merged = (saved || []).map(item => ({
+        ...item,
+        quantity: Number(item.quantity) || 1
+    }));
+
     for (const item of (local || [])) {
-        const existing = merged.find(x => String(x.id) === String(item.id));
-        if (existing) existing.quantity += Number(item.quantity) || 1;
-        else merged.push({...item, quantity: Number(item.quantity) || 1});
+
+        const existing = merged.find(
+            x => String(x.id) === String(item.id)
+        );
+
+        if (existing) {
+
+            existing.quantity += Number(item.quantity) || 1;
+
+        } else {
+
+            merged.push({
+                ...item,
+                quantity: Number(item.quantity) || 1
+            });
+
+        }
+
     }
+
     return merged;
+
 }
+
+
+/* =========================
+   UPDATE TOTALS
+   ========================= */
 
 function updateTotals(total) {
-    document.getElementById('nav-total').textContent = `₹${total}`;
-    document.getElementById('bottom-total').textContent = `₹${total}`;
+
+    document.getElementById('nav-total').textContent =
+        `₹${total}`;
+
+    document.getElementById('bottom-total').textContent =
+        `₹${total}`;
+
 }
+
+
+/* =========================
+   CALCULATE TOTAL
+   ========================= */
 
 function calculateTotal() {
-    return cart.reduce((sum, item) =>
-        sum + Number(item.price || 0) * (Number(item.quantity) || 1), 0);
+
+    return cart.reduce(
+        (sum, item) =>
+            sum +
+            Number(item.price || 0) *
+            (Number(item.quantity) || 1),
+        0
+    );
+
 }
 
+
+/* =========================
+   RENDER CART
+   ========================= */
+
 function renderCart() {
-    const container = document.getElementById('cart-container');
+
+    const container =
+        document.getElementById('cart-container');
+
 
     if (!cart.length) {
+
         container.innerHTML = `
             <div class="text-center py-16">
-                <div class="text-6xl mb-4">☁️</div>
-                <h3 class="text-xl font-medium mb-2">Your cart is empty</h3>
-                <p class="text-gray-500">Time to find a soft companion!</p>
+
+                <div class="text-6xl mb-4">
+                    ☁️
+                </div>
+
+                <h3 class="text-xl font-medium mb-2">
+                    Your cart is empty
+                </h3>
+
+                <p class="text-gray-500">
+                    Time to find a soft companion!
+                </p>
+
             </div>`;
+
         updateTotals(0);
+
         return;
     }
 
+
     container.innerHTML = cart.map((item, index) => {
-        const quantity = Number(item.quantity) || 1;
-        const lineTotal = Number(item.price || 0) * quantity;
+
+        const quantity =
+            Number(item.quantity) || 1;
+
+        const lineTotal =
+            Number(item.price || 0) * quantity;
+
 
         return `
         <div class="flex flex-col sm:flex-row sm:items-center gap-4 bg-white/90 p-4 rounded-2xl shadow-sm border">
-            <img src="${escapeHtml(item.image || '')}"
-                 class="w-20 h-20 object-cover rounded-xl flex-shrink-0"
-                 alt="${escapeHtml(item.name || 'PEPE KUN plushie')}">
+
+            <img 
+                src="${escapeHtml(item.image_url || item.image || '')}"
+                class="w-20 h-20 object-cover rounded-xl flex-shrink-0"
+                alt="${escapeHtml(item.name || 'PEPE KUN plushie')}"
+            >
+
             <div class="flex-1 min-w-0">
-                <h3 class="font-medium truncate">${escapeHtml(item.name || 'PEPE KUN Plushie')}</h3>
-                <p class="text-gray-500 text-sm">₹${Number(item.price || 0)}</p>
+
+                <h3 class="font-medium truncate">
+                    ${escapeHtml(item.name || 'PEPE KUN Plushie')}
+                </h3>
+
+                <p class="text-gray-500 text-sm">
+                    ₹${Number(item.price || 0)}
+                </p>
+
                 <div class="flex items-center gap-2 mt-2">
-                    <button onclick="changeQty(${index}, -1)" aria-label="Decrease quantity"
-                            class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200">−</button>
-                    <span class="min-w-6 text-center">${quantity}</span>
-                    <button onclick="changeQty(${index}, 1)" aria-label="Increase quantity"
-                            class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200">+</button>
+
+                    <button 
+                        onclick="changeQty(${index}, -1)" 
+                        aria-label="Decrease quantity"
+                        class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200"
+                    >
+                        −
+                    </button>
+
+                    <span class="min-w-6 text-center">
+                        ${quantity}
+                    </span>
+
+                    <button 
+                        onclick="changeQty(${index}, 1)" 
+                        aria-label="Increase quantity"
+                        class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200"
+                    >
+                        +
+                    </button>
+
                 </div>
+
             </div>
+
             <div class="flex items-center justify-between sm:block sm:text-right gap-4">
-                <div class="font-semibold">₹${lineTotal}</div>
-                <button onclick="removeItem(${index})" class="text-sm text-red-500 hover:text-red-700 mt-1">
+
+                <div class="font-semibold">
+                    ₹${lineTotal}
+                </div>
+
+                <button 
+                    onclick="removeItem(${index})" 
+                    class="text-sm text-red-500 hover:text-red-700 mt-1"
+                >
                     Remove
                 </button>
+
             </div>
+
         </div>`;
+
     }).join('');
 
+
     updateTotals(calculateTotal());
+
 }
+
+
+/* =========================
+   SAVE CART
+   ========================= */
 
 async function saveCart() {
+
     saveLocalCart();
 
+
     if (!currentUser) {
+
         renderCart();
+
         return true;
+
     }
 
-    const { error } = await supabase.from('carts').upsert(
-        {
-            user_id: currentUser.id,
-            items: cart,
-            updated_at: new Date().toISOString()
-        },
-        { onConflict: 'user_id' }
-    );
+
+    const { error } =
+        await supabaseClient
+            .from('carts')
+            .upsert(
+                {
+                    user_id: currentUser.id,
+                    items: cart,
+                    updated_at: new Date().toISOString()
+                },
+                {
+                    onConflict: 'user_id'
+                }
+            );
+
 
     if (error) {
-        console.error('Cart save error:', error);
-        alert('Your cart could not be saved to your account: ' + error.message);
+
+        console.error(
+            'Cart save error:',
+            error
+        );
+
+        alert(
+            'Your cart could not be saved to your account: ' +
+            error.message
+        );
+
         return false;
+
     }
 
+
     renderCart();
+
     return true;
+
 }
+
+
+/* =========================
+   CHANGE QUANTITY
+   ========================= */
 
 async function changeQty(index, difference) {
-    if (!cart[index]) return;
-    cart[index].quantity = (Number(cart[index].quantity) || 1) + difference;
-    if (cart[index].quantity <= 0) cart.splice(index, 1);
+
+    if (!cart[index]) {
+        return;
+    }
+
+
+    cart[index].quantity =
+        (Number(cart[index].quantity) || 1) +
+        difference;
+
+
+    if (cart[index].quantity <= 0) {
+
+        cart.splice(index, 1);
+
+    }
+
+
     await saveCart();
+
 }
+
+
+/* =========================
+   REMOVE ITEM
+   ========================= */
 
 async function removeItem(index) {
-    if (!cart[index]) return;
+
+    if (!cart[index]) {
+        return;
+    }
+
+
     cart.splice(index, 1);
+
     await saveCart();
+
 }
+
+
+/* =========================
+   CLOSE CHECKOUT
+   ========================= */
 
 function closeCheckout() {
-    const modal = document.getElementById('checkout-modal');
+
+    const modal =
+        document.getElementById('checkout-modal');
+
+
     modal.classList.add('hidden');
+
     modal.classList.remove('flex');
+
 }
+
+
+/* =========================
+   OPEN CHECKOUT
+   ========================= */
 
 async function processCheckout() {
-    if (checkoutBusy) return;
+
+    if (checkoutBusy) {
+        return;
+    }
+
 
     if (!cart.length) {
-        alert('Add a plushie to your cart first!');
+
+        alert(
+            'Add a plushie to your cart first!'
+        );
+
         return;
     }
+
 
     if (!currentUser) {
-        alert('Please log in first. Your cart will be kept for you.');
-        window.location.href = 'login.html';
+
+        alert(
+            'Please log in first. Your cart will be kept for you.'
+        );
+
+        window.location.href =
+            'login.html';
+
         return;
     }
 
-    const modal = document.getElementById('checkout-modal');
+
+    const modal =
+        document.getElementById('checkout-modal');
+
+
     modal.classList.remove('hidden');
+
     modal.classList.add('flex');
+
 }
 
-document.getElementById('checkout-form').addEventListener('submit', async event => {
-    event.preventDefault();
-    if (checkoutBusy || !currentUser || !cart.length) return;
 
-    const form = event.target;
-    const button = form.querySelector('button[type="submit"]');
-    const shipping = {
-        name: form.elements.name.value.trim(),
-        phone: form.elements.phone.value.trim(),
-        address: form.elements.address.value.trim(),
-        city: form.elements.city.value.trim(),
-        pincode: form.elements.pincode.value.trim()
-    };
+/* =========================
+   PLACE ORDER
+   ========================= */
 
-    checkoutBusy = true;
-    if (button) {
-        button.disabled = true;
-        button.textContent = 'Placing Order...';
-    }
+document
+    .getElementById('checkout-form')
+    .addEventListener(
+        'submit',
+        async event => {
 
-    const total = calculateTotal();
+            event.preventDefault();
 
-    const { error } = await supabase.from('orders').insert([{ 
-        user_id: currentUser.id,
-        items: cart,
-        order_total: total,
-        status: 'pending',
-        shipping_details: shipping
-    }]);
 
-    if (error) {
-        checkoutBusy = false;
-        if (button) {
-            button.disabled = false;
-            button.textContent = 'Place Order';
-        }
-        alert('Checkout failed: ' + error.message);
-        return;
-    }
+            if (
+                checkoutBusy ||
+                !currentUser ||
+                !cart.length
+            ) {
+                return;
+            }
 
-    cart = [];
-    await saveCart();
-    closeCheckout();
-    alert('Order placed successfully!');
-    window.location.href = 'index.html';
-});
 
-document.addEventListener('DOMContentLoaded', async () => {
-    cart = getLocalCart();
+            const form = event.target;
 
-    const { data } = await supabase.auth.getUser();
-    currentUser = data?.user || null;
 
-    if (currentUser) {
-        const { data: saved, error } = await supabase
-            .from('carts')
-            .select('items')
-            .eq('user_id', currentUser.id)
-            .maybeSingle();
+            const button =
+                form.querySelector(
+                    'button[type="submit"]'
+                );
 
-        if (!error && Array.isArray(saved?.items)) {
-            cart = mergeCarts(saved.items, cart);
+
+            const shipping = {
+
+                name:
+                    form.elements.name.value.trim(),
+
+                phone:
+                    form.elements.phone.value.trim(),
+
+                address:
+                    form.elements.address.value.trim(),
+
+                city:
+                    form.elements.city.value.trim(),
+
+                pincode:
+                    form.elements.pincode.value.trim()
+
+            };
+
+
+            checkoutBusy = true;
+
+
+            if (button) {
+
+                button.disabled = true;
+
+                button.textContent =
+                    'Placing Order...';
+
+            }
+
+
+            const total =
+                calculateTotal();
+
+
+            const { error } =
+                await supabaseClient
+                    .from('orders')
+                    .insert([{
+
+                        user_id:
+                            currentUser.id,
+
+                        items:
+                            cart,
+
+                        order_total:
+                            total,
+
+                        status:
+                            'pending',
+
+                        shipping_details:
+                            shipping
+
+                    }]);
+
+
+            if (error) {
+
+                checkoutBusy = false;
+
+
+                if (button) {
+
+                    button.disabled = false;
+
+                    button.textContent =
+                        'Place Order';
+
+                }
+
+
+                alert(
+                    'Checkout failed: ' +
+                    error.message
+                );
+
+                return;
+            }
+
+
+            cart = [];
+
+
             await saveCart();
-        } else if (error) {
-            console.warn('Saved cart could not be loaded:', error.message);
+
+
+            closeCheckout();
+
+
+            alert(
+                'Order placed successfully!'
+            );
+
+
+            window.location.href =
+                'index.html';
+
         }
+    );
+
+
+/* =========================
+   LOAD CART + USER
+   ========================= */
+
+document.addEventListener(
+    'DOMContentLoaded',
+    async () => {
+
+        cart = getLocalCart();
+
+
+        const { data } =
+            await supabaseClient.auth.getUser();
+
+
+        currentUser =
+            data?.user || null;
+
+
+        if (currentUser) {
+
+            const { data: saved, error } =
+                await supabaseClient
+                    .from('carts')
+                    .select('items')
+                    .eq(
+                        'user_id',
+                        currentUser.id
+                    )
+                    .maybeSingle();
+
+
+            if (
+                !error &&
+                Array.isArray(saved?.items)
+            ) {
+
+                cart =
+                    mergeCarts(
+                        saved.items,
+                        cart
+                    );
+
+                await saveCart();
+
+            } else if (error) {
+
+                console.warn(
+                    'Saved cart could not be loaded:',
+                    error.message
+                );
+
+            }
+
+        }
+
+
+        saveLocalCart();
+
+        renderCart();
+
     }
+);
 
-    saveLocalCart();
-    renderCart();
-});
 
-// Make functions used by inline HTML buttons explicitly available to the page.
-window.changeQty = changeQty;
-window.removeItem = removeItem;
-window.closeCheckout = closeCheckout;
-window.processCheckout = processCheckout;
+/* =========================
+   MAKE INLINE FUNCTIONS
+   AVAILABLE
+   ========================= */
+
+window.changeQty =
+    changeQty;
+
+window.removeItem =
+    removeItem;
+
+window.closeCheckout =
+    closeCheckout;
+
+window.processCheckout =
+    processCheckout;
+
 </script>
+
 </body>
 </html>
