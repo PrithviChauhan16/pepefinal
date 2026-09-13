@@ -65,7 +65,7 @@
 
     currentUser = user || null;
 
-    // --- NEW: Toggle Auth Buttons ---
+// --- NEW: Toggle Auth Buttons ---
     if (currentUser) {
       document.getElementById('auth-login-btn')?.classList.add('hidden');
       document.getElementById('auth-account-btn')?.classList.remove('hidden');
@@ -73,10 +73,32 @@
       document.getElementById('mobile-account-btn')?.classList.remove('hidden');
     }
     // --------------------------------
-   async function logout() {
+    if (currentUser) {
+      const { data, error } = await supabaseClient
+        .from('carts')
+        .select('items')
+        .eq('user_id', currentUser.id)
+        .maybeSingle();
+
+      if (!error && data?.items) {
+        cart = data.items;
+        localStorage.setItem(
+          'pepekun_cart',
+          JSON.stringify(cart)
+        );
+      }
+    }
+
+    updateCartUI();
+  } // <-- This is the end of loadUserAndCart()
+
+  // Place logout securely on its own right here
+  async function logout() {
     await supabaseClient.auth.signOut();
-    window.location.href = 'login.html'; // Redirect to login after signing out
-}
+    window.location.href = 'login.html'; 
+  }
+
+  async function syncCart() {
 
     if (currentUser) {
       const { data, error } = await supabaseClient
