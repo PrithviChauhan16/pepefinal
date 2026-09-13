@@ -49,11 +49,11 @@
       .from('products')
       .select('*');
 
-    if (error) {
-      console.error('Products load error:', error);
-      alert('Products could not be loaded. Check your Supabase products table/RLS.');
-      return;
-    }
+   if (error) {
+  console.error('PRODUCTS LOAD ERROR:', error);
+  alert('Products error: ' + error.message);
+  return;
+}
 
     products = data || [];
   }
