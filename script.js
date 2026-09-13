@@ -3,9 +3,9 @@
 (function () {
   'use strict';
 
+  // --- 1. FIXED SUPABASE KEY ---
   const SUPABASE_URL = 'https://cmxhngjykgoqblobyefh.supabase.co';
-  const SUPABASE_ANON_KEY =
-    'sb_publishable_05GBhGfDMBLN009-tv5soQ_XkQ_7jPc';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjbXhobmdqa2dvcWJsb2J5ZWZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyNDAwNTMsImV4cCI6MjEwNDgxNjA1M30.puMa5Ty4NTWxzTM9gnSHzqAVMzgMhgAfTPu-8sIVgPM';
 
   if (!window.supabase || typeof window.supabase.createClient !== 'function') {
     console.error('Supabase library did not load.');
@@ -23,7 +23,6 @@
 
   function toggleMobileMenu() {
     const m = document.getElementById('mobile-menu');
-
     if (m) {
       m.classList.toggle('hidden');
       m.classList.toggle('flex');
@@ -44,35 +43,33 @@
   }
 
   async function loadProducts() {
-    // Do NOT order by created_at because products table does not have that column.
     const { data, error } = await supabaseClient
       .from('products')
       .select('*');
 
-   if (error) {
-  console.error('PRODUCTS LOAD ERROR:', error);
-  alert('Products error: ' + error.message);
-  return;
-}
-
+    if (error) {
+      console.error('PRODUCTS LOAD ERROR:', error);
+      alert('Products error: ' + error.message);
+      return;
+    }
     products = data || [];
   }
 
- async function loadUserAndCart() {
+  async function loadUserAndCart() {
     const {
       data: { user }
     } = await supabaseClient.auth.getUser();
 
     currentUser = user || null;
 
-// --- NEW: Toggle Auth Buttons ---
+    // --- Toggle Auth Buttons ---
     if (currentUser) {
       document.getElementById('auth-login-btn')?.classList.add('hidden');
       document.getElementById('auth-account-btn')?.classList.remove('hidden');
       document.getElementById('mobile-login-btn')?.classList.add('hidden');
       document.getElementById('mobile-account-btn')?.classList.remove('hidden');
     }
-    // --------------------------------
+    
     if (currentUser) {
       const { data, error } = await supabaseClient
         .from('carts')
@@ -88,37 +85,15 @@
         );
       }
     }
-
     updateCartUI();
-  } // <-- This is the end of loadUserAndCart()
+  } 
 
-  // Place logout securely on its own right here
   async function logout() {
     await supabaseClient.auth.signOut();
     window.location.href = 'login.html'; 
   }
 
-  async function syncCart() {
-
-    if (currentUser) {
-      const { data, error } = await supabaseClient
-        .from('carts')
-        .select('items')
-        .eq('user_id', currentUser.id)
-        .maybeSingle();
-
-      if (!error && data?.items) {
-        cart = data.items;
-        localStorage.setItem(
-          'pepekun_cart',
-          JSON.stringify(cart)
-        );
-      }
-    }
-
-    updateCartUI();
-  }
-
+  // --- 2. REMOVED DUPLICATE FUNCTION ---
   async function syncCart() {
     localStorage.setItem(
       'pepekun_cart',
@@ -142,7 +117,6 @@
         console.error('Cart save error:', error);
       }
     }
-
     updateCartUI();
   }
 
