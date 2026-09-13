@@ -25,27 +25,34 @@
 </head>
 <body class="text-brand-900 antialiased selection:bg-pink-200">
 
-    <!-- FLOATING PILL NAVBAR -->
+ <!-- FLOATING PILL NAVBAR -->
 <nav class="sticky top-4 z-50 w-[95%] max-w-6xl mx-auto bg-white/40 backdrop-blur-md border border-white/50 px-6 py-4 shadow-lg rounded-full">
     <div class="flex items-center justify-between">
-        <!-- Logo -->
+        <!-- Logo (Left) -->
         <a href="#home" class="flex items-center ml-2">
-            <span class="text-xl font-bold tracking-wide">PEPE KUN</span>
+            <img src="pepe-black1.png" alt="PEPE KUN Logo" class="h-10 w-auto object-contain">
         </a>
-<!-- Account Button points to account.html -->
-    <a href="account.html" class="bg-brand-900 text-white px-6 py-2 rounded-full hover:bg-pink-500 transition-colors shadow-md">
-        Account
-    </a>
-       <!-- Desktop Actions -->
+
+        <!-- Desktop Navigation (Center) -->
+        <div class="hidden md:flex gap-8 text-sm font-medium items-center absolute left-1/2 -translate-x-1/2">
+            <a href="#home" class="hover:text-pink-500 transition-colors">Home</a>
+            <a href="#about" class="hover:text-pink-500 transition-colors">About Us</a>
+            <a href="#contact" class="hover:text-pink-500 transition-colors">Contact</a>
+        </div>
+
+        <!-- Desktop Actions (Right) -->
         <div class="hidden md:flex gap-4 text-sm font-medium items-center mr-2">
             <!-- Cart Button -->
             <button onclick="window.location.href='cart.html'" id="cart-btn" class="hover:text-pink-500 transition-colors flex items-center gap-1">
                 Cart (<span id="cart-count">0</span>)
             </button>
             
-            <!-- Dynamic Auth Buttons -->
+            <!-- Dynamic Auth Buttons (Account hidden by default) -->
             <a href="login.html" id="auth-login-btn" class="bg-brand-900 text-white px-6 py-2 rounded-full hover:bg-pink-500 transition-colors shadow-md">
                 Log In
+            </a>
+            <a href="account.html" id="auth-account-btn" class="hidden bg-pink-500 text-white px-6 py-2 rounded-full hover:bg-brand-900 transition-colors shadow-md">
+                My Account
             </a>
         </div>
 
@@ -56,12 +63,17 @@
     </div>
 
     <!-- Mobile Navigation Dropdown -->
-    <div id="mobile-menu" class="hidden md:hidden flex-col gap-4 pt-4 pb-2 border-t border-gray-100 mt-4 text-center text-sm font-medium">
+    <div id="mobile-menu" class="hidden flex-col gap-4 pt-4 pb-2 border-t border-gray-100 mt-4 text-center text-sm font-medium">
         <a href="#home" onclick="toggleMobileMenu()" class="hover:text-pink-500">Home</a>
         <a href="#about" onclick="toggleMobileMenu()" class="hover:text-pink-500">About Us</a>
         <a href="#contact" onclick="toggleMobileMenu()" class="hover:text-pink-500">Contact</a>
         <button onclick="window.location.href='cart.html'" class="hover:text-pink-500 w-full text-center py-2">Cart (<span id="cart-count-mobile">0</span>)</button>
         
+        <!-- Dynamic Mobile Auth Buttons -->
+        <a href="login.html" id="mobile-login-btn" class="bg-brand-900 text-white px-5 py-2 rounded-full mx-auto inline-block">Log In</a>
+        <a href="account.html" id="mobile-account-btn" class="hidden bg-pink-500 text-white px-5 py-2 rounded-full mx-auto inline-block">My Account</a>
+    </div>
+</nav>      
         <!-- Dynamic Mobile Auth Buttons -->
         <a href="login.html" id="mobile-login-btn" class="bg-brand-900 text-white px-5 py-2 rounded-full mx-auto inline-block">Log In</a>
         <a href="account.html" id="mobile-account-btn" class="hidden bg-pink-500 text-white px-5 py-2 rounded-full mx-auto inline-block">My Account</a>
