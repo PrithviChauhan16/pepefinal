@@ -1,0 +1,44 @@
+/* Global Background */
+body { 
+    background-color: #ffd8ff;
+    background-image: url('pepekun-original-bg.png'); 
+    background-repeat: repeat;
+    background-size: 300px;
+    background-attachment: fixed;
+}
+@media (min-width: 768px) {
+    body { background-size: 500px; }
+}
+
+/* Floating Animations */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-12px); }
+    100% { transform: translateY(0px); }
+}
+.animate-float { animation: float 4s ease-in-out infinite; }
+.delay-100 { animation-delay: 0.1s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-500 { animation-delay: 0.5s; }
+
+/* Masonry Grid */
+.masonry-grid { column-count: 1; column-gap: 1.5rem; }
+@media (min-width: 640px) { .masonry-grid { column-count: 2; } }
+@media (min-width: 1024px) { .masonry-grid { column-count: 3; } }
+.masonry-item { break-inside: avoid; margin-bottom: 1.5rem; }
+
+/* Cloud Tags */
+.cloud-tag {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 50px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    position: absolute; top: 16px; left: 16px;
+    padding: 6px 14px; font-size: 0.75rem; font-weight: 600;
+    color: #ec4899; z-index: 10;
+}
+.cloud-tag::before, .cloud-tag::after {
+    content: ''; position: absolute; background: rgba(255, 255, 255, 0.95);
+    border-radius: 50%; z-index: -1;
+}
+.cloud-tag::before { width: 16px; height: 16px; top: -4px; left: 12px; }
+.cloud-tag::after { width: 22px; height: 22px; top: -8px; right: 12px; }

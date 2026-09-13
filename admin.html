@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PEPE KUN | Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Outfit', 'sans-serif'] }, colors: { brand: { 900: '#1a1a1a' } } } } }
+    </script>
+    <!-- Insert this line -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="text-brand-900 antialiased bg-gray-50 flex h-screen overflow-hidden selection:bg-pink-200">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r border-gray-200 flex flex-col hidden md:flex z-10">
+        <div class="h-16 flex items-center px-6 border-b border-gray-200">
+            <span class="text-xl font-bold tracking-wide text-pink-500">ADMIN PANEL</span>
+        </div>
+        <nav class="flex-1 p-4 space-y-2">
+            <button onclick="showTab('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 px-4 py-3 bg-gray-100 text-brand-900 rounded-xl font-medium transition-colors">📊 Overview</button>
+            <button onclick="showTab('categories')" id="nav-categories" class="w-full flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl font-medium transition-colors">🏷️ Categories</button>
+            <button onclick="showTab('products')" id="nav-products" class="w-full flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl font-medium transition-colors">🧸 Products</button>
+            <button onclick="showTab('orders')" id="nav-orders" class="w-full flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl font-medium transition-colors">📦 Orders</button>
+            <button onclick="showTab('messages')" id="nav-messages" class="w-full flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl font-medium transition-colors">✉️ Enquiries</button>
+        </nav>
+        <div class="p-4 border-t border-gray-200">
+            <a href="#" onclick="event.preventDefault();adminLogout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-brand-900 text-white rounded-xl font-medium hover:bg-pink-500 transition-colors">Log Out</a>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen overflow-y-auto relative">
+        
+        <!-- Mobile Header -->
+        <header class="h-16 bg-white border-b border-gray-200 flex md:hidden items-center justify-between px-4 sticky top-0 z-10">
+            <span class="font-bold text-pink-500">ADMIN</span>
+            <a href="#" onclick="event.preventDefault();adminLogout()" class="text-sm font-medium">Log Out</a>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="p-4 md:p-8">
+            
+            <!-- OVERVIEW TAB -->
+            <div id="tab-dashboard" class="tab-content block">
+                <h1 class="text-3xl font-semibold mb-8">Dashboard Overview</h1>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <p class="text-sm text-gray-500 font-medium mb-1">Total Sales</p>
+                        <p class="text-3xl font-bold">₹0</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <p class="text-sm text-gray-500 font-medium mb-1">Pending Orders</p>
+                        <p class="text-3xl font-bold text-pink-500">0</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <p class="text-sm text-gray-500 font-medium mb-1">Unread Enquiries</p>
+                        <p class="text-3xl font-bold text-blue-500">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CATEGORIES TAB -->
+            <div id="tab-categories" class="tab-content hidden">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                    <h1 class="text-3xl font-semibold">Manage Categories</h1>
+                    <button onclick="openCategoryModal()" class="bg-brand-900 text-white px-5 py-2.5 rounded-full font-medium hover:bg-pink-500 transition-colors text-sm w-full md:w-auto">
+                        + Add New Category
+                    </button>
+                </div>
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
+                    <table class="w-full text-left border-collapse min-w-[500px]">
+                        <thead>
+                            <tr class="bg-gray-50 border-b border-gray-100 text-sm text-gray-500">
+                                <th class="p-4 font-medium">Category Name</th>
+                                <th class="p-4 font-medium text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-category-table" class="text-sm">
+                            <!-- JS will inject categories here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- PRODUCTS TAB -->
+            <div id="tab-products" class="tab-content hidden">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                    <h1 class="text-3xl font-semibold">Manage Products</h1>
+                    <button onclick="openAdminProductModal()" class="bg-brand-900 text-white px-5 py-2.5 rounded-full font-medium hover:bg-pink-500 transition-colors text-sm w-full md:w-auto">
+                        + Add New Product
+                    </button>
+                </div>
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
+                    <table class="w-full text-left border-collapse min-w-[600px]">
+                        <thead>
+                            <tr class="bg-gray-50 border-b border-gray-100 text-sm text-gray-500">
+                                <th class="p-4 font-medium">Product Name</th>
+                                <th class="p-4 font-medium">Category</th>
+                                <th class="p-4 font-medium">Price</th>
+                                <th class="p-4 font-medium">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-product-table" class="text-sm">
+                            <!-- JS will inject functional products here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ORDERS TAB -->
+            <div id="tab-orders" class="tab-content hidden">
+                <h1 class="text-3xl font-semibold mb-8">Recent Orders</h1>
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
+    <table class="w-full text-left border-collapse min-w-[600px]">
+        <thead>
+            <tr class="bg-gray-50 border-b border-gray-100 text-sm text-gray-500">
+                <th class="p-4 font-medium">Date</th>
+                <th class="p-4 font-medium">Total</th>
+                <th class="p-4 font-medium">Status</th>
+                <th class="p-4 font-medium">Actions</th>
+            </tr>
+        </thead>
+        <tbody id="admin-orders-table" class="text-sm">
+            <!-- Supabase orders inject here -->
+        </tbody>
+    </table>
+</div>
+            </div>
+
+            <!-- MESSAGES TAB -->
+            <div id="tab-messages" class="tab-content hidden">
+                <h1 class="text-3xl font-semibold mb-8">Customer Enquiries</h1>
+               <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
+    <table class="w-full text-left border-collapse min-w-[600px]">
+        <thead>
+            <tr class="bg-gray-50 border-b border-gray-100 text-sm text-gray-500">
+                <th class="p-4 font-medium">Date</th>
+                <th class="p-4 font-medium">Name</th>
+                <th class="p-4 font-medium">Email</th>
+                <th class="p-4 font-medium">Message</th>
+            </tr>
+        </thead>
+        <tbody id="admin-messages-table" class="text-sm">
+            <!-- Supabase enquiries inject here -->
+        </tbody>
+    </table>
+</div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ADMIN CATEGORY MODAL -->
+    <div id="admin-category-modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-6 md:p-8 shadow-2xl relative">
+            <button onclick="closeCategoryModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <h2 id="category-modal-title" class="text-2xl font-semibold mb-6">Add Category</h2>
+            <form onsubmit="saveCategory(event)" class="space-y-4">
+                <input type="hidden" id="admin-cat-id">
+                <div>
+                    <label class="block text-sm text-gray-500 mb-1">Category Name</label>
+                    <input type="text" id="admin-cat-name" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:border-pink-500" required>
+                </div>
+                <button type="submit" class="w-full bg-brand-900 text-white py-3 rounded-xl font-medium hover:bg-pink-500 transition-colors mt-4">
+                    Save Category
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ADMIN PRODUCT ADD/EDIT MODAL -->
+    <div id="admin-product-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-lg rounded-3xl p-6 md:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeAdminProductModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            
+            <h2 id="modal-form-title" class="text-2xl font-semibold mb-6">Add Product</h2>
+            
+            <form id="admin-product-form" onsubmit="saveProduct(event)" class="space-y-4">
+                <input type="hidden" id="admin-prod-id">
+                
+                <div>
+                    <label class="block text-sm text-gray-500 mb-1">Product Name</label>
+                    <input type="text" id="admin-prod-name" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:border-pink-500" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm text-gray-500 mb-1">Price (₹)</label>
+                    <input type="number" id="admin-prod-price" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:border-pink-500" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm text-gray-500 mb-1">Category</label>
+                    <select id="admin-prod-category" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:border-pink-500">
+                        <!-- JS injects dynamic categories here -->
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm text-gray-500 mb-1">Status Tag (e.g., Best Seller)</label>
+                    <input type="text" id="admin-prod-tag" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:border-pink-500" required>
+                </div>
+
+                <div>
+                    <label class="block text-sm text-gray-500 mb-1">Image URL</label>
+                    <input type="url" id="admin-prod-image" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:border-pink-500" placeholder="https://..." required>
+                </div>
+<div>
+    <label class="block text-sm text-gray-500 mb-1">Description</label>
+    <textarea id="admin-prod-desc" rows="3" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:border-pink-500" placeholder="A beautifully crafted..."></textarea>
+</div>
+<div>
+    <label class="block text-sm text-gray-500 mb-1">Specifications (One per line)</label>
+    <textarea id="admin-prod-specs" rows="3" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:border-pink-500" placeholder="Height: 30cm&#10;Material: Recycled Polyester"></textarea>
+</div>
+                <button type="submit" class="w-full bg-brand-900 text-white py-3 rounded-xl font-medium hover:bg-pink-500 transition-colors mt-4">
+                    Save Product
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+const supabaseUrl = 'https://cmxhngjykgoqblobyefh.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjbXhobmdqa2dvcWJsb2J5ZWZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyNDAwNTMsImV4cCI6MjEwNDgxNjA1M30.puMa5Ty4NTWxzTM9gnSHzqAVMzgMhgAfTPu-8sIVgPM';
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+const ADMIN_EMAIL = 'admin@pepekun.com';
+
+let adminProducts = [];
+let adminCategories = [];
+let categoriesTableAvailable = true;
+
+function escapeHtml(value = '') {
+    return String(value).replace(/[&<>'"]/g, ch => ({
+        '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;'
+    }[ch]));
+}
+
+function localCategories() {
+    try {
+        const saved = JSON.parse(localStorage.getItem('pepekun_categories') || 'null');
+        if (Array.isArray(saved) && saved.length) return saved;
+    } catch (_) {}
+    return ['Signature Collection', 'Fantasy Series', 'Mini Series'];
+}
+
+async function requireAdmin() {
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user || user.email?.toLowerCase() !== ADMIN_EMAIL) {
+        alert('Admin login required.');
+        window.location.href = 'login.html';
+        return false;
+    }
+
+    return true;
+}
+
+function showTab(name) {
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+    const target = document.getElementById('tab-' + name);
+    if (target) target.classList.remove('hidden');
+
+    document.querySelectorAll('aside nav button').forEach(button =>
+        button.classList.remove('bg-gray-100', 'text-brand-900'));
+
+    document.getElementById('nav-' + name)?.classList.add('bg-gray-100', 'text-brand-900');
+
+    if (name === 'orders') loadOrders();
+    if (name === 'messages') loadMessages();
+}
+
+async function loadProducts() {
+    const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        console.error('Products:', error);
+        alert('Products could not be loaded: ' + error.message);
+        return;
+    }
+
+    adminProducts = data || [];
+    renderAdminProducts();
+}
+
+async function loadCategories() {
+    const { data, error } = await supabase
+        .from('categories')
+        .select('*')
+        .order('name', { ascending: true });
+
+    if (!error && Array.isArray(data)) {
+        categoriesTableAvailable = true;
+        adminCategories = data.map(row => row.name).filter(Boolean);
+        if (!adminCategories.length) adminCategories = localCategories();
+        localStorage.setItem('pepekun_categories', JSON.stringify(adminCategories));
+    } else {
+        // The category table is an optional addition. Existing product management
+        // still works if the older database has not been migrated yet.
+        categoriesTableAvailable = false;
+        adminCategories = localCategories();
+        console.warn('categories table unavailable; using local category fallback.');
+    }
+
+    renderAdminCategories();
+}
+
+async function loadDashboard() {
+    const [ordersResult, enquiriesResult] = await Promise.all([
+        supabase.from('orders').select('order_total,status'),
+        supabase.from('enquiries').select('*', { count: 'exact', head: true })
+    ]);
+
+    const orders = ordersResult.data || [];
+    const totalSales = orders.reduce((sum, order) => sum + Number(order.order_total || 0), 0);
+    const pending = orders.filter(order => order.status === 'pending').length;
+    const enquiries = enquiriesResult.count || 0;
+
+    const cards = document.querySelectorAll('#tab-dashboard .grid > div');
+    if (cards[0]) cards[0].querySelector('p:last-child').textContent = '₹' + totalSales;
+    if (cards[1]) cards[1].querySelector('p:last-child').textContent = pending;
+    if (cards[2]) cards[2].querySelector('p:last-child').textContent = enquiries;
+}
+
+function renderAdminCategories() {
+    const table = document.getElementById('admin-category-table');
+    const select = document.getElementById('admin-prod-category');
+
+    select.innerHTML = adminCategories.length
+        ? adminCategories.map(name => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('')
+        : '<option value="">No categories</option>';
+
+    table.innerHTML = adminCategories.length
+        ? adminCategories.map((name, index) => `
+            <tr class="border-b">
+                <td class="p-4">${escapeHtml(name)}</td>
+                <td class="p-4 text-right">
+                    <button onclick="deleteCategory(${index})" class="text-red-500 hover:text-red-700">Delete</button>
+                </td>
+            </tr>`).join('')
+        : '<tr><td colspan="2" class="p-8 text-center">No categories yet.</td></tr>';
+}
+
+function openCategoryModal() {
+    document.getElementById('admin-cat-id').value = '';
+    document.getElementById('admin-cat-name').value = '';
+    document.getElementById('category-modal-title').textContent = 'Add Category';
+
+    const modal = document.getElementById('admin-category-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function closeCategoryModal() {
+    const modal = document.getElementById('admin-category-modal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+async function saveCategory(event) {
+    event.preventDefault();
+
+    const input = document.getElementById('admin-cat-name');
+    const name = input.value.trim();
+    if (!name) return;
+
+    if (adminCategories.some(item => item.toLowerCase() === name.toLowerCase())) {
+        alert('This category already exists.');
+        return;
+    }
+
+    if (categoriesTableAvailable) {
+        const { error } = await supabase.from('categories').insert([{ name }]);
+        if (error) {
+            // If the database has not been migrated, keep the feature usable locally.
+            console.warn('Category database save failed:', error.message);
+            categoriesTableAvailable = false;
+        }
+    }
+
+    adminCategories.push(name);
+    localStorage.setItem('pepekun_categories', JSON.stringify(adminCategories));
+    renderAdminCategories();
+    closeCategoryModal();
+    event.target.reset();
+}
+
+async function deleteCategory(index) {
+    const name = adminCategories[index];
+    if (!name) return;
+
+    const inUse = adminProducts.some(product => product.category === name);
+    if (inUse) {
+        alert('This category is being used by a product. Change the product category first.');
+        return;
+    }
+
+    if (!confirm('Delete this category?')) return;
+
+    if (categoriesTableAvailable) {
+        const { error } = await supabase.from('categories').delete().eq('name', name);
+        if (error) {
+            console.warn('Category database delete failed:', error.message);
+            categoriesTableAvailable = false;
+        }
+    }
+
+    adminCategories.splice(index, 1);
+    localStorage.setItem('pepekun_categories', JSON.stringify(adminCategories));
+    renderAdminCategories();
+}
+
+function renderAdminProducts() {
+    const table = document.getElementById('admin-product-table');
+
+    if (!adminProducts.length) {
+        table.innerHTML = '<tr><td colspan="4" class="p-8 text-center">No products yet.</td></tr>';
+        return;
+    }
+
+    table.innerHTML = adminProducts.map(product => `
+        <tr class="border-b">
+            <td class="p-4 flex items-center gap-3">
+                <img src="${escapeHtml(product.image || '')}" class="w-10 h-10 rounded-lg object-cover" alt="">
+                <span>${escapeHtml(product.name || '')}</span>
+            </td>
+            <td class="p-4">${escapeHtml(product.category || '')}</td>
+            <td class="p-4">₹${Number(product.price || 0)}</td>
+            <td class="p-4">
+                <button onclick="openAdminProductModal('${escapeHtml(product.id)}')" class="text-blue-500 mr-3 hover:text-blue-700">Edit</button>
+                <button onclick="deleteProduct('${escapeHtml(product.id)}')" class="text-red-500 hover:text-red-700">Delete</button>
+            </td>
+        </tr>`).join('');
+}
+
+function openAdminProductModal(id = null) {
+    const form = document.getElementById('admin-product-form');
+    const categorySelect = document.getElementById('admin-prod-category');
+
+    if (id !== null) {
+        const product = adminProducts.find(item => String(item.id) === String(id));
+        if (!product) return;
+
+        document.getElementById('modal-form-title').textContent = 'Edit Product';
+        document.getElementById('admin-prod-id').value = product.id;
+        document.getElementById('admin-prod-name').value = product.name || '';
+        document.getElementById('admin-prod-price').value = product.price ?? '';
+        document.getElementById('admin-prod-category').value = product.category || '';
+        document.getElementById('admin-prod-tag').value = product.tag || '';
+        document.getElementById('admin-prod-image').value = product.image || '';
+        document.getElementById('admin-prod-desc').value = product.description || '';
+        document.getElementById('admin-prod-specs').value =
+            Array.isArray(product.specs) ? product.specs.join('\n') : '';
+    } else {
+        form.reset();
+        document.getElementById('modal-form-title').textContent = 'Add Product';
+        document.getElementById('admin-prod-id').value = '';
+        if (adminCategories.length) categorySelect.value = adminCategories[0];
+    }
+
+    const modal = document.getElementById('admin-product-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function closeAdminProductModal() {
+    const modal = document.getElementById('admin-product-modal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+async function saveProduct(event) {
+    event.preventDefault();
+
+    const id = document.getElementById('admin-prod-id').value;
+    const data = {
+        name: document.getElementById('admin-prod-name').value.trim(),
+        price: Number(document.getElementById('admin-prod-price').value),
+        category: document.getElementById('admin-prod-category').value,
+        tag: document.getElementById('admin-prod-tag').value.trim(),
+        image: document.getElementById('admin-prod-image').value.trim(),
+        description: document.getElementById('admin-prod-desc').value.trim(),
+        specs: document.getElementById('admin-prod-specs').value
+            .split('\n').map(value => value.trim()).filter(Boolean)
+    };
+
+    if (!data.name || !data.category || !data.image || !Number.isFinite(data.price)) {
+        alert('Please complete all required product fields.');
+        return;
+    }
+
+    const button = event.target.querySelector('button[type="submit"]');
+    if (button) {
+        button.disabled = true;
+        button.textContent = 'Saving...';
+    }
+
+    const result = id
+        ? await supabase.from('products').update(data).eq('id', id)
+        : await supabase.from('products').insert([data]);
+
+    if (button) {
+        button.disabled = false;
+        button.textContent = 'Save Product';
+    }
+
+    if (result.error) {
+        alert('Save failed: ' + result.error.message);
+        return;
+    }
+
+    closeAdminProductModal();
+    await loadProducts();
+    await loadDashboard();
+}
+
+async function deleteProduct(id) {
+    if (!confirm('Delete this product permanently?')) return;
+
+    const { error } = await supabase.from('products').delete().eq('id', id);
+    if (error) {
+        alert('Delete failed: ' + error.message);
+        return;
+    }
+
+    await loadProducts();
+}
+
+async function loadOrders() {
+    const { data, error } = await supabase
+        .from('orders')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+    const table = document.getElementById('admin-orders-table');
+
+    if (error) {
+        table.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-red-500">${escapeHtml(error.message)}</td></tr>`;
+        return;
+    }
+
+    table.innerHTML = (data || []).length
+        ? data.map(order => `
+            <tr class="border-b">
+                <td class="p-4">${new Date(order.created_at || Date.now()).toLocaleString()}</td>
+                <td class="p-4 font-semibold">₹${Number(order.order_total || 0)}</td>
+                <td class="p-4">
+                    <select onchange="updateOrderStatus('${escapeHtml(order.id)}', this.value)"
+                            class="border rounded-lg px-2 py-1">
+                        ${['pending','confirmed','shipped','delivered','cancelled'].map(status =>
+                            `<option value="${status}" ${order.status === status ? 'selected' : ''}>${status}</option>`
+                        ).join('')}
+                    </select>
+                </td>
+                <td class="p-4">
+                    <button onclick="viewOrder('${escapeHtml(order.id)}')" class="text-blue-500 hover:text-blue-700">View</button>
+                </td>
+            </tr>`).join('')
+        : '<tr><td colspan="4" class="p-8 text-center">No orders yet.</td></tr>';
+}
+
+async function updateOrderStatus(id, status) {
+    const { error } = await supabase
+        .from('orders')
+        .update({status})
+        .eq('id', id);
+
+    if (error) {
+        alert('Could not update order: ' + error.message);
+        await loadOrders();
+        return;
+    }
+
+    await loadDashboard();
+}
+
+async function viewOrder(id) {
+    const { data, error } = await supabase
+        .from('orders')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+    if (error) {
+        alert('Could not load order: ' + error.message);
+        return;
+    }
+
+    const shipping = data.shipping_details || {};
+    const items = Array.isArray(data.items) ? data.items : [];
+    const itemText = items.map(item =>
+        `${item.name || 'Product'} x ${Number(item.quantity) || 1}`
+    ).join('\n');
+
+    alert(
+        'Order Details\n\n' +
+        'Customer: ' + (shipping.name || '') + '\n' +
+        'Phone: ' + (shipping.phone || '') + '\n' +
+        'Address: ' + (shipping.address || '') + ', ' +
+            (shipping.city || '') + ' - ' + (shipping.pincode || '') + '\n\n' +
+        'Items:\n' + (itemText || 'No item details') + '\n\n' +
+        'Total: ₹' + Number(data.order_total || 0) + '\n' +
+        'Status: ' + (data.status || 'pending')
+    );
+}
+
+async function loadMessages() {
+    const { data, error } = await supabase
+        .from('enquiries')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+    const table = document.getElementById('admin-messages-table');
+
+    if (error) {
+        table.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-red-500">${escapeHtml(error.message)}</td></tr>`;
+        return;
+    }
+
+    table.innerHTML = (data || []).length
+        ? data.map(message => `
+            <tr class="border-b">
+                <td class="p-4">${new Date(message.created_at || Date.now()).toLocaleString()}</td>
+                <td class="p-4">${escapeHtml(message.name || '')}</td>
+                <td class="p-4">${escapeHtml(message.email || '')}</td>
+                <td class="p-4 whitespace-pre-wrap">${escapeHtml(message.message || '')}</td>
+            </tr>`).join('')
+        : '<tr><td colspan="4" class="p-8 text-center">No enquiries yet.</td></tr>';
+}
+
+async function adminLogout() {
+    await supabase.auth.signOut();
+    window.location.href = 'index.html';
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    if (!(await requireAdmin())) return;
+    await loadProducts();
+    await loadCategories();
+    await loadDashboard();
+});
+</script>
+</body>
+</html>
