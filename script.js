@@ -58,12 +58,21 @@
     products = data || [];
   }
 
-  async function loadUserAndCart() {
+ async function loadUserAndCart() {
     const {
       data: { user }
     } = await supabaseClient.auth.getUser();
 
     currentUser = user || null;
+
+    // --- NEW: Toggle Auth Buttons ---
+    if (currentUser) {
+      document.getElementById('auth-login-btn')?.classList.add('hidden');
+      document.getElementById('auth-account-btn')?.classList.remove('hidden');
+      document.getElementById('mobile-login-btn')?.classList.add('hidden');
+      document.getElementById('mobile-account-btn')?.classList.remove('hidden');
+    }
+    // --------------------------------
 
     if (currentUser) {
       const { data, error } = await supabaseClient
