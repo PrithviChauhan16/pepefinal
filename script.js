@@ -3,7 +3,7 @@
 (function () {
   'use strict';
 
-  const SUPABASE_URL = 'https://cmxhngjykgoqblobyefh4.supabase.co';
+  const SUPABASE_URL = 'https://cmxhngjykgoqblobyefh.supabase.co';
   const SUPABASE_ANON_KEY =
     'sb_publishable_05GBhGfDMBLN009-tv5soQ_XkQ_7jPc';
 
