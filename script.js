@@ -73,6 +73,10 @@
       document.getElementById('mobile-account-btn')?.classList.remove('hidden');
     }
     // --------------------------------
+   async function logout() {
+    await supabaseClient.auth.signOut();
+    window.location.href = 'login.html'; // Redirect to login after signing out
+}
 
     if (currentUser) {
       const { data, error } = await supabaseClient
@@ -508,6 +512,7 @@
   window.openProductModal = openProductModal;
   window.closeModal = closeModal;
   window.addToCart = addToCart;
+  window.logout = logout;
 
   document.addEventListener(
     'DOMContentLoaded',
