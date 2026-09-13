@@ -38,10 +38,13 @@
   }
 
   async function loadProducts() {
-    const { data, error } = await client.from('products').select('*').order('created_at', {ascending:false});
-    if (error) { console.error('Products load error:', error); return; }
+    const { data, error } = await client.from('products').select('*');
+    if (error) { 
+        console.error('Products load error:', error); 
+        return; 
+    }
     products = data || [];
-  }
+}
 
   async function loadUserAndCart() {
     const { data } = await client.auth.getUser();
