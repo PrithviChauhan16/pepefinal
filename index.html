@@ -91,14 +91,14 @@
         </div>
     </section>
 
-    <!-- CATEGORIES SECTION -->
-    <section id="categories" class="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-24 transition-opacity duration-500">
-        <div class="text-center mb-12 bg-white/80 backdrop-blur-sm py-4 rounded-2xl max-w-[90%] md:max-w-sm mx-auto shadow-sm border border-white">
+   <!-- CATEGORIES SECTION -->
+    <section id="categories" class="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-24 transition-all duration-500">
+        <div id="category-header" class="text-center mb-12 bg-white/80 backdrop-blur-sm py-4 rounded-2xl max-w-[90%] md:max-w-sm mx-auto shadow-sm border border-white transition-opacity duration-300">
             <h2 class="text-2xl md:text-3xl font-semibold">Choose Your Companion</h2>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            <button onclick="showCategory('Signature Collection')" class="subtle-square-1 group relative h-64 md:h-72 overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 animate-float delay-100 border-4 border-white cursor-pointer">
+        <div id="category-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 transition-all duration-500">
+            <button data-category="Signature Collection" onclick="showCategory('Signature Collection')" class="category-btn subtle-square-1 group relative h-64 md:h-72 overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 animate-float delay-100 border-4 border-white cursor-pointer w-full">
                 <img src="https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=600" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Pandas & Cats">
                 <div class="absolute inset-0 bg-black/20 transition-colors"></div>
                 <div class="absolute inset-0 flex items-center justify-center">
@@ -106,7 +106,7 @@
                 </div>
             </button>
 
-            <button onclick="showCategory('Fantasy Series')" class="subtle-square-2 group relative h-64 md:h-72 overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 animate-float delay-300 border-4 border-white cursor-pointer">
+            <button data-category="Fantasy Series" onclick="showCategory('Fantasy Series')" class="category-btn subtle-square-2 group relative h-64 md:h-72 overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 animate-float delay-300 border-4 border-white cursor-pointer w-full">
                 <img src="https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=600" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Dragons">
                 <div class="absolute inset-0 bg-black/20 transition-colors"></div>
                 <div class="absolute inset-0 flex items-center justify-center">
@@ -114,7 +114,7 @@
                 </div>
             </button>
 
-            <button onclick="showCategory('Mini Series')" class="subtle-square-3 group relative h-64 md:h-72 overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 animate-float delay-500 border-4 border-white cursor-pointer">
+            <button data-category="Mini Series" onclick="showCategory('Mini Series')" class="category-btn subtle-square-3 group relative h-64 md:h-72 overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 animate-float delay-500 border-4 border-white cursor-pointer w-full">
                 <img src="https://images.unsplash.com/photo-1558285549-2a05f32b1ba6?q=80&w=600" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Mini Plush">
                 <div class="absolute inset-0 bg-black/20 transition-colors"></div>
                 <div class="absolute inset-0 flex items-center justify-center">
@@ -126,8 +126,7 @@
 
     <!-- HIDDEN PRODUCT POP-UP -->
     <section id="product-display" class="max-w-7xl mx-auto px-4 sm:px-6 pb-24 hidden opacity-0 transition-opacity duration-500">
-        <div class="flex items-center justify-between mb-8 bg-white/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm border border-white">
-            <h2 id="active-category-title" class="text-xl md:text-2xl font-medium text-pink-500">Collection Name</h2>
+        <div class="flex items-center justify-end mb-8 bg-white/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm border border-white">
             <button onclick="hideProducts()" class="text-sm font-medium text-gray-500 hover:text-brand-900 transition-colors">
                 ✕ Back to Categories
             </button>
@@ -135,15 +134,20 @@
         <div id="product-grid" class="masonry-grid"></div>
     </section>
 
-    <!-- RESPONSIVE CIRCULAR SHOWCASE -->
-    <section class="py-16 md:py-24 relative overflow-hidden flex justify-center items-center px-4 bg-white/70 backdrop-blur-md border-y border-white shadow-sm my-12">
+   <!-- RESPONSIVE CIRCULAR SHOWCASE (With Image Background) -->
+    <section class="py-16 md:py-24 relative overflow-hidden flex justify-center items-center px-4 border-y border-white shadow-sm my-12 bg-cover bg-center bg-fixed" style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000');">
         
-        <div class="absolute w-72 h-72 md:w-96 md:h-96 bg-pink-300/20 rounded-full blur-3xl -z-10 animate-pulse"></div>
+        <!-- Semi-transparent overlay to ensure the wheel stands out against the image -->
+        <div class="absolute inset-0 bg-white/60 backdrop-blur-sm z-0"></div>
 
-        <div class="relative w-full max-w-[320px] md:max-w-md aspect-square flex items-center justify-center animate-float">
+        <!-- Ambient Pink Glow -->
+        <div class="absolute w-72 h-72 md:w-96 md:h-96 bg-pink-300/40 rounded-full blur-3xl z-0 animate-pulse"></div>
+
+        <!-- Main Wheel Container (Added z-10 to sit above the background overlay) -->
+        <div class="relative z-10 w-full max-w-[320px] md:max-w-md aspect-square flex items-center justify-center animate-float">
             
-            <div class="absolute inset-0 rounded-full border-2 border-dashed border-pink-400/60 pointer-events-none animate-[spin_30s_linear_infinite]"></div>
-            <div class="absolute inset-4 rounded-full border border-pink-300/30 pointer-events-none animate-[spin_20s_linear_infinite_reverse]"></div>
+            <div class="absolute inset-0 rounded-full border-2 border-dashed border-pink-500/60 pointer-events-none animate-[spin_30s_linear_infinite]"></div>
+            <div class="absolute inset-4 rounded-full border border-pink-400/40 pointer-events-none animate-[spin_20s_linear_infinite_reverse]"></div>
 
             <img onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=800')" src="https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=150" class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border-4 border-white object-cover shadow-xl cursor-pointer hover:scale-110 hover:border-pink-400 transition-all duration-300 z-20" alt="Thumb">
             
