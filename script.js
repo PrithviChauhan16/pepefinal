@@ -180,8 +180,8 @@
   function showCategory(categoryName) {
     const section = document.getElementById('product-display');
     const grid = document.getElementById('product-grid');
-    const title = document.getElementById('active-category-title');
-    const catSection = document.getElementById('categories');
+    const catGrid = document.getElementById('category-grid');
+    const catHeader = document.getElementById('category-header');
 
     if (!section || !grid) {
       console.error('Product display elements not found.');
@@ -192,98 +192,88 @@
       p => String(p.category || '').toLowerCase() === String(categoryName || '').toLowerCase()
     );
 
-    if (title) {
-      title.textContent = categoryName;
-    }
-
     grid.innerHTML = list.length
-      ? list
-          .map(
+      ? list.map(
             p => `
         <div class="masonry-item bg-white/90 backdrop-blur-md rounded-3xl overflow-hidden shadow-sm border border-gray-100 relative group">
-
-          <div class="cloud-tag">
-            ${escapeHtml(p.tag || 'PEPE KUN')}
+          <div class="cloud-tag">${escapeHtml(p.tag || 'PEPE KUN')}</div>
+          <div class="w-full ${escapeHtml(p.heightClass || 'h-[300px]')} overflow-hidden">
+            <img src="${escapeHtml(p.image_url || p.image || '')}" onclick="openProductModal('${escapeHtml(p.id)}')" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 cursor-pointer" alt="${escapeHtml(p.name || '')}">
           </div>
-
-          <div class="w-full ${escapeHtml(
-            p.heightClass || 'h-[300px]'
-          )} overflow-hidden">
-
-            <img
-              src="${escapeHtml(p.image_url || p.image || '')}"
-              onclick="openProductModal('${escapeHtml(p.id)}')"
-              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 cursor-pointer"
-              alt="${escapeHtml(p.name || '')}"
-            >
-
-          </div>
-
           <div class="p-4 md:p-5">
-
             <div class="flex justify-between gap-3">
-
-              <h3
-                onclick="openProductModal('${escapeHtml(p.id)}')"
-                class="font-medium text-lg cursor-pointer hover:text-pink-500"
-              >
-                ${escapeHtml(p.name)}
-              </h3>
-
-              <span class="font-semibold">
-                ₹${Number(p.price || 0).toLocaleString('en-IN')}
-              </span>
-
+              <h3 onclick="openProductModal('${escapeHtml(p.id)}')" class="font-medium text-lg cursor-pointer hover:text-pink-500">${escapeHtml(p.name)}</h3>
+              <span class="font-semibold">₹${Number(p.price || 0).toLocaleString('en-IN')}</span>
             </div>
-
-            <button
-              id="btn-${escapeHtml(p.id)}"
-              onclick="addToCart('${escapeHtml(p.id)}')"
-              class="mt-4 w-full bg-brand-900 text-white rounded-full py-2.5"
-            >
+            <button id="btn-${escapeHtml(p.id)}" onclick="addToCart('${escapeHtml(p.id)}')" class="mt-4 w-full bg-brand-900 text-white rounded-full py-2.5">
               Add to Cart
             </button>
-
           </div>
         </div>
       `
-          )
-          .join('')
-      : `
-        <div class="col-span-full text-center bg-white/80 rounded-3xl p-12">
-          No products in this collection yet.
-        </div>
-      `;
+          ).join('')
+      : `<div class="col-span-full text-center bg-white/80 rounded-3xl p-12">No products in this collection yet.</div>`;
 
-    // Hide the categories layout
-    if (catSection) {
-        catSection.classList.add('hidden');
+    // 1. Hide the "Choose Your Companion" header
+    if (catHeader) catHeader.classList.add('hidden');
+
+    // 2. Hide unselected categories and disable click on the active one
+    const catButtons = document.querySelectorAll('.category-btn');
+    catButtons.forEach(btn => {
+        if (btn.getAttribute('data-category') === categoryName) {
+            btn.classList.remove('hidden');
+            btn.style.pointerEvents = 'none'; // Prevent clicking it again
+            btn.classList.remove('hover:shadow-2xl'); // Flatten hover state
+        } else {
+            btn.classList.add('hidden');
+        }
+    });
+
+    // 3. Center the active category by changing the grid layout
+    if (catGrid) {
+        catGrid.classList.remove('md:grid-cols-3');
+        catGrid.classList.add('max-w-2xl', 'mx-auto'); 
     }
 
+    // 4. Show products
     section.classList.remove('hidden');
 
     setTimeout(() => {
       section.classList.remove('opacity-0');
-      section.scrollIntoView({ behavior: 'smooth' });
+      document.getElementById('categories').scrollIntoView({ behavior: 'smooth' });
     }, 20);
   }
 
   function hideProducts() {
-    const s = document.getElementById('product-display');
-    const catSection = document.getElementById('categories');
+    const section = document.getElementById('product-display');
+    const catGrid = document.getElementById('category-grid');
+    const catHeader = document.getElementById('category-header');
 
-    if (!s) return;
+    if (!section) return;
 
-    s.classList.add('opacity-0');
+    section.classList.add('opacity-0');
 
     setTimeout(() => {
-      s.classList.add('hidden');
+      section.classList.add('hidden');
       
-      // Reveal the categories again when closing products
-      if (catSection) {
-          catSection.classList.remove('hidden');
-          catSection.scrollIntoView({ behavior: 'smooth' });
+      // 1. Restore the "Choose Your Companion" header
+      if (catHeader) catHeader.classList.remove('hidden');
+      
+      // 2. Show all category buttons again and restore clickability
+      const catButtons = document.querySelectorAll('.category-btn');
+      catButtons.forEach(btn => {
+          btn.classList.remove('hidden');
+          btn.style.pointerEvents = 'auto'; 
+          btn.classList.add('hover:shadow-2xl'); 
+      });
+
+      // 3. Restore the 3-column grid layout
+      if (catGrid) {
+          catGrid.classList.add('md:grid-cols-3');
+          catGrid.classList.remove('max-w-2xl', 'mx-auto');
       }
+
+      document.getElementById('categories').scrollIntoView({ behavior: 'smooth' });
     }, 300);
   }
 
