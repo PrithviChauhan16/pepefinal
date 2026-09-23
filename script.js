@@ -110,16 +110,16 @@
     grid.innerHTML = list.length
       ? list.map(p => `
         <div class="group flex flex-col gap-3">
-          <div class="relative w-full aspect-square pepe-box overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow">
+          <div class="relative w-full aspect-square pepe-box overflow-hidden bg-white transition-all">
             ${p.tag ? `<div class="cloud-tag">${escapeHtml(p.tag)}</div>` : ''}
             <img src="${escapeHtml(p.image_url || p.image || '')}" onclick="openProductModal('${escapeHtml(p.id)}')" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 cursor-pointer" alt="${escapeHtml(p.name || '')}">
           </div>
           
           <div class="px-1 text-left flex flex-col">
-            <h3 onclick="openProductModal('${escapeHtml(p.id)}')" class="font-medium text-gray-900 cursor-pointer hover:text-pink-500 text-base md:text-lg tracking-wide">${escapeHtml(p.name)}</h3>
-            <span class="text-gray-600 text-sm mt-1">₹${Number(p.price || 0).toLocaleString('en-IN')}</span>
+            <h3 onclick="openProductModal('${escapeHtml(p.id)}')" class="font-medium text-gray-900 cursor-pointer hover:text-pink-500 text-sm md:text-base tracking-wide">${escapeHtml(p.name)}</h3>
+            <span class="text-gray-500 text-sm mt-1">₹${Number(p.price || 0).toLocaleString('en-IN')}</span>
             
-            <button id="btn-${escapeHtml(p.id)}" onclick="addToCart('${escapeHtml(p.id)}')" class="mt-3 w-fit px-5 py-2 border border-gray-800 rounded-full text-xs font-medium hover:bg-gray-800 hover:text-white transition-colors">
+            <button id="btn-${escapeHtml(p.id)}" onclick="addToCart('${escapeHtml(p.id)}')" class="mt-3 w-fit px-4 py-1.5 border border-gray-800 rounded-full text-[11px] font-medium hover:bg-gray-800 hover:text-white transition-colors">
               + Add to Cart
             </button>
           </div>
@@ -134,7 +134,7 @@
         if (btn.getAttribute('data-category') === categoryName) {
             btn.classList.remove('hidden');
             btn.style.pointerEvents = 'none'; 
-            btn.classList.remove('hover:shadow-2xl'); 
+            btn.classList.remove('hover:-translate-y-1'); 
         } else {
             btn.classList.add('hidden');
         }
@@ -142,7 +142,7 @@
 
     if (catGrid) {
         catGrid.classList.remove('md:grid-cols-3');
-        catGrid.classList.add('max-w-2xl', 'mx-auto'); 
+        catGrid.classList.add('max-w-[280px]', 'mx-auto'); 
     }
 
     section.classList.remove('hidden');
@@ -169,12 +169,12 @@
       catButtons.forEach(btn => {
           btn.classList.remove('hidden');
           btn.style.pointerEvents = 'auto'; 
-          btn.classList.add('hover:shadow-2xl'); 
+          btn.classList.add('hover:-translate-y-1'); 
       });
 
       if (catGrid) {
           catGrid.classList.add('md:grid-cols-3');
-          catGrid.classList.remove('max-w-2xl', 'mx-auto');
+          catGrid.classList.remove('max-w-[280px]', 'mx-auto');
       }
       document.getElementById('categories').scrollIntoView({ behavior: 'smooth' });
     }, 300);
@@ -218,7 +218,7 @@
       document.getElementById('modal-specs').innerHTML = specs.length ? specs.map(x => `<li>• ${escapeHtml(x)}</li>`).join('') : '<li>• Premium plush material</li>';
       
       const gallery = Array.isArray(p.gallery) && p.gallery.length ? p.gallery : [p.image_url || p.image];
-      document.getElementById('modal-gallery').innerHTML = gallery.filter(Boolean).map(x => `<img src="${escapeHtml(x)}" onclick="document.getElementById('modal-main-img').src='${escapeHtml(x)}'" class="w-20 h-20 object-cover rounded-xl border-2 border-transparent hover:border-pink-500 cursor-pointer" alt="">`).join('');
+      document.getElementById('modal-gallery').innerHTML = gallery.filter(Boolean).map(x => `<img src="${escapeHtml(x)}" onclick="document.getElementById('modal-main-img').src='${escapeHtml(x)}'" class="w-20 h-20 object-cover rounded-xl border-2 border-transparent hover:border-gray-800 cursor-pointer" alt="">`).join('');
 
       document.getElementById('modal-add-btn').onclick = () => addToCart(p.id);
       document.getElementById('modal-buy-btn').onclick = async () => { await addToCart(p.id); location.href = 'cart.html'; };
@@ -226,7 +226,6 @@
       m.classList.remove('hidden');
       m.classList.add('flex');
       
-      // Ensures smooth fade transition
       setTimeout(() => m.classList.remove('opacity-0'), 10);
       document.body.style.overflow = 'hidden';
     }
