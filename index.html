@@ -68,20 +68,20 @@
     </div>
 </section>
 
-<!-- CATEGORIES SECTION -->
-<section id="categories" class="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-24 transition-all duration-500">
+<!-- CATEGORIES SECTION (Shrunk to max-w-4xl to make cards smaller) -->
+<section id="categories" class="max-w-4xl mx-auto px-4 sm:px-6 py-12 md:py-24 transition-all duration-500">
     <div id="category-header" class="text-center mb-12 bg-white/80 backdrop-blur-sm py-4 rounded-2xl max-w-[90%] md:max-w-sm mx-auto shadow-sm border border-white transition-opacity duration-300">
         <h2 class="text-2xl md:text-3xl font-semibold">Choose Your Companion</h2>
     </div>
     
-    <div id="category-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 transition-all duration-500">
+    <div id="category-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 transition-all duration-500">
         <!-- Category 1 -->
         <div data-category="Signature Collection" onclick="showCategory('Signature Collection')" class="category-btn group flex flex-col gap-3 cursor-pointer w-full">
             <div class="relative w-full aspect-square pepe-box overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow">
                 <img src="https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Pandas & Cats">
             </div>
-            <div class="px-1 text-left flex flex-col">
-                <h3 class="text-lg md:text-xl font-medium text-gray-900 tracking-wide">Signature Collection</h3>
+            <div class="px-1 text-center md:text-left flex flex-col">
+                <h3 class="text-base md:text-lg font-medium text-gray-900 tracking-wide">Signature Collection</h3>
                 <p class="text-sm text-gray-500 mt-1">Explore →</p>
             </div>
         </div>
@@ -91,8 +91,8 @@
             <div class="relative w-full aspect-square pepe-box overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow">
                 <img src="https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Dragons">
             </div>
-            <div class="px-1 text-left flex flex-col">
-                <h3 class="text-lg md:text-xl font-medium text-gray-900 tracking-wide">Fantasy Series</h3>
+            <div class="px-1 text-center md:text-left flex flex-col">
+                <h3 class="text-base md:text-lg font-medium text-gray-900 tracking-wide">Fantasy Series</h3>
                 <p class="text-sm text-gray-500 mt-1">Explore →</p>
             </div>
         </div>
@@ -102,8 +102,8 @@
             <div class="relative w-full aspect-square pepe-box overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow">
                 <img src="https://images.unsplash.com/photo-1558285549-2a05f32b1ba6?q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Mini Plush">
             </div>
-            <div class="px-1 text-left flex flex-col">
-                <h3 class="text-lg md:text-xl font-medium text-gray-900 tracking-wide">Mini Series</h3>
+            <div class="px-1 text-center md:text-left flex flex-col">
+                <h3 class="text-base md:text-lg font-medium text-gray-900 tracking-wide">Mini Series</h3>
                 <p class="text-sm text-gray-500 mt-1">Explore →</p>
             </div>
         </div>
@@ -111,7 +111,7 @@
 </section>
 
 <!-- HIDDEN PRODUCT POP-UP SECTION -->
-<section id="product-display" class="max-w-7xl mx-auto px-4 sm:px-6 pb-24 hidden opacity-0 transition-opacity duration-500">
+<section id="product-display" class="max-w-5xl mx-auto px-4 sm:px-6 pb-24 hidden opacity-0 transition-opacity duration-500">
     <div class="flex items-center justify-end mb-8 bg-white/80 backdrop-blur-sm p-4 rounded-2xl shadow-sm border border-white">
         <button onclick="hideProducts()" class="text-sm font-medium text-gray-500 hover:text-brand-900 transition-colors">✕ Back to Categories</button>
     </div>
@@ -119,8 +119,8 @@
     <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8"></div>
 </section>
 
-<!-- RESPONSIVE CIRCULAR SHOWCASE WITH IMAGE BACKGROUND -->
-<section class="py-16 md:py-24 relative overflow-hidden flex justify-center items-center px-4 border-y border-white shadow-sm my-12 bg-cover bg-center bg-fixed" style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000');">
+<!-- RESPONSIVE CIRCULAR SHOWCASE (Update the background-image URL here) -->
+<section class="py-16 md:py-24 relative overflow-hidden flex justify-center items-center px-4 border-y border-white shadow-sm my-12 bg-cover bg-center bg-fixed" style="background-image: url('YOUR-BACKGROUND-IMAGE.jpg');">
     <div class="absolute inset-0 bg-white/70 backdrop-blur-sm z-0"></div>
     <div class="absolute w-72 h-72 md:w-96 md:h-96 bg-pink-300/40 rounded-full blur-3xl z-0 animate-pulse"></div>
 
