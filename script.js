@@ -178,14 +178,10 @@
   }
 
   function showCategory(categoryName) {
-    const section =
-      document.getElementById('product-display');
-
-    const grid =
-      document.getElementById('product-grid');
-
-    const title =
-      document.getElementById('active-category-title');
+    const section = document.getElementById('product-display');
+    const grid = document.getElementById('product-grid');
+    const title = document.getElementById('active-category-title');
+    const catSection = document.getElementById('categories');
 
     if (!section || !grid) {
       console.error('Product display elements not found.');
@@ -193,9 +189,7 @@
     }
 
     const list = products.filter(
-      p =>
-        String(p.category || '').toLowerCase() ===
-        String(categoryName || '').toLowerCase()
+      p => String(p.category || '').toLowerCase() === String(categoryName || '').toLowerCase()
     );
 
     if (title) {
@@ -261,20 +255,22 @@
         </div>
       `;
 
+    // Hide the categories layout
+    if (catSection) {
+        catSection.classList.add('hidden');
+    }
+
     section.classList.remove('hidden');
 
     setTimeout(() => {
       section.classList.remove('opacity-0');
-
-      section.scrollIntoView({
-        behavior: 'smooth'
-      });
+      section.scrollIntoView({ behavior: 'smooth' });
     }, 20);
   }
 
   function hideProducts() {
-    const s =
-      document.getElementById('product-display');
+    const s = document.getElementById('product-display');
+    const catSection = document.getElementById('categories');
 
     if (!s) return;
 
@@ -282,6 +278,12 @@
 
     setTimeout(() => {
       s.classList.add('hidden');
+      
+      // Reveal the categories again when closing products
+      if (catSection) {
+          catSection.classList.remove('hidden');
+          catSection.scrollIntoView({ behavior: 'smooth' });
+      }
     }, 300);
   }
 
