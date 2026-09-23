@@ -110,7 +110,7 @@
     grid.innerHTML = list.length
       ? list.map(p => `
         <div class="group flex flex-col gap-3">
-          <div class="relative w-full aspect-square pepe-box overflow-hidden bg-white transition-all">
+          <div class="relative w-full aspect-square pepe-box-2 overflow-hidden bg-white transition-all">
             ${p.tag ? `<div class="cloud-tag">${escapeHtml(p.tag)}</div>` : ''}
             <img src="${escapeHtml(p.image_url || p.image || '')}" onclick="openProductModal('${escapeHtml(p.id)}')" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 cursor-pointer" alt="${escapeHtml(p.name || '')}">
           </div>
