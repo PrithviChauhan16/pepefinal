@@ -21,46 +21,24 @@ body {
 .delay-300 { animation-delay: 0.3s; }
 .delay-500 { animation-delay: 0.5s; }
 
-/* Masonry Grid */
-.masonry-grid { column-count: 1; column-gap: 1.5rem; }
-@media (min-width: 640px) { .masonry-grid { column-count: 2; } }
-@media (min-width: 1024px) { .masonry-grid { column-count: 3; } }
-.masonry-item { break-inside: avoid; margin-bottom: 1.5rem; }
-
 /* Cloud Tags */
 .cloud-tag {
     background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #2d2d2d;
     border-radius: 50px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    position: absolute; top: 16px; left: 16px;
-    padding: 6px 14px; font-size: 0.75rem; font-weight: 600;
-    color: #ec4899; z-index: 10;
-}
-.cloud-tag::before, .cloud-tag::after {
-    content: ''; position: absolute; background: rgba(255, 255, 255, 0.95);
-    border-radius: 50%; z-index: -1;
-}
-.cloud-tag::before { width: 16px; height: 16px; top: -4px; left: 12px; }
-.cloud-tag::after { width: 22px; height: 22px; top: -8px; right: 12px; }
-/* Subtle Irregular Squares for Categories */
-.subtle-square-1 {
-    border-radius: 24px 40px 24px 32px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    position: absolute; top: 12px; left: 12px;
+    padding: 4px 12px; font-size: 0.65rem; font-weight: 700;
+    color: #2d2d2d; z-index: 10; text-transform: uppercase; letter-spacing: 0.5px;
 }
 
-.subtle-square-2 {
-    border-radius: 40px 24px 32px 24px;
+/* PEPE KUN Organic Outlined Box */
+.pepe-box {
+    border-radius: 20px 24px 20px 24px;
+    border: 1.5px solid #2d2d2d;
 }
 
-.subtle-square-3 {
-    border-radius: 28px 32px 40px 24px;
-}
-
-.subtle-square-1:hover, .subtle-square-2:hover, .subtle-square-3:hover {
-    border-radius: 32px;
+.pepe-box:hover {
+    border-radius: 24px 20px 24px 20px;
     transition: border-radius 0.4s ease-in-out;
-}
-/* Optional: Add a gentle morphing animation on hover */
-.blob-1:hover, .blob-2:hover, .blob-3:hover {
-    border-radius: 50%;
-    transition: border-radius 0.5s ease-in-out;
 }
