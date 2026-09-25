@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PEPE KUN | Discover Softness</title>
-    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -20,27 +19,65 @@
             };
         }
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        html { scroll-behavior: smooth; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        #toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            background-color: #1a1a1a;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 9999px;
+            font-size: 14px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            opacity: 0;
+            transform: translateY(100%);
+            animation: slideUpFade 0.3s forwards, fadeOut 0.3s 2.7s forwards;
+        }
+        @keyframes slideUpFade {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeOut {
+            to { opacity: 0; transform: translateY(10px); }
+        }
+        
+        /* Spinning dashed ring animation */
+        .spin-slow { animation: spin 30s linear infinite; }
+        .spin-slow-reverse { animation: spin 20s linear infinite reverse; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+    </style>
 </head>
-<body class="text-brand-900 antialiased selection:bg-pink-200">
+<body class="text-brand-900 antialiased selection:bg-pink-200 bg-[#fdfbf7]">
 
-<!-- FLOATING PILL NAVBAR -->
-<nav class="sticky top-4 z-50 w-[95%] max-w-6xl mx-auto bg-white/40 backdrop-blur-md border border-white/50 px-6 py-4 shadow-lg rounded-full">
+<nav class="sticky top-4 z-50 w-[95%] max-w-6xl mx-auto bg-white/70 backdrop-blur-md border border-white/50 px-6 py-4 shadow-sm rounded-full">
     <div class="flex items-center justify-between">
         <a href="#home" class="flex items-center ml-2">
-            <img src="pepe-black1.png" alt="PEPE KUN Logo" class="h-10 w-auto object-contain">
+            <img src="pepe-black1.png" alt="Logo" class="h-10 w-auto object-contain">
         </a>
         <div class="hidden md:flex gap-8 text-sm font-medium items-center absolute left-1/2 -translate-x-1/2">
             <a href="#home" class="hover:text-pink-500 transition-colors">Home</a>
+            <a href="#categories" class="hover:text-pink-500 transition-colors">Collections</a>
             <a href="#about" class="hover:text-pink-500 transition-colors">About Us</a>
             <a href="#contact" class="hover:text-pink-500 transition-colors">Contact</a>
         </div>
         <div class="hidden md:flex gap-4 text-sm font-medium items-center mr-2">
-            <button onclick="window.location.href='cart.html'" id="cart-btn" class="hover:text-pink-500 transition-colors flex items-center gap-1">
+            <button onclick="showToast('Cart functionality coming soon!')" class="hover:text-pink-500 transition-colors flex items-center gap-1">
                 Cart (<span id="cart-count">0</span>)
             </button>
-            <a href="login.html" id="auth-login-btn" class="bg-brand-900 text-white px-6 py-2 rounded-full hover:bg-pink-500 transition-colors shadow-md">Log In</a>
-            <a href="account.html" id="auth-account-btn" class="hidden bg-pink-500 text-white px-6 py-2 rounded-full hover:bg-brand-900 transition-colors shadow-md">My Account</a>
+            <button onclick="showToast('Login portal coming soon!')" class="bg-brand-900 text-white px-6 py-2 rounded-full hover:bg-pink-500 transition-colors shadow-md">Log In</button>
         </div>
         <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-gray-600 focus:outline-none">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
@@ -48,165 +85,437 @@
     </div>
     <div id="mobile-menu" class="hidden flex-col gap-4 pt-4 pb-2 border-t border-gray-100 mt-4 text-center text-sm font-medium">
         <a href="#home" onclick="toggleMobileMenu()" class="hover:text-pink-500">Home</a>
+        <a href="#categories" onclick="toggleMobileMenu()" class="hover:text-pink-500">Collections</a>
         <a href="#about" onclick="toggleMobileMenu()" class="hover:text-pink-500">About Us</a>
-        <a href="#contact" onclick="toggleMobileMenu()" class="hover:text-pink-500">Contact</a>
-        <button onclick="window.location.href='cart.html'" class="hover:text-pink-500 w-full text-center py-2">Cart (<span id="cart-count-mobile">0</span>)</button>
-        <a href="login.html" id="mobile-login-btn" class="bg-brand-900 text-white px-5 py-2 rounded-full mx-auto inline-block">Log In</a>
-        <a href="account.html" id="mobile-account-btn" class="hidden bg-pink-500 text-white px-5 py-2 rounded-full mx-auto inline-block">My Account</a>
+        <button onclick="showToast('Cart coming soon!')" class="hover:text-pink-500 w-full text-center py-2">Cart (<span id="cart-count-mobile">0</span>)</button>
     </div>
 </nav>      
 
-<header id="home" class="relative max-w-[95%] md:max-w-[90%] mx-auto mt-6 md:mt-8 rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-sm border border-gray-800">
-    <img src="ChatGPT Image Sep 13, 2026, 02_19_44 AM.png" class="w-full h-auto block opacity-95" alt="Pepe Kun Banner">
+<header id="home" class="relative max-w-[95%] md:max-w-[90%] mx-auto mt-6 md:mt-8 rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-sm border border-gray-200">
+    <img src="banner.png" class="w-full h-auto min-h-[250px] md:min-h-[400px] object-cover block" alt="Banner" onerror="this.src='https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=1200'; this.onerror=null;">
 </header>
 
-<!-- CATEGORIES SECTION -->
-<section id="categories" class="max-w-4xl mx-auto px-4 sm:px-6 py-16 md:py-24 transition-all duration-500">
+<section id="categories" class="max-w-6xl mx-auto px-4 sm:px-6 py-16 md:py-24 transition-all duration-500">
     <div id="category-header" class="text-center mb-12 transition-opacity duration-300">
-        <h2 class="text-2xl md:text-3xl font-medium tracking-wide text-gray-900">Choose Your Companion</h2>
+        <h2 class="text-3xl md:text-4xl font-semibold tracking-wide text-gray-900">Choose Your Companion</h2>
+        <p class="text-gray-500 mt-4 max-w-xl mx-auto">Select a collection below to browse our uniquely crafted plush series.</p>
     </div>
     
-    <div id="category-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 transition-all duration-500">
+    <div id="category-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 transition-all duration-500">
         <!-- Category 1 -->
-        <div data-category="Signature Collection" onclick="showCategory('Signature Collection')" class="category-btn group flex flex-col gap-3 cursor-pointer w-full transition-transform hover:-translate-y-1">
-            <div class="relative w-full aspect-square pepe-box-1 overflow-hidden bg-white">
-                <img src="https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Pandas & Cats">
+        <div data-category="Signature Collection" onclick="showCategory('Signature Collection')" class="category-btn group flex flex-col gap-4 cursor-pointer w-full">
+            <div class="relative w-full aspect-square rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+                <img src="https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Signature Collection">
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300"></div>
             </div>
-            <div class="px-1 text-center md:text-left flex flex-col">
-                <h3 class="text-sm md:text-base font-medium text-gray-900 tracking-wide">Signature Collection</h3>
-                <p class="text-sm text-gray-500 mt-1">Explore</p>
+            <div class="px-2 text-center">
+                <h3 class="text-lg font-semibold text-gray-900 tracking-wide">Signature Collection</h3>
             </div>
         </div>
 
         <!-- Category 2 -->
-        <div data-category="Fantasy Series" onclick="showCategory('Fantasy Series')" class="category-btn group flex flex-col gap-3 cursor-pointer w-full transition-transform hover:-translate-y-1">
-            <div class="relative w-full aspect-square pepe-box-2 overflow-hidden bg-white">
-                <img src="https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Dragons">
+        <div data-category="Fantasy Series" onclick="showCategory('Fantasy Series')" class="category-btn group flex flex-col gap-4 cursor-pointer w-full">
+            <div class="relative w-full aspect-square rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+                <img src="https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Fantasy Series">
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300"></div>
             </div>
-            <div class="px-1 text-center md:text-left flex flex-col">
-                <h3 class="text-sm md:text-base font-medium text-gray-900 tracking-wide">Fantasy Series</h3>
-                <p class="text-sm text-gray-500 mt-1">Explore</p>
+            <div class="px-2 text-center">
+                <h3 class="text-lg font-semibold text-gray-900 tracking-wide">Fantasy Series</h3>
             </div>
         </div>
 
         <!-- Category 3 -->
-        <div data-category="Mini Series" onclick="showCategory('Mini Series')" class="category-btn group flex flex-col gap-3 cursor-pointer w-full transition-transform hover:-translate-y-1">
-            <div class="relative w-full aspect-square pepe-box-3 overflow-hidden bg-white">
-                <img src="https://images.unsplash.com/photo-1558285549-2a05f32b1ba6?q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Mini Plush">
+        <div data-category="Mini Series" onclick="showCategory('Mini Series')" class="category-btn group flex flex-col gap-4 cursor-pointer w-full">
+            <div class="relative w-full aspect-square rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+                <img src="https://images.unsplash.com/photo-1558285549-2a05f32b1ba6?q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Mini Series">
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300"></div>
             </div>
-            <div class="px-1 text-center md:text-left flex flex-col">
-                <h3 class="text-sm md:text-base font-medium text-gray-900 tracking-wide">Mini Series</h3>
-                <p class="text-sm text-gray-500 mt-1">Explore</p>
+            <div class="px-2 text-center">
+                <h3 class="text-lg font-semibold text-gray-900 tracking-wide">Mini Series</h3>
             </div>
         </div>
     </div>
 </section>
 
-<!-- HIDDEN PRODUCT POP-UP SECTION -->
-<section id="product-display" class="max-w-5xl mx-auto px-4 sm:px-6 pb-24 hidden opacity-0 transition-opacity duration-500">
-    <div class="flex items-center justify-end mb-8 p-4">
-        <button onclick="hideProducts()" class="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors border border-gray-300 rounded-full px-4 py-1">← Back to Categories</button>
+<section id="product-display" class="max-w-6xl mx-auto px-4 sm:px-6 pb-24 hidden opacity-0 transition-opacity duration-500">
+    <div class="flex items-center justify-between mb-8 pb-4 border-b border-gray-200">
+        <h3 id="active-category-title" class="text-2xl md:text-3xl font-bold text-gray-900">Products</h3>
+        <button onclick="hideProducts()" class="text-sm font-medium text-gray-700 hover:text-pink-500 transition-colors border border-gray-300 rounded-full px-5 py-2 bg-white shadow-sm">← Back</button>
     </div>
-    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8"></div>
+    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
+        <!-- Products injected here via JS -->
+    </div>
 </section>
 
-<!-- RESPONSIVE CIRCULAR SHOWCASE -->
-<section class="py-16 md:py-24 relative overflow-hidden flex justify-center items-center px-4 border-y border-gray-200 shadow-sm my-12 bg-cover bg-center bg-fixed" style="background-image: url('YOUR-BACKGROUND-IMAGE.jpg');">
-    <div class="absolute inset-0 bg-white/70 backdrop-blur-sm z-0"></div>
-    <div class="absolute w-72 h-72 md:w-96 md:h-96 bg-pink-300/20 rounded-full blur-3xl z-0 animate-pulse"></div>
+<section class="py-16 md:py-24 relative overflow-hidden flex flex-col items-center justify-center border-y border-gray-100 bg-white">
+    <div class="text-center mb-12 relative z-10 px-4">
+        <h2 class="text-3xl md:text-4xl font-semibold text-gray-900">Featured Showcase</h2>
+        <p class="text-gray-500 mt-2">Explore our favorites up close</p>
+    </div>
 
-    <div class="relative z-10 w-full max-w-[320px] md:max-w-md aspect-square flex items-center justify-center animate-float">
-        <div class="absolute inset-0 rounded-full border border-dashed border-gray-800/30 pointer-events-none animate-[spin_30s_linear_infinite]"></div>
-        <div class="absolute inset-4 rounded-full border border-gray-800/20 pointer-events-none animate-[spin_20s_linear_infinite_reverse]"></div>
-
-        <img onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=800')" src="https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=150" class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border border-gray-800 object-cover shadow-sm cursor-pointer hover:scale-110 hover:border-pink-400 transition-all duration-300 z-20" alt="Thumb">
-        <img onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=800')" src="https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=150" class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border border-gray-800 object-cover shadow-sm cursor-pointer hover:scale-110 hover:border-pink-400 transition-all duration-300 z-20" alt="Thumb">
-        <img onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=800')" src="https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=150" class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border border-gray-800 object-cover shadow-sm cursor-pointer hover:scale-110 hover:border-pink-400 transition-all duration-300 z-20" alt="Thumb">
+    <!-- Responsive Container -->
+    <div class="relative z-10 w-[280px] h-[280px] md:w-[450px] md:h-[450px] mx-auto mt-4 mb-8">
         
-        <div onclick="updateCenterMedia('video', 'your-video-file.mp4')" class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border border-gray-800 overflow-hidden shadow-sm cursor-pointer hover:scale-110 hover:border-pink-400 transition-all duration-300 bg-gray-100 flex items-center justify-center z-20 group">
-            <div class="absolute inset-0 bg-black/10 group-hover:bg-black/5 transition-colors z-10"></div>
-            <svg class="w-6 h-6 text-gray-800 absolute z-20" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            <img src="https://images.unsplash.com/photo-1558285549-2a05f32b1ba6?q=80&w=150" class="w-full h-full object-cover opacity-90" alt="Video Thumb">
+        <!-- Spinning Background Rings -->
+        <div class="absolute inset-0 rounded-full border border-dashed border-gray-300 spin-slow pointer-events-none"></div>
+        <div class="absolute inset-6 md:inset-8 rounded-full border border-gray-200 spin-slow-reverse pointer-events-none"></div>
+
+        <!-- 6 Thumbnails Placed in a Circle -->
+        
+        <!-- 1: Top Center (Image) -->
+        <div onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=800')" 
+             class="absolute top-[0%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border-2 border-white shadow-md cursor-pointer hover:scale-110 transition-transform duration-300 z-20 overflow-hidden group">
+             <img src="https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=150" class="w-full h-full object-cover" alt="Thumb 1">
         </div>
 
-        <div class="relative z-10 w-[65%] h-[65%] rounded-full overflow-hidden border border-gray-800 bg-white flex items-center justify-center transition-transform duration-500 hover:scale-[1.02]">
-            <img id="center-img" src="" class="w-full h-full object-cover hidden animate-[fadeIn_0.3s_ease-in]" alt="Center Showcase">
-            <div id="center-video-container" class="w-full h-full relative">
+        <!-- 2: Top Right (Image) -->
+        <div onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=800')" 
+             class="absolute top-[25%] left-[93.3%] transform -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border-2 border-white shadow-md cursor-pointer hover:scale-110 transition-transform duration-300 z-20 overflow-hidden group">
+             <img src="https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=150" class="w-full h-full object-cover" alt="Thumb 2">
+        </div>
+
+        <!-- 3: Bottom Right (Video) -->
+        <div onclick="updateCenterMedia('video', 'https://www.w3schools.com/html/mov_bbb.mp4')" 
+             class="absolute top-[75%] left-[93.3%] transform -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border-2 border-white shadow-md cursor-pointer hover:scale-110 transition-transform duration-300 z-20 overflow-hidden group bg-gray-100 flex items-center justify-center">
+             <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors z-10"></div>
+             <!-- Play Icon -->
+             <svg class="w-6 h-6 text-white absolute z-20 drop-shadow-md" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+             <img src="https://images.unsplash.com/photo-1558285549-2a05f32b1ba6?q=80&w=150" class="w-full h-full object-cover blur-[1px]" alt="Video Thumb 1">
+        </div>
+
+        <!-- 4: Bottom Center (Image) -->
+        <div onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=800')" 
+             class="absolute top-[100%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border-2 border-white shadow-md cursor-pointer hover:scale-110 transition-transform duration-300 z-20 overflow-hidden group">
+             <img src="https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=150" class="w-full h-full object-cover" alt="Thumb 4">
+        </div>
+
+        <!-- 5: Bottom Left (Image) -->
+        <div onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1603539947678-cd3954edcb15?q=80&w=800')" 
+             class="absolute top-[75%] left-[6.7%] transform -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border-2 border-white shadow-md cursor-pointer hover:scale-110 transition-transform duration-300 z-20 overflow-hidden group">
+             <img src="https://images.unsplash.com/photo-1603539947678-cd3954edcb15?q=80&w=150" class="w-full h-full object-cover" alt="Thumb 5">
+        </div>
+
+        <!-- 6: Top Left (Video) -->
+        <div onclick="updateCenterMedia('video', 'https://www.w3schools.com/html/mov_bbb.mp4')" 
+             class="absolute top-[25%] left-[6.7%] transform -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border-2 border-white shadow-md cursor-pointer hover:scale-110 transition-transform duration-300 z-20 overflow-hidden group bg-gray-100 flex items-center justify-center">
+             <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors z-10"></div>
+             <!-- Play Icon -->
+             <svg class="w-6 h-6 text-white absolute z-20 drop-shadow-md" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+             <img src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?q=80&w=150" class="w-full h-full object-cover blur-[1px]" alt="Video Thumb 2">
+        </div>
+
+        <!-- Center Display Container -->
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] rounded-full overflow-hidden border-[6px] border-white shadow-xl bg-gray-50 flex items-center justify-center transition-transform duration-500 hover:scale-[1.02]">
+            <!-- Center Image -->
+            <img id="center-img" src="https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=800" class="w-full h-full object-cover fade-in" alt="Center Showcase">
+            
+            <!-- Center Video Container -->
+            <div id="center-video-container" class="w-full h-full relative hidden fade-in">
                 <video id="center-video" autoplay loop muted playsinline class="w-full h-full object-cover">
-                    <source id="center-video-src" src="your-video-file.mp4" type="video/mp4">
+                    <source id="center-video-src" src="" type="video/mp4">
                 </video>
             </div>
         </div>
+
     </div>
 </section>
 
-<!-- ABOUT US SECTION -->
-<section id="about" class="bg-white py-16 md:py-24 border-y border-gray-200 my-8 md:my-12 mx-4 sm:mx-6 rounded-[2rem]">
+<section id="about" class="bg-white py-16 md:py-24 border-y border-gray-100 my-8 md:my-12 mx-4 sm:mx-6 rounded-[2rem] shadow-sm">
     <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
         <div class="text-center md:text-left">
-            <h2 class="text-3xl md:text-4xl font-semibold mb-6">More Than Just Toys.</h2>
-            <p class="text-gray-600 mb-6 leading-relaxed">At Pepe Kun, every plushie is designed with a personality. From our sleepy cats to our signature bamboo pandas, we focus on premium materials, unique cloud-tag branding, and unparalleled softness.</p>
+            <h2 class="text-3xl md:text-4xl font-semibold mb-6 text-gray-900">More Than Just Toys.</h2>
+            <p class="text-gray-600 mb-6 leading-relaxed">At Pepe Kun, every plushie is designed with a distinct personality. From our sleepy cats to our signature bamboo pandas, we focus on premium materials, unique cloud-tag branding, and unparalleled cloud-like softness.</p>
         </div>
-        <div class="h-[300px] md:h-[500px] rounded-[2rem] overflow-hidden border border-gray-800">
+        <div class="h-[300px] md:h-[450px] rounded-[2rem] overflow-hidden shadow-md">
             <img src="https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=800" class="w-full h-full object-cover" alt="About Pepe Kun">
         </div>
     </div>
 </section>
 
-<!-- CONTACT SECTION -->
 <section id="contact" class="py-12 md:py-24 max-w-4xl mx-auto px-4 sm:px-6 text-center">
-    <div class="bg-white p-8 md:p-12 rounded-[2rem] border border-gray-200 shadow-sm">
-        <h2 class="text-2xl md:text-3xl font-medium mb-4">Say Hello</h2>
+    <div class="bg-white p-8 md:p-12 rounded-[2rem] border border-gray-100 shadow-sm">
+        <h2 class="text-2xl md:text-3xl font-medium mb-4 text-gray-900">Say Hello</h2>
         <p class="text-gray-500 mb-8 text-sm md:text-base">Have questions about an order or our materials? Reach out below.</p>
-        <form id="contact-form" class="space-y-6 text-left">
+        <form id="contact-form" onsubmit="handleContact(event)" class="space-y-6 text-left">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <input name="name" type="text" placeholder="Name" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-gray-800 bg-gray-50 text-sm" required>
-                <input name="email" type="email" placeholder="Email" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-gray-800 bg-gray-50 text-sm" required>
+                <input name="name" type="text" placeholder="Name" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 bg-gray-50 text-sm" required>
+                <input name="email" type="email" placeholder="Email" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 bg-gray-50 text-sm" required>
             </div>
-            <textarea name="message" rows="4" placeholder="Message" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-gray-800 bg-gray-50 text-sm" required></textarea>
-            <button type="submit" class="w-full px-8 py-3 bg-gray-900 text-white rounded-full font-medium hover:bg-gray-800 transition-colors">Send Message</button>
+            <textarea name="message" rows="4" placeholder="Message" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 bg-gray-50 text-sm" required></textarea>
+            <button type="submit" class="w-full px-8 py-3 bg-gray-900 text-white rounded-full font-medium hover:bg-pink-500 transition-colors">Send Message</button>
         </form>
     </div>
 </section>
 
-<!-- Footer -->
-<footer class="text-center py-8 text-gray-500 text-sm font-medium border-t border-gray-200 mt-12">
+<footer class="text-center py-8 text-gray-500 text-sm font-medium border-t border-gray-200 mt-12 pb-24 md:pb-8">
     &copy; 2026 PEPE KUN. All rights reserved.
 </footer>
 
-<!-- PRODUCT QUICK-VIEW MODAL -->
+<!-- Toast Container -->
+<div id="toast-container"></div>
+
 <div id="product-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 sm:p-6 opacity-0 transition-opacity duration-300">
-    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm cursor-pointer" onclick="closeModal()"></div>
-    <div class="relative w-full max-w-4xl bg-white rounded-[2rem] overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh]">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm cursor-pointer" onclick="closeModal()"></div>
+    
+    <!-- Modal Content -->
+    <div class="relative w-full max-w-5xl bg-white rounded-[2rem] overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh]">
         
-        <button onclick="closeModal()" class="absolute top-4 right-4 z-10 bg-white border border-gray-200 p-2 rounded-full hover:bg-gray-100 text-gray-800 transition-transform">
+        <!-- Close Button -->
+        <button onclick="closeModal()" class="absolute top-4 right-4 z-20 bg-white/80 backdrop-blur border border-gray-200 p-2 rounded-full hover:bg-gray-100 text-gray-800 transition-transform">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
         
-        <div class="md:w-1/2 p-6 bg-gray-50 flex flex-col gap-4 overflow-y-auto border-r border-gray-100">
-            <div class="w-full aspect-square pepe-box-1 overflow-hidden bg-white">
+        <!-- Left Side: Image -->
+        <div class="md:w-1/2 bg-gray-50 flex items-center justify-center p-6 border-b md:border-b-0 md:border-r border-gray-100">
+            <div class="w-full aspect-square overflow-hidden bg-white rounded-2xl shadow-sm">
                 <img id="modal-main-img" src="" class="w-full h-full object-cover transition-transform duration-500">
             </div>
-            <div class="flex gap-3 overflow-x-auto pb-2 snap-x" id="modal-gallery"></div>
         </div>
 
+        <!-- Right Side: Details & Tabs -->
         <div class="md:w-1/2 p-6 md:p-8 flex flex-col overflow-y-auto">
-            <div class="text-[11px] text-gray-500 font-bold tracking-widest uppercase mb-2" id="modal-category"></div>
+            <div class="text-xs text-pink-500 font-bold tracking-widest uppercase mb-2" id="modal-category"></div>
             <h2 class="text-3xl md:text-4xl font-semibold text-gray-900 mb-2" id="modal-title"></h2>
-            <div class="text-xl font-medium text-gray-600 mb-6" id="modal-price"></div>
-            <h3 class="font-medium text-gray-900 mb-2 border-b border-gray-100 pb-2">Description</h3>
-            <p class="text-gray-600 mb-6 leading-relaxed text-sm md:text-base" id="modal-desc"></p>
-            <h3 class="font-medium text-gray-900 mb-2 border-b border-gray-100 pb-2">Specifications</h3>
-            <ul class="text-gray-600 mb-8 space-y-2 text-sm" id="modal-specs"></ul>
+            <div class="text-2xl font-medium text-gray-700 mb-8" id="modal-price"></div>
+            
+            <!-- TABS -->
+            <div class="flex gap-6 border-b border-gray-200 mb-6">
+                <button id="tab-btn-desc" onclick="switchTab('desc')" class="pb-3 border-b-2 border-gray-900 font-medium text-gray-900 transition-colors">Description</button>
+                <button id="tab-btn-specs" onclick="switchTab('specs')" class="pb-3 border-b-2 border-transparent font-medium text-gray-500 hover:text-gray-900 transition-colors">Specifications</button>
+            </div>
 
+            <!-- TAB CONTENT: Description -->
+            <div id="tab-content-desc" class="block text-gray-600 mb-8 leading-relaxed text-sm md:text-base fade-in">
+                <!-- Injected via JS -->
+            </div>
+
+            <!-- TAB CONTENT: Specifications -->
+            <div id="tab-content-specs" class="hidden text-gray-600 mb-8 leading-relaxed text-sm md:text-base fade-in">
+                <!-- Injected via JS -->
+            </div>
+
+            <!-- Actions -->
             <div class="mt-auto flex gap-4 pt-4 border-t border-gray-100">
-                <button id="modal-add-btn" class="flex-1 bg-white border border-gray-800 text-gray-800 py-3 rounded-full font-medium hover:bg-gray-800 hover:text-white transition-colors">Add to Cart</button>
-                <button id="modal-buy-btn" class="flex-1 bg-gray-900 text-white py-3 rounded-full font-medium hover:bg-gray-800 transition-colors">Buy Now</button>
+                <button onclick="addToCart()" class="flex-1 bg-white border border-gray-900 text-gray-900 py-3.5 rounded-full font-medium hover:bg-gray-50 transition-colors">Add to Cart</button>
+                <button onclick="buyNow()" class="flex-1 bg-gray-900 text-white py-3.5 rounded-full font-medium hover:bg-pink-500 transition-colors">Buy Now</button>
             </div>
         </div>
     </div>
 </div>
 
-<script src="script.js"></script>
+<script>
+    // Product Database Array (Simulated Backend)
+    const sampleProducts = {
+        "Signature Collection": [
+            { 
+                id: 1, name: "Bamboo Panda Kun", price: "$38.00", 
+                image: "https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=600", 
+                desc: "Meet Bamboo Panda Kun, our flagship plushie. Designed for the ultimate cuddle experience, this panda features ultra-soft faux fur and a perfectly squishy filling that feels like a warm hug.",
+                specs: "<ul class='list-disc pl-5 space-y-2'><li><strong>Dimensions:</strong> 14\" H x 10\" W</li><li><strong>Material:</strong> 100% Recycled Polyester Fiber</li><li><strong>Care:</strong> Machine washable on gentle cycle</li><li><strong>Weight:</strong> 1.2 lbs</li></ul>"
+            },
+            { 
+                id: 2, name: "Sleepy Cat Companion", price: "$32.00", 
+                image: "https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=600", 
+                desc: "The Sleepy Cat is specially weighted to provide deep pressure stimulation. Its closed-eye design promotes relaxation, making it the perfect bedtime companion.",
+                specs: "<ul class='list-disc pl-5 space-y-2'><li><strong>Dimensions:</strong> 12\" H x 8\" W</li><li><strong>Material:</strong> Minky plush with glass bead weighting</li><li><strong>Care:</strong> Spot clean only</li><li><strong>Weight:</strong> 2.5 lbs</li></ul>"
+            }
+        ],
+        "Fantasy Series": [
+            { 
+                id: 3, name: "Starlight Dragon", price: "$45.00", 
+                image: "https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=600", 
+                desc: "Bring a touch of magic into your room with the Starlight Dragon. Featuring iridescent wings and embroidered star patterns, this dragon is built for both display and comfort.",
+                specs: "<ul class='list-disc pl-5 space-y-2'><li><strong>Dimensions:</strong> 18\" L x 9\" H</li><li><strong>Material:</strong> Premium Velboa with metallic thread</li><li><strong>Care:</strong> Surface wash</li><li><strong>Weight:</strong> 1.5 lbs</li></ul>"
+            }
+        ],
+        "Mini Series": [
+            { 
+                id: 5, name: "Pocket Pepe Bean", price: "$18.00", 
+                image: "https://images.unsplash.com/photo-1558285549-2a05f32b1ba6?q=80&w=600", 
+                desc: "Never go anywhere without comfort again. The Pocket Pepe Bean fits right in your hand or bag, filled with micro-beads for an addictive sensory experience.",
+                specs: "<ul class='list-disc pl-5 space-y-2'><li><strong>Dimensions:</strong> 4\" H x 3\" W</li><li><strong>Material:</strong> Spandex blend outer, EPS micro-beads</li><li><strong>Care:</strong> Hand wash gently</li><li><strong>Weight:</strong> 0.2 lbs</li></ul>"
+            }
+        ]
+    };
+
+    let cartCount = 0;
+
+    // Toast System
+    function showToast(message) {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerText = message;
+        container.appendChild(toast);
+        setTimeout(() => { if(toast.parentElement) toast.remove(); }, 3100);
+    }
+
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobile-menu');
+        menu.classList.toggle('hidden');
+        menu.classList.toggle('flex');
+    }
+
+    // Category / Product Views
+    function showCategory(categoryName) {
+        const categoriesSec = document.getElementById('categories');
+        const productSec = document.getElementById('product-display');
+        const grid = document.getElementById('product-grid');
+        const titleEl = document.getElementById('active-category-title');
+
+        titleEl.innerText = categoryName;
+        grid.innerHTML = '';
+
+        const items = sampleProducts[categoryName] || [];
+        items.forEach(item => {
+            const itemData = encodeURIComponent(JSON.stringify({...item, category: categoryName}));
+            grid.innerHTML += `
+                <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group cursor-pointer" onclick="openModal('${itemData}')">
+                    <div class="w-full aspect-square overflow-hidden bg-gray-50 relative">
+                        <img src="${item.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="${item.name}">
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300"></div>
+                        <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0">
+                            <svg class="w-5 h-5 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                        </div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow text-center">
+                        <h4 class="font-semibold text-gray-900 text-lg mb-1">${item.name}</h4>
+                        <p class="text-pink-500 font-medium">${item.price}</p>
+                    </div>
+                </div>
+            `;
+        });
+
+        categoriesSec.style.opacity = '0';
+        setTimeout(() => {
+            categoriesSec.classList.add('hidden');
+            productSec.classList.remove('hidden');
+            setTimeout(() => {
+                productSec.style.opacity = '1';
+                productSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 50);
+        }, 300);
+    }
+
+    function hideProducts() {
+        const categoriesSec = document.getElementById('categories');
+        const productSec = document.getElementById('product-display');
+
+        productSec.style.opacity = '0';
+        setTimeout(() => {
+            productSec.classList.add('hidden');
+            categoriesSec.classList.remove('hidden');
+            setTimeout(() => {
+                categoriesSec.style.opacity = '1';
+                categoriesSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 50);
+        }, 300);
+    }
+
+    // Modal & Tab Logic
+    function openModal(itemDataStr) {
+        const item = JSON.parse(decodeURIComponent(itemDataStr));
+        
+        document.getElementById('modal-main-img').src = item.image;
+        document.getElementById('modal-category').innerText = item.category;
+        document.getElementById('modal-title').innerText = item.name;
+        document.getElementById('modal-price').innerText = item.price;
+        document.getElementById('tab-content-desc').innerHTML = `<p>${item.desc}</p>`;
+        document.getElementById('tab-content-specs').innerHTML = item.specs;
+        
+        switchTab('desc');
+
+        const modal = document.getElementById('product-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        setTimeout(() => { modal.style.opacity = '1'; }, 10);
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('product-modal');
+        modal.style.opacity = '0';
+        setTimeout(() => {
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }, 300);
+    }
+
+    function switchTab(tab) {
+        const btnDesc = document.getElementById('tab-btn-desc');
+        const btnSpecs = document.getElementById('tab-btn-specs');
+        const contentDesc = document.getElementById('tab-content-desc');
+        const contentSpecs = document.getElementById('tab-content-specs');
+
+        if (tab === 'desc') {
+            btnDesc.className = "pb-3 border-b-2 border-gray-900 font-medium text-gray-900 transition-colors";
+            btnSpecs.className = "pb-3 border-b-2 border-transparent font-medium text-gray-500 hover:text-gray-900 transition-colors";
+            
+            contentDesc.classList.remove('hidden');
+            contentDesc.classList.add('block');
+            contentSpecs.classList.remove('block');
+            contentSpecs.classList.add('hidden');
+        } else {
+            btnSpecs.className = "pb-3 border-b-2 border-gray-900 font-medium text-gray-900 transition-colors";
+            btnDesc.className = "pb-3 border-b-2 border-transparent font-medium text-gray-500 hover:text-gray-900 transition-colors";
+            
+            contentSpecs.classList.remove('hidden');
+            contentSpecs.classList.add('block');
+            contentDesc.classList.remove('block');
+            contentDesc.classList.add('hidden');
+        }
+    }
+
+    // Spinning Wheel Media Control
+    function updateCenterMedia(type, src) {
+        const imgEl = document.getElementById('center-img');
+        const vidContainer = document.getElementById('center-video-container');
+        const vidEl = document.getElementById('center-video');
+        const vidSrcEl = document.getElementById('center-video-src');
+
+        // Reset animations to re-trigger fade-in
+        imgEl.classList.remove('fade-in');
+        vidContainer.classList.remove('fade-in');
+        void imgEl.offsetWidth; // trigger reflow
+        void vidContainer.offsetWidth; 
+
+        if (type === 'image') {
+            vidContainer.classList.add('hidden');
+            vidEl.pause();
+            
+            imgEl.src = src;
+            imgEl.classList.remove('hidden');
+            imgEl.classList.add('fade-in');
+        } else if (type === 'video') {
+            imgEl.classList.add('hidden');
+            
+            vidSrcEl.src = src;
+            vidEl.load();
+            vidContainer.classList.remove('hidden');
+            vidContainer.classList.add('fade-in');
+            vidEl.play().catch(e => console.log("Video auto-play blocked.", e));
+        }
+    }
+
+    // Cart & Contact actions
+    function addToCart() {
+        cartCount++;
+        document.getElementById('cart-count').innerText = cartCount;
+        document.getElementById('cart-count-mobile').innerText = cartCount;
+        showToast('Successfully added to cart!');
+    }
+    
+    function buyNow() {
+        addToCart();
+        closeModal();
+        showToast('Redirecting to checkout...');
+    }
+
+    function handleContact(e) {
+        e.preventDefault();
+        showToast('Thank you for reaching out! We have received your message.');
+        e.target.reset();
+    }
+</script>
 </body>
 </html>
