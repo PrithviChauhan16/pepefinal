@@ -3,809 +3,205 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PEPE KUN | Your Cart</title>
+    <title>Cart | PEPE KUN</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
-            theme: {
-                extend: { fontFamily: { sans: ['Outfit', 'sans-serif'] }, colors: { brand: { 900: '#1a1a1a' } } }
-            }
+        if (window.tailwind) {
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        fontFamily: { sans: ['Outfit', 'sans-serif'] },
+                        colors: { brand: { 50: '#fdfbf7', 900: '#1a1a1a' } }
+                    }
+                }
+            };
         }
     </script>
-    
-    <style>
-        body { 
-            background-color: #fff3ff;
-            background-image: none;
-            background-repeat: repeat;
-            background-size: 300px;
-            background-attachment: fixed;
-        }
-        @media (min-width: 768px) { body { background-size: 500px; } }
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0px); } }
-        .animate-float { animation: float 5s ease-in-out infinite; }
-    </style>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
+<body class="bg-gray-50 text-brand-900 antialiased selection:bg-pink-200 min-h-screen flex flex-col">
 
-<body class="text-brand-900 antialiased selection:bg-pink-200">
-
-    <!-- Minimal Cart Navbar -->
-    <nav class="sticky top-4 z-50 w-[95%] max-w-6xl mx-auto bg-white/60 backdrop-blur-md border border-white/50 px-6 py-4 shadow-md rounded-full flex justify-between items-center">
-        <a href="index.html" class="text-sm font-medium hover:text-pink-500 transition-colors">
-            ← Continue Shopping.
-        </a>
-
-        <span class="text-xl font-bold tracking-wide">Your Cart</span>
-
-        <span class="font-semibold text-pink-500" id="nav-total">₹0</span>
+    <!-- NAVIGATION -->
+    <nav class="sticky top-4 z-50 w-[95%] max-w-6xl mx-auto bg-white/40 backdrop-blur-md border border-white/50 px-6 py-4 shadow-lg rounded-full">
+        <div class="flex items-center justify-between">
+            <a href="index.html" class="flex items-center ml-2">
+                <!-- Replace with your actual logo -->
+                <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold text-gray-500">LOGO</div>
+            </a>
+            <div class="hidden md:flex gap-8 text-sm font-medium items-center absolute left-1/2 -translate-x-1/2">
+                <a href="index.html" class="hover:text-pink-500 transition-colors">Home</a>
+                <a href="index.html#categories" class="hover:text-pink-500 transition-colors">Categories</a>
+                <a href="index.html#contact" class="hover:text-pink-500 transition-colors">Contact</a>
+            </div>
+            <div class="hidden md:flex gap-4 text-sm font-medium items-center mr-2">
+                <a href="cart.html" class="text-pink-500 transition-colors flex items-center gap-1 font-semibold">
+                    Cart
+                </a>
+                <a href="#" class="bg-brand-900 text-white px-6 py-2 rounded-full hover:bg-pink-500 transition-colors shadow-md">Log In</a>
+            </div>
+        </div>
     </nav>
 
-    <!-- Cart Layout -->
-    <main class="max-w-4xl mx-auto px-4 py-16">
+    <!-- CART MAIN CONTAINER -->
+    <main class="flex-grow max-w-6xl mx-auto w-full px-4 sm:px-6 py-12 mt-8">
+        <div class="flex items-center justify-between mb-8">
+            <h1 class="text-3xl font-semibold text-gray-900">Your Cart</h1>
+            <a href="index.html" class="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors border border-gray-300 rounded-full px-5 py-2">
+                ← Continue Shopping
+            </a>
+        </div>
 
-        <div class="bg-white/80 backdrop-blur-md p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] shadow-xl border border-white animate-float">
-            
-            <!-- Dynamic Cart Items Container -->
-            <div id="cart-container" class="space-y-4 mb-8">
-                <!-- JavaScript will inject items here -->
-            </div>
-            
-            <!-- Checkout Bottom Bar -->
-            <div class="border-t border-gray-200/50 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
-
-                <div>
-                    <p class="text-sm text-gray-500 mb-1">Subtotal (Taxes included)</p>
-
-                    <div class="text-3xl font-semibold">
-                        Total:
-                        <span id="bottom-total" class="text-pink-500">₹0</span>
+        <div class="flex flex-col lg:flex-row gap-10">
+            <!-- Cart Items List (Stateless DOM-based) -->
+            <div class="lg:w-2/3 flex flex-col gap-6" id="cart-container">
+                
+                <!-- Sample Item 1 -->
+                <div class="cart-item flex flex-col sm:flex-row items-center gap-6 p-6 bg-white rounded-3xl border border-gray-200 shadow-sm" data-price="45.00">
+                    <div class="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl overflow-hidden bg-gray-100 flex-shrink-0">
+                        <img src="https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=400" alt="Bamboo Panda" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex-grow flex flex-col w-full text-center sm:text-left">
+                        <div class="text-[11px] text-gray-500 font-bold tracking-widest uppercase mb-1">Signature Collection</div>
+                        <h3 class="text-lg font-medium text-gray-900">Bamboo Panda Plush</h3>
+                        <div class="text-gray-600 font-medium mt-1 mb-4">$45.00</div>
+                        
+                        <div class="flex items-center justify-center sm:justify-start gap-6 mt-auto">
+                            <!-- Quantity Control -->
+                            <div class="flex items-center bg-gray-50 border border-gray-200 rounded-full">
+                                <button onclick="updateQuantity(this, -1)" class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-black transition-colors rounded-l-full">-</button>
+                                <input type="number" value="1" min="1" max="99" class="qty-input w-10 text-center bg-transparent text-sm font-medium focus:outline-none" readonly>
+                                <button onclick="updateQuantity(this, 1)" class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-black transition-colors rounded-r-full">+</button>
+                            </div>
+                            <!-- Remove Button -->
+                            <button onclick="removeItem(this)" class="text-sm font-medium text-red-400 hover:text-red-600 transition-colors underline underline-offset-4">Remove</button>
+                        </div>
                     </div>
                 </div>
 
-                <button onclick="processCheckout()" class="w-full md:w-auto px-12 py-4 bg-brand-900 text-white rounded-full font-medium text-lg hover:bg-pink-500 transition-colors shadow-lg">
-                    Checkout Securely
-                </button>
-
-            </div>
-
-        </div>
-
-    </main>
-    
-    <!-- Checkout Modal -->
-    <div id="checkout-modal" class="fixed inset-0 z-[70] hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-
-        <div class="bg-white w-full max-w-lg rounded-3xl p-6 md:p-8 shadow-2xl">
-
-            <div class="flex justify-between items-center mb-5">
-
-                <h2 class="text-2xl font-semibold">Delivery Details</h2>
-
-                <button onclick="closeCheckout()" class="text-gray-400 text-xl">
-                    ✕
-                </button>
-
-            </div>
-
-            <form id="checkout-form" class="space-y-4">
-
-                <input 
-                    name="name" 
-                    required 
-                    placeholder="Full name" 
-                    class="w-full px-4 py-3 border rounded-xl"
-                >
-
-                <input 
-                    name="phone" 
-                    required 
-                    placeholder="Phone number" 
-                    class="w-full px-4 py-3 border rounded-xl"
-                >
-
-                <textarea 
-                    name="address" 
-                    required 
-                    rows="3" 
-                    placeholder="Full delivery address" 
-                    class="w-full px-4 py-3 border rounded-xl"
-                ></textarea>
-
-                <div class="grid grid-cols-2 gap-3">
-
-                    <input 
-                        name="city" 
-                        required 
-                        placeholder="City" 
-                        class="w-full px-4 py-3 border rounded-xl"
-                    >
-
-                    <input 
-                        name="pincode" 
-                        required 
-                        placeholder="PIN code" 
-                        class="w-full px-4 py-3 border rounded-xl"
-                    >
-
+                <!-- Sample Item 2 -->
+                <div class="cart-item flex flex-col sm:flex-row items-center gap-6 p-6 bg-white rounded-3xl border border-gray-200 shadow-sm" data-price="38.50">
+                    <div class="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl overflow-hidden bg-gray-100 flex-shrink-0">
+                        <img src="https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=400" alt="Ruby Dragon" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex-grow flex flex-col w-full text-center sm:text-left">
+                        <div class="text-[11px] text-gray-500 font-bold tracking-widest uppercase mb-1">Fantasy Series</div>
+                        <h3 class="text-lg font-medium text-gray-900">Ruby Dragon Plush</h3>
+                        <div class="text-gray-600 font-medium mt-1 mb-4">$38.50</div>
+                        
+                        <div class="flex items-center justify-center sm:justify-start gap-6 mt-auto">
+                            <!-- Quantity Control -->
+                            <div class="flex items-center bg-gray-50 border border-gray-200 rounded-full">
+                                <button onclick="updateQuantity(this, -1)" class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-black transition-colors rounded-l-full">-</button>
+                                <input type="number" value="2" min="1" max="99" class="qty-input w-10 text-center bg-transparent text-sm font-medium focus:outline-none" readonly>
+                                <button onclick="updateQuantity(this, 1)" class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-black transition-colors rounded-r-full">+</button>
+                            </div>
+                            <!-- Remove Button -->
+                            <button onclick="removeItem(this)" class="text-sm font-medium text-red-400 hover:text-red-600 transition-colors underline underline-offset-4">Remove</button>
+                        </div>
+                    </div>
                 </div>
 
-                <button 
-                    type="submit"
-                    class="w-full bg-brand-900 text-white py-3 rounded-xl"
-                >
-                    Place Order
-                </button>
+                <!-- Empty State (Hidden by default) -->
+                <div id="empty-state" class="hidden text-center py-16 bg-white rounded-3xl border border-gray-200 shadow-sm">
+                    <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    </div>
+                    <h2 class="text-xl font-medium text-gray-900 mb-2">Your cart is empty</h2>
+                    <p class="text-gray-500 mb-6 text-sm">Looks like you haven't added any companions yet.</p>
+                    <a href="index.html" class="inline-block bg-brand-900 text-white px-8 py-3 rounded-full font-medium hover:bg-gray-800 transition-colors">Start Shopping</a>
+                </div>
 
-            </form>
+            </div>
 
+            <!-- Order Summary Sidebar -->
+            <div class="lg:w-1/3">
+                <div class="bg-white p-6 sm:p-8 rounded-3xl border border-gray-200 shadow-sm sticky top-28">
+                    <h2 class="text-xl font-medium text-gray-900 mb-6">Order Summary</h2>
+                    
+                    <div class="space-y-4 text-sm text-gray-600 mb-6 border-b border-gray-100 pb-6">
+                        <div class="flex justify-between">
+                            <span>Subtotal (<span id="summary-count">0</span> items)</span>
+                            <span class="font-medium text-gray-900" id="summary-subtotal">$0.00</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Shipping</span>
+                            <span class="font-medium text-gray-900">Calculated at checkout</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center mb-8">
+                        <span class="text-base font-medium text-gray-900">Total</span>
+                        <span class="text-2xl font-semibold text-gray-900" id="summary-total">$0.00</span>
+                    </div>
+                    
+                    <button id="checkout-btn" class="w-full bg-brand-900 text-white py-4 rounded-full font-medium hover:bg-gray-800 transition-colors shadow-md text-center">
+                        Proceed to Checkout
+                    </button>
+                    
+                    <div class="mt-4 text-center">
+                        <span class="text-xs text-gray-400">Secure checkout powered by PEPE KUN</span>
+                    </div>
+                </div>
+            </div>
         </div>
+    </main>
 
-    </div>
+    <script>
+        // Pure UI Logic - Recalculates totals based strictly on the HTML currently on the page
+        
+        function updateQuantity(btn, change) {
+            const input = btn.parentElement.querySelector('.qty-input');
+            let newValue = parseInt(input.value) + change;
+            if (newValue >= 1 && newValue <= 99) {
+                input.value = newValue;
+                calculateTotals();
+            }
+        }
 
+        function removeItem(btn) {
+            const itemRow = btn.closest('.cart-item');
+            itemRow.style.opacity = '0';
+            setTimeout(() => {
+                itemRow.remove();
+                calculateTotals();
+            }, 300); // Wait for transition before removing from DOM
+        }
 
-<script>
+        function calculateTotals() {
+            const items = document.querySelectorAll('.cart-item');
+            const emptyState = document.getElementById('empty-state');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            
+            let totalItems = 0;
+            let subtotal = 0;
 
-/* =========================
-   SUPABASE CONNECTION
-   ========================= */
-
-const supabaseUrl = 'https://cmxhngjykgoqblobyefh.supabase.co';
-
-/*
- IMPORTANT:
- Put your CURRENT Supabase publishable key here.
-
- It should start with:
-
- sb_publishable_
-
-Do NOT put the old eyJhbGci... key here.
-*/
-
-const supabaseKey = 'sb_publishable_05GBhGfDMBLN009-tv5soQ_XkQ_7jPc';
-
-
-/*
- IMPORTANT:
- We use supabaseClient instead of supabase
- to avoid the duplicate global declaration error.
-*/
-
-const supabaseClient = window.supabase.createClient(
-    supabaseUrl,
-    supabaseKey
-);
-
-
-let cart = [];
-let currentUser = null;
-let checkoutBusy = false;
-
-
-/* =========================
-   ESCAPE HTML
-   ========================= */
-
-function escapeHtml(value = '') {
-
-    return String(value).replace(/[&<>'"]/g, ch => ({
-        '&':'&amp;',
-        '<':'&lt;',
-        '>':'&gt;',
-        "'":'&#39;',
-        '"':'&quot;'
-    }[ch]));
-
-}
-
-
-/* =========================
-   GET LOCAL CART
-   ========================= */
-
-function getLocalCart() {
-
-    try {
-
-        const value = JSON.parse(
-            localStorage.getItem('pepekun_cart') || '[]'
-        );
-
-        return Array.isArray(value) ? value : [];
-
-    } catch (_) {
-
-        return [];
-
-    }
-
-}
-
-
-/* =========================
-   SAVE LOCAL CART
-   ========================= */
-
-function saveLocalCart() {
-
-    localStorage.setItem(
-        'pepekun_cart',
-        JSON.stringify(cart)
-    );
-
-}
-
-
-/* =========================
-   MERGE CARTS
-   ========================= */
-
-function mergeCarts(saved, local) {
-
-    const merged = (saved || []).map(item => ({
-        ...item,
-        quantity: Number(item.quantity) || 1
-    }));
-
-    for (const item of (local || [])) {
-
-        const existing = merged.find(
-            x => String(x.id) === String(item.id)
-        );
-
-        if (existing) {
-
-            existing.quantity += Number(item.quantity) || 1;
-
-        } else {
-
-            merged.push({
-                ...item,
-                quantity: Number(item.quantity) || 1
+            items.forEach(item => {
+                const price = parseFloat(item.getAttribute('data-price'));
+                const qty = parseInt(item.querySelector('.qty-input').value);
+                
+                totalItems += qty;
+                subtotal += (price * qty);
             });
 
+            // Update Summary UI
+            document.getElementById('summary-count').innerText = totalItems;
+            document.getElementById('summary-subtotal').innerText = '$' + subtotal.toFixed(2);
+            document.getElementById('summary-total').innerText = '$' + subtotal.toFixed(2);
+
+            // Handle Empty Cart State
+            if (items.length === 0) {
+                emptyState.classList.remove('hidden');
+                checkoutBtn.disabled = true;
+                checkoutBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                emptyState.classList.add('hidden');
+                checkoutBtn.disabled = false;
+                checkoutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
         }
 
-    }
-
-    return merged;
-
-}
-
-
-/* =========================
-   UPDATE TOTALS
-   ========================= */
-
-function updateTotals(total) {
-
-    document.getElementById('nav-total').textContent =
-        `₹${total}`;
-
-    document.getElementById('bottom-total').textContent =
-        `₹${total}`;
-
-}
-
-
-/* =========================
-   CALCULATE TOTAL
-   ========================= */
-
-function calculateTotal() {
-
-    return cart.reduce(
-        (sum, item) =>
-            sum +
-            Number(item.price || 0) *
-            (Number(item.quantity) || 1),
-        0
-    );
-
-}
-
-
-/* =========================
-   RENDER CART
-   ========================= */
-
-function renderCart() {
-
-    const container =
-        document.getElementById('cart-container');
-
-
-    if (!cart.length) {
-
-        container.innerHTML = `
-            <div class="text-center py-16">
-
-                <div class="text-6xl mb-4">
-                    ☁️
-                </div>
-
-                <h3 class="text-xl font-medium mb-2">
-                    Your cart is empty
-                </h3>
-
-                <p class="text-gray-500">
-                    Time to find a soft companion!
-                </p>
-
-            </div>`;
-
-        updateTotals(0);
-
-        return;
-    }
-
-
-    container.innerHTML = cart.map((item, index) => {
-
-        const quantity =
-            Number(item.quantity) || 1;
-
-        const lineTotal =
-            Number(item.price || 0) * quantity;
-
-
-        return `
-        <div class="flex flex-col sm:flex-row sm:items-center gap-4 bg-white/90 p-4 rounded-2xl shadow-sm border">
-
-            <img 
-                src="${escapeHtml(item.image_url || item.image || '')}"
-                class="w-20 h-20 object-cover rounded-xl flex-shrink-0"
-                alt="${escapeHtml(item.name || 'PEPE KUN plushie')}"
-            >
-
-            <div class="flex-1 min-w-0">
-
-                <h3 class="font-medium truncate">
-                    ${escapeHtml(item.name || 'PEPE KUN Plushie')}
-                </h3>
-
-                <p class="text-gray-500 text-sm">
-                    ₹${Number(item.price || 0)}
-                </p>
-
-                <div class="flex items-center gap-2 mt-2">
-
-                    <button 
-                        onclick="changeQty(${index}, -1)" 
-                        aria-label="Decrease quantity"
-                        class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200"
-                    >
-                        −
-                    </button>
-
-                    <span class="min-w-6 text-center">
-                        ${quantity}
-                    </span>
-
-                    <button 
-                        onclick="changeQty(${index}, 1)" 
-                        aria-label="Increase quantity"
-                        class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200"
-                    >
-                        +
-                    </button>
-
-                </div>
-
-            </div>
-
-            <div class="flex items-center justify-between sm:block sm:text-right gap-4">
-
-                <div class="font-semibold">
-                    ₹${lineTotal}
-                </div>
-
-                <button 
-                    onclick="removeItem(${index})" 
-                    class="text-sm text-red-500 hover:text-red-700 mt-1"
-                >
-                    Remove
-                </button>
-
-            </div>
-
-        </div>`;
-
-    }).join('');
-
-
-    updateTotals(calculateTotal());
-
-}
-
-
-/* =========================
-   SAVE CART
-   ========================= */
-
-async function saveCart() {
-
-    saveLocalCart();
-
-
-    if (!currentUser) {
-
-        renderCart();
-
-        return true;
-
-    }
-
-
-    const { error } =
-        await supabaseClient
-            .from('carts')
-            .upsert(
-                {
-                    user_id: currentUser.id,
-                    items: cart,
-                    updated_at: new Date().toISOString()
-                },
-                {
-                    onConflict: 'user_id'
-                }
-            );
-
-
-    if (error) {
-
-        console.error(
-            'Cart save error:',
-            error
-        );
-
-        alert(
-            'Your cart could not be saved to your account: ' +
-            error.message
-        );
-
-        return false;
-
-    }
-
-
-    renderCart();
-
-    return true;
-
-}
-
-
-/* =========================
-   CHANGE QUANTITY
-   ========================= */
-
-async function changeQty(index, difference) {
-
-    if (!cart[index]) {
-        return;
-    }
-
-
-    cart[index].quantity =
-        (Number(cart[index].quantity) || 1) +
-        difference;
-
-
-    if (cart[index].quantity <= 0) {
-
-        cart.splice(index, 1);
-
-    }
-
-
-    await saveCart();
-
-}
-
-
-/* =========================
-   REMOVE ITEM
-   ========================= */
-
-async function removeItem(index) {
-
-    if (!cart[index]) {
-        return;
-    }
-
-
-    cart.splice(index, 1);
-
-    await saveCart();
-
-}
-
-
-/* =========================
-   CLOSE CHECKOUT
-   ========================= */
-
-function closeCheckout() {
-
-    const modal =
-        document.getElementById('checkout-modal');
-
-
-    modal.classList.add('hidden');
-
-    modal.classList.remove('flex');
-
-}
-
-
-/* =========================
-   OPEN CHECKOUT
-   ========================= */
-
-async function processCheckout() {
-
-    if (checkoutBusy) {
-        return;
-    }
-
-
-    if (!cart.length) {
-
-        alert(
-            'Add a plushie to your cart first!'
-        );
-
-        return;
-    }
-
-
-    if (!currentUser) {
-
-        alert(
-            'Please log in first. Your cart will be kept for you.'
-        );
-
-        window.location.href =
-            'login.html';
-
-        return;
-    }
-
-
-    const modal =
-        document.getElementById('checkout-modal');
-
-
-    modal.classList.remove('hidden');
-
-    modal.classList.add('flex');
-
-}
-
-
-/* =========================
-   PLACE ORDER
-   ========================= */
-
-document
-    .getElementById('checkout-form')
-    .addEventListener(
-        'submit',
-        async event => {
-
-            event.preventDefault();
-
-
-            if (
-                checkoutBusy ||
-                !currentUser ||
-                !cart.length
-            ) {
-                return;
-            }
-
-
-            const form = event.target;
-
-
-            const button =
-                form.querySelector(
-                    'button[type="submit"]'
-                );
-
-
-            const shipping = {
-
-                name:
-                    form.elements.name.value.trim(),
-
-                phone:
-                    form.elements.phone.value.trim(),
-
-                address:
-                    form.elements.address.value.trim(),
-
-                city:
-                    form.elements.city.value.trim(),
-
-                pincode:
-                    form.elements.pincode.value.trim()
-
-            };
-
-
-            checkoutBusy = true;
-
-
-            if (button) {
-
-                button.disabled = true;
-
-                button.textContent =
-                    'Placing Order...';
-
-            }
-
-
-            const total =
-                calculateTotal();
-
-
-            const { error } =
-                await supabaseClient
-                    .from('orders')
-                    .insert([{
-
-                        user_id:
-                            currentUser.id,
-
-                        items:
-                            cart,
-
-                        order_total:
-                            total,
-
-                        status:
-                            'pending',
-
-                        shipping_details:
-                            shipping
-
-                    }]);
-
-
-            if (error) {
-
-                checkoutBusy = false;
-
-
-                if (button) {
-
-                    button.disabled = false;
-
-                    button.textContent =
-                        'Place Order';
-
-                }
-
-
-                alert(
-                    'Checkout failed: ' +
-                    error.message
-                );
-
-                return;
-            }
-
-
-            cart = [];
-
-
-            await saveCart();
-
-
-            closeCheckout();
-
-
-            alert(
-                'Order placed successfully!'
-            );
-
-
-            window.location.href =
-                'index.html';
-
-        }
-    );
-
-
-/* =========================
-   LOAD CART + USER
-   ========================= */
-
-document.addEventListener(
-    'DOMContentLoaded',
-    async () => {
-
-        cart = getLocalCart();
-
-
-        const { data } =
-            await supabaseClient.auth.getUser();
-
-
-        currentUser =
-            data?.user || null;
-
-
-        if (currentUser) {
-
-            const { data: saved, error } =
-                await supabaseClient
-                    .from('carts')
-                    .select('items')
-                    .eq(
-                        'user_id',
-                        currentUser.id
-                    )
-                    .maybeSingle();
-
-
-            if (
-                !error &&
-                Array.isArray(saved?.items)
-            ) {
-
-                cart =
-                    mergeCarts(
-                        saved.items,
-                        cart
-                    );
-
-                await saveCart();
-
-            } else if (error) {
-
-                console.warn(
-                    'Saved cart could not be loaded:',
-                    error.message
-                );
-
-            }
-
-        }
-
-
-        saveLocalCart();
-
-        renderCart();
-
-    }
-);
-
-
-/* =========================
-   MAKE INLINE FUNCTIONS
-   AVAILABLE
-   ========================= */
-
-window.changeQty =
-    changeQty;
-
-window.removeItem =
-    removeItem;
-
-window.closeCheckout =
-    closeCheckout;
-
-window.processCheckout =
-    processCheckout;
-
-</script>
-
+        // Initialize calculation on page load
+        document.addEventListener('DOMContentLoaded', calculateTotals);
+    </script>
 </body>
 </html>
