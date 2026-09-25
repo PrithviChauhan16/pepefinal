@@ -37,6 +37,16 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+
+        /* ========================================================
+           ⬇️ CHANGE YOUR SPINNING WHEEL BACKGROUND IMAGE HERE ⬇️ 
+           ======================================================== */
+        #spinning-showcase {
+            background-image: url('https://images.unsplash.com/photo-1557682224-5b8590cd9ec5?q=80&w=2000');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
     </style>
 </head>
 <body class="text-brand-900 antialiased selection:bg-pink-200 bg-gray-50">
@@ -121,43 +131,44 @@
 </section>
 
 <!-- SPINNING SHOWCASE SECTION -->
-<section class="py-24 relative overflow-hidden flex justify-center items-center px-4 shadow-inner my-12 bg-cover bg-center bg-fixed" style="background-image: url('https://images.unsplash.com/photo-1557682224-5b8590cd9ec5?q=80&w=2000');">
+<section id="spinning-showcase" class="py-24 relative overflow-hidden flex justify-center items-center px-4 shadow-inner my-12">
     <div class="absolute inset-0 bg-white/60 backdrop-blur-sm z-0"></div>
 
-    <div class="relative z-10 w-full max-w-[340px] md:max-w-lg aspect-square flex items-center justify-center animate-float">
+    <div class="relative z-10 w-full max-w-[320px] md:max-w-md aspect-square flex items-center justify-center animate-float">
         <!-- Spinning tracks -->
         <div class="absolute inset-0 rounded-full border border-dashed border-gray-800/20 pointer-events-none animate-[spin_40s_linear_infinite]"></div>
         <div class="absolute inset-8 rounded-full border border-gray-800/10 pointer-events-none animate-[spin_25s_linear_infinite_reverse]"></div>
 
-        <!-- 6 Floating Media Items (4 Images, 2 Videos) -->
-        <!-- Image 1 -->
-        <img onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=800')" src="https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=150" class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 md:w-24 md:h-24 rounded-full border-2 border-white object-cover shadow-lg cursor-pointer hover:scale-110 transition-transform duration-300 z-20" alt="Thumb">
+        <!-- 6 Perfectly Spaced Media Items (Hexagonal Layout) -->
         
-        <!-- Image 2 -->
-        <img onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=800')" src="https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=150" class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-16 h-16 md:w-24 md:h-24 rounded-full border-2 border-white object-cover shadow-lg cursor-pointer hover:scale-110 transition-transform duration-300 z-20" alt="Thumb">
+        <!-- Image 1 (Top / 12 o'clock) -->
+        <img onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=800')" src="https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=150" class="absolute left-[50%] top-[0%] -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border border-gray-800 object-cover shadow-sm cursor-pointer hover:scale-110 hover:border-pink-400 transition-all duration-300 z-20" alt="Thumb">
         
-        <!-- Image 3 -->
-        <img onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=800')" src="https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=150" class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-16 h-16 md:w-24 md:h-24 rounded-full border-2 border-white object-cover shadow-lg cursor-pointer hover:scale-110 transition-transform duration-300 z-20" alt="Thumb">
+        <!-- Image 2 (Top Right / 2 o'clock) -->
+        <img onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=800')" src="https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=150" class="absolute left-[93.3%] top-[25%] -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border border-gray-800 object-cover shadow-sm cursor-pointer hover:scale-110 hover:border-pink-400 transition-all duration-300 z-20" alt="Thumb">
         
-        <!-- Image 4 -->
-        <img onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?q=80&w=800')" src="https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?q=80&w=150" class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-16 h-16 md:w-24 md:h-24 rounded-full border-2 border-white object-cover shadow-lg cursor-pointer hover:scale-110 transition-transform duration-300 z-20" alt="Thumb">
-
-        <!-- Video 1 (Top Left) -->
-        <div onclick="updateCenterMedia('video', 'your-video-1.mp4')" class="absolute top-[15%] left-[15%] -translate-x-1/2 -translate-y-1/2 w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-white overflow-hidden shadow-lg cursor-pointer hover:scale-110 transition-transform duration-300 bg-gray-100 flex items-center justify-center z-20 group">
+        <!-- Video 1 (Bottom Right / 4 o'clock) -->
+        <div onclick="updateCenterMedia('video', 'your-video-1.mp4')" class="absolute left-[93.3%] top-[75%] -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border border-gray-800 overflow-hidden shadow-sm cursor-pointer hover:scale-110 hover:border-pink-400 transition-all duration-300 bg-gray-100 flex items-center justify-center z-20 group">
             <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors z-10"></div>
-            <svg class="w-8 h-8 text-white absolute z-20 drop-shadow-md" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <svg class="w-6 h-6 text-white absolute z-20 drop-shadow-md" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             <img src="https://images.unsplash.com/photo-1558285549-2a05f32b1ba6?q=80&w=150" class="w-full h-full object-cover" alt="Video Thumb">
         </div>
-
-        <!-- Video 2 (Bottom Right) -->
-        <div onclick="updateCenterMedia('video', 'your-video-2.mp4')" class="absolute bottom-[15%] right-[15%] translate-x-1/2 translate-y-1/2 w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-white overflow-hidden shadow-lg cursor-pointer hover:scale-110 transition-transform duration-300 bg-gray-100 flex items-center justify-center z-20 group">
+        
+        <!-- Image 3 (Bottom / 6 o'clock) -->
+        <img onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=800')" src="https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=150" class="absolute left-[50%] top-[100%] -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border border-gray-800 object-cover shadow-sm cursor-pointer hover:scale-110 hover:border-pink-400 transition-all duration-300 z-20" alt="Thumb">
+        
+        <!-- Video 2 (Bottom Left / 8 o'clock) -->
+        <div onclick="updateCenterMedia('video', 'your-video-2.mp4')" class="absolute left-[6.7%] top-[75%] -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border border-gray-800 overflow-hidden shadow-sm cursor-pointer hover:scale-110 hover:border-pink-400 transition-all duration-300 bg-gray-100 flex items-center justify-center z-20 group">
             <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors z-10"></div>
-            <svg class="w-8 h-8 text-white absolute z-20 drop-shadow-md" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <svg class="w-6 h-6 text-white absolute z-20 drop-shadow-md" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=150" class="w-full h-full object-cover" alt="Video Thumb">
         </div>
 
+        <!-- Image 4 (Top Left / 10 o'clock) -->
+        <img onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?q=80&w=800')" src="https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?q=80&w=150" class="absolute left-[6.7%] top-[25%] -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border border-gray-800 object-cover shadow-sm cursor-pointer hover:scale-110 hover:border-pink-400 transition-all duration-300 z-20" alt="Thumb">
+
         <!-- Center Display -->
-        <div class="relative z-10 w-[60%] h-[60%] rounded-full overflow-hidden border-4 border-white bg-white shadow-2xl flex items-center justify-center transition-transform duration-500 hover:scale-105">
+        <div class="relative z-10 w-[65%] h-[65%] rounded-full overflow-hidden border border-gray-800 bg-white shadow-xl flex items-center justify-center transition-transform duration-500 hover:scale-[1.02]">
             <img id="center-img" src="https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=800" class="w-full h-full object-cover" alt="Center Showcase">
             <div id="center-video-container" class="w-full h-full relative hidden">
                 <video id="center-video" autoplay loop muted playsinline class="w-full h-full object-cover">
@@ -250,7 +261,6 @@
 
 <script>
     // --- AUTHENTICATION UI LOGIC ---
-    // Changes login button based on simulated user role
     document.addEventListener('DOMContentLoaded', () => {
         const userRole = localStorage.getItem('pepe_user_role'); 
         const loginBtn = document.getElementById('auth-login-btn');
@@ -314,18 +324,14 @@
 
     // --- CATEGORY DISPLAY LOGIC ---
     function showCategory(catName) {
-        // Hide categories
         document.getElementById('categories').classList.add('hidden');
         
-        // Show product display container
         const display = document.getElementById('product-display');
         display.classList.remove('hidden');
         setTimeout(() => display.classList.remove('opacity-0'), 50);
 
-        // Update Title
         document.getElementById('current-category-title').innerText = catName;
 
-        // Filter and Render Products
         const grid = document.getElementById('product-grid');
         grid.innerHTML = '';
         
@@ -366,17 +372,14 @@
         const product = productsData.find(p => p.id === productId);
         if(!product) return;
 
-        // Populate Text Data
         document.getElementById('modal-category').innerText = product.category;
         document.getElementById('modal-title').innerText = product.title;
         document.getElementById('modal-price').innerText = product.price;
         document.getElementById('tab-desc').innerText = product.desc;
         
-        // Populate Specs
         const specsList = document.getElementById('modal-specs-list');
         specsList.innerHTML = product.specs.map(spec => `<li>${spec}</li>`).join('');
 
-        // Populate Images
         document.getElementById('modal-main-img').src = product.images[0];
         
         const thumbsContainer = document.getElementById('modal-thumbnails');
@@ -386,15 +389,13 @@
             </div>
         `).join('');
 
-        // Reset Tabs to Description
         switchTab('desc');
 
-        // Show Modal
         const modal = document.getElementById('product-modal');
         modal.classList.remove('hidden');
         modal.classList.add('flex');
         setTimeout(() => modal.classList.remove('opacity-0'), 10);
-        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        document.body.style.overflow = 'hidden'; 
     }
 
     function closeModal() {
