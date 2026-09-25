@@ -69,7 +69,7 @@
 <body class="text-brand-900 antialiased selection:bg-pink-200 bg-gray-50">
 
 <!-- FLOATING NAVBAR -->
-<nav class="sticky top-4 z-50 w-[95%] max-w-6xl mx-auto bg-white/80 backdrop-blur-md border border-white/50 px-6 py-4 shadow-lg rounded-3xl transition-all duration-300">
+<nav class="sticky top-4 z-50 w-[95%] max-w-6xl mx-auto bg-white/50 backdrop-blur-sm border border-white/50 px-6 py-4 shadow-lg rounded-3xl transition-all duration-300">
     <div class="flex items-center justify-between">
         
         <a href="#home" class="flex items-center ml-2">
@@ -111,7 +111,6 @@
 <!-- BANNER (Auto-sliding images, un-cropped) -->
 <header id="home" class="relative w-full max-w-7xl mx-auto mt-6 md:mt-8 rounded-[2rem] md:rounded-[3rem] overflow-hidden bg-transparent flex justify-center">
     <!-- ⬇️ CHANGE YOUR FIRST BANNER IMAGE HERE ⬇️ -->
-    <!-- The JavaScript will automatically read this link to use as the first slide! -->
     <img id="banner-slider" src="banner.png" class="w-full h-auto object-contain transition-opacity duration-500" alt="Pepe Kun Banner">
 </header>
 
@@ -156,13 +155,14 @@
 
 <!-- HIDDEN PRODUCT POP-UP SECTION -->
 <section id="product-display" class="max-w-5xl mx-auto px-4 sm:px-6 pt-16 pb-24 hidden opacity-0 transition-opacity duration-500">
-    <div class="flex items-center justify-between mb-10 border-b border-gray-200 pb-4">
-        <h2 id="current-category-title" class="text-2xl font-semibold text-gray-900">Products</h2>
-        <button onclick="hideProducts()" class="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors border border-gray-300 rounded-full px-5 py-2 hover:bg-gray-100">
-            ← Back to Categories
+    <div class="flex items-center justify-between mb-8 md:mb-10 border-b border-gray-200 pb-4">
+        <h2 id="current-category-title" class="text-xl md:text-2xl font-semibold text-gray-900">Products</h2>
+        <button onclick="hideProducts()" class="text-xs md:text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors border border-gray-300 rounded-full px-4 md:px-5 py-2 hover:bg-gray-100">
+            ← Back
         </button>
     </div>
-    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+    <!-- ⬇️ Updated Grid: 2 columns on mobile (grid-cols-2), 3 on desktop (md:grid-cols-3) ⬇️ -->
+    <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
         <!-- Products injected via JS -->
     </div>
 </section>
@@ -170,7 +170,7 @@
 <!-- SPINNING SHOWCASE SECTION -->
 <section class="bg-section-1 relative overflow-hidden py-24 my-12 flex flex-col justify-center items-center w-full">
     <!-- Frosted overlay to create the blur effect -->
-    <div class="absolute inset-0 bg-white/50 backdrop-blur-md z-0 pointer-events-none"></div>
+    <div class="absolute inset-0 bg-white/50 backdrop-blur-sm z-0 pointer-events-none"></div>
 
     <div class="relative z-10 w-full max-w-[300px] md:max-w-[400px] aspect-square flex items-center justify-center animate-float mt-8">
         <!-- Spinning tracks -->
@@ -220,7 +220,7 @@
 <!-- ABOUT US SECTION -->
 <section id="about" class="bg-section-2 relative overflow-hidden py-16 md:py-24 border border-gray-200 shadow-sm my-8">
     <!-- Frosted overlay for the blur effect -->
-    <div class="absolute inset-0 bg-white/50 backdrop-blur-md z-0 pointer-events-none"></div>
+    <div class="absolute inset-0 bg-white/50 backdrop-blur-sm z-0 pointer-events-none"></div>
     
     <div class="relative z-10 max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
         <div class="text-center md:text-left">
@@ -236,7 +236,7 @@
 <!-- CONTACT SECTION -->
 <section id="contact" class="bg-section-1 relative py-16 md:py-24 w-full">
     <!-- Frosted overlay for the blur effect -->
-    <div class="absolute inset-0 bg-white/50 backdrop-blur-md z-0 pointer-events-none"></div>
+    <div class="absolute inset-0 bg-white/50 backdrop-blur-sm z-0 pointer-events-none"></div>
     
     <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
         <div class="bg-white/95 backdrop-blur p-8 md:p-12 rounded-[3rem] border border-gray-200 shadow-xl">
@@ -345,7 +345,6 @@
     });
 
     // --- AUTO IMAGE SLIDER (BANNER ONLY) ---
-    // Make sure your HTML banner img tag has an id of "banner-slider"
     const bannerImgElement = document.getElementById('banner-slider');
     
     // ⬇️ ADD YOUR BANNER IMAGES HERE ⬇️
@@ -363,13 +362,12 @@
             setTimeout(() => {
                 bannerIndex = (bannerIndex + 1) % bannerPhotos.length;
                 
-                // Only update the source if the array slot isn't empty or placeholder
                 if(bannerPhotos[bannerIndex] && !bannerPhotos[bannerIndex].includes('PASTE_YOUR')) {
                     bannerImgElement.src = bannerPhotos[bannerIndex];
                 }
                 
                 bannerImgElement.classList.remove('opacity-0');
-            }, 500);
+            }, 500); 
         }
     }, 4000);
 
@@ -441,15 +439,16 @@
         }
 
         filtered.forEach(p => {
+            // Updated text sizes and gap for mobile layout
             grid.innerHTML += `
-                <div onclick="openModal(${p.id})" class="group cursor-pointer flex flex-col gap-3">
-                    <div class="w-full aspect-square bg-white rounded-[2rem] overflow-hidden border border-gray-100 shadow-sm relative">
+                <div onclick="openModal(${p.id})" class="group cursor-pointer flex flex-col gap-2 md:gap-3">
+                    <div class="w-full aspect-square bg-white rounded-2xl md:rounded-[2rem] overflow-hidden border border-gray-100 shadow-sm relative">
                         <img src="${p.images[0]}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors"></div>
                     </div>
-                    <div class="px-2">
-                        <h3 class="font-medium text-gray-900 text-lg">${p.title}</h3>
-                        <p class="text-gray-500 font-medium">${p.price}</p>
+                    <div class="px-1 md:px-2">
+                        <h3 class="font-medium text-gray-900 text-[15px] md:text-lg leading-snug">${p.title}</h3>
+                        <p class="text-gray-500 font-medium text-sm md:text-base">${p.price}</p>
                     </div>
                 </div>
             `;
