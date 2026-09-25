@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PEPE KUN | Discover Softness</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -19,6 +20,7 @@
             };
         }
     </script>
+    
     <style>
         html { scroll-behavior: smooth; }
         .fade-in { animation: fadeIn 0.3s ease-in-out forwards; }
@@ -42,7 +44,7 @@
             padding: 12px 24px;
             border-radius: 9999px;
             font-size: 14px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             opacity: 0;
             transform: translateY(100%);
             animation: slideUpFade 0.3s forwards, fadeOut 0.3s 2.7s forwards;
@@ -54,43 +56,54 @@
         .spin-slow { animation: spin 30s linear infinite; }
         .spin-slow-reverse { animation: spin 20s linear infinite reverse; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
+        
+        /* Hide scrollbar for gallery */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="text-brand-900 antialiased selection:bg-pink-200 bg-[#fdfbf7]">
 
 <nav class="sticky top-4 z-50 w-[95%] max-w-6xl mx-auto bg-white/70 backdrop-blur-md border border-white/50 px-6 py-4 shadow-sm rounded-full">
     <div class="flex items-center justify-between">
+        <!-- Logo Image ONLY -->
         <a href="#home" class="flex items-center ml-2">
-            <!-- Logo Placeholder only -->
-            <img src="pepe-black1.png" alt="Logo" class="h-10 w-auto object-contain" onerror="this.src='https://placehold.co/120x40/transparent/1a1a1a?text=LOGO';">
+            <img src="pepe-logo.png" alt="PEPE KUN Logo" class="h-10 w-auto object-contain" onerror="this.src='https://placehold.co/120x40/transparent/1a1a1a?text=LOGO';">
         </a>
+        
+        <!-- Centered Links -->
         <div class="hidden md:flex gap-8 text-sm font-medium items-center absolute left-1/2 -translate-x-1/2">
             <a href="#home" class="hover:text-pink-500 transition-colors">Home</a>
             <a href="#categories" class="hover:text-pink-500 transition-colors">Collections</a>
             <a href="#about" class="hover:text-pink-500 transition-colors">About Us</a>
             <a href="#contact" class="hover:text-pink-500 transition-colors">Contact</a>
         </div>
+        
+        <!-- Right side actions -->
         <div class="hidden md:flex gap-4 text-sm font-medium items-center mr-2">
             <button onclick="showToast('Cart functionality coming soon!')" class="hover:text-pink-500 transition-colors flex items-center gap-1">
                 Cart (<span id="cart-count">0</span>)
             </button>
             <button onclick="showToast('Login portal coming soon!')" class="bg-brand-900 text-white px-6 py-2 rounded-full hover:bg-pink-500 transition-colors shadow-md">Log In</button>
         </div>
+        
+        <!-- Mobile menu button -->
         <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-gray-600 focus:outline-none">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
         </button>
     </div>
+    
     <div id="mobile-menu" class="hidden flex-col gap-4 pt-4 pb-2 border-t border-gray-100 mt-4 text-center text-sm font-medium">
         <a href="#home" onclick="toggleMobileMenu()" class="hover:text-pink-500">Home</a>
         <a href="#categories" onclick="toggleMobileMenu()" class="hover:text-pink-500">Collections</a>
         <a href="#about" onclick="toggleMobileMenu()" class="hover:text-pink-500">About Us</a>
         <button onclick="showToast('Cart coming soon!')" class="hover:text-pink-500 w-full text-center py-2">Cart (<span id="cart-count-mobile">0</span>)</button>
+        <button onclick="showToast('Login portal coming soon!')" class="bg-brand-900 text-white px-5 py-2 rounded-full mx-auto inline-block">Log In</button>
     </div>
 </nav>      
 
-<!-- Completely adaptable banner: height depends strictly on the image ratio -->
 <header id="home" class="relative max-w-[95%] md:max-w-[90%] mx-auto mt-6 md:mt-8 rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-sm border border-gray-200">
-    <img src="banner.png" class="w-full h-auto block" alt="Banner Image" onerror="this.src='https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=1200'; this.onerror=null;">
+    <img src="banner.png" class="w-full h-auto block" alt="PEPE KUN Banner" onerror="this.src='https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=1200'; this.onerror=null;">
 </header>
 
 <section id="categories" class="max-w-6xl mx-auto px-4 sm:px-6 py-16 md:py-24 transition-all duration-500">
@@ -102,7 +115,7 @@
     <div id="category-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 transition-all duration-500">
         <!-- Category 1 -->
         <div onclick="showCategory('Signature Collection')" class="group flex flex-col gap-4 cursor-pointer w-full">
-            <div class="relative w-full aspect-square rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+            <div class="relative w-full aspect-square rounded-2xl overflow-hidden bg-gray-50 shadow-sm hover:shadow-xl transition-shadow duration-300 border border-gray-100">
                 <img src="https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Signature Collection">
                 <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300"></div>
             </div>
@@ -113,7 +126,7 @@
 
         <!-- Category 2 -->
         <div onclick="showCategory('Fantasy Series')" class="group flex flex-col gap-4 cursor-pointer w-full">
-            <div class="relative w-full aspect-square rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+            <div class="relative w-full aspect-square rounded-2xl overflow-hidden bg-gray-50 shadow-sm hover:shadow-xl transition-shadow duration-300 border border-gray-100">
                 <img src="https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Fantasy Series">
                 <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300"></div>
             </div>
@@ -124,7 +137,7 @@
 
         <!-- Category 3 -->
         <div onclick="showCategory('Mini Series')" class="group flex flex-col gap-4 cursor-pointer w-full">
-            <div class="relative w-full aspect-square rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+            <div class="relative w-full aspect-square rounded-2xl overflow-hidden bg-gray-50 shadow-sm hover:shadow-xl transition-shadow duration-300 border border-gray-100">
                 <img src="https://images.unsplash.com/photo-1558285549-2a05f32b1ba6?q=80&w=600" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Mini Series">
                 <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300"></div>
             </div>
@@ -135,8 +148,7 @@
     </div>
 </section>
 
-<!-- Added generous top margin (mt-16 md:mt-24) to detach from the banner -->
-<section id="product-display" class="max-w-6xl mx-auto px-4 sm:px-6 mt-16 md:mt-24 pb-24 hidden opacity-0 transition-opacity duration-500">
+<section id="product-display" class="max-w-6xl mx-auto px-4 sm:px-6 mt-20 md:mt-24 pb-24 hidden opacity-0 transition-opacity duration-500 min-h-[60vh]">
     <div class="flex items-center justify-between mb-8 pb-4 border-b border-gray-200">
         <h3 id="active-category-title" class="text-2xl md:text-3xl font-bold text-gray-900">Products</h3>
         <button onclick="hideProducts()" class="text-sm font-medium text-gray-700 hover:text-pink-500 transition-colors border border-gray-300 rounded-full px-5 py-2 bg-white shadow-sm">← Back to Categories</button>
@@ -147,64 +159,64 @@
 </section>
 
 <section class="py-16 md:py-24 relative overflow-hidden flex flex-col items-center justify-center border-y border-gray-100 bg-white">
-    <div class="text-center mb-12 relative z-10 px-4">
+    <div class="text-center mb-16 relative z-10 px-4">
         <h2 class="text-3xl md:text-4xl font-semibold text-gray-900">Featured Showcase</h2>
         <p class="text-gray-500 mt-2">Explore our favorites up close</p>
     </div>
 
     <!-- Responsive Showcase Container -->
-    <div class="relative z-10 w-[280px] h-[280px] md:w-[450px] md:h-[450px] mx-auto mt-4 mb-8">
+    <div class="relative z-10 w-[300px] h-[300px] md:w-[500px] md:h-[500px] mx-auto mt-4 mb-8">
         
         <!-- Spinning Background Rings -->
         <div class="absolute inset-0 rounded-full border border-dashed border-gray-300 spin-slow pointer-events-none"></div>
         <div class="absolute inset-6 md:inset-8 rounded-full border border-gray-200 spin-slow-reverse pointer-events-none"></div>
 
-        <!-- 6 Thumbnails (4 Photos, 2 Videos) Placed in a Circle -->
+        <!-- 6 Thumbnails (4 Photos, 2 Videos) Placed around the circle -->
         
         <!-- 1: Top Center (Image) -->
         <div onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=800')" 
-             class="absolute top-[0%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border-2 border-white shadow-md cursor-pointer hover:scale-110 transition-transform duration-300 z-20 overflow-hidden group">
+             class="absolute top-[0%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 md:w-20 md:h-20 rounded-full border-4 border-white shadow-md cursor-pointer hover:scale-110 hover:border-pink-200 transition-all duration-300 z-20 overflow-hidden group">
              <img src="https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=150" class="w-full h-full object-cover" alt="Thumb 1">
         </div>
 
         <!-- 2: Top Right (Image) -->
         <div onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=800')" 
-             class="absolute top-[25%] left-[93.3%] transform -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border-2 border-white shadow-md cursor-pointer hover:scale-110 transition-transform duration-300 z-20 overflow-hidden group">
+             class="absolute top-[25%] left-[93.3%] transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 md:w-20 md:h-20 rounded-full border-4 border-white shadow-md cursor-pointer hover:scale-110 hover:border-pink-200 transition-all duration-300 z-20 overflow-hidden group">
              <img src="https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=150" class="w-full h-full object-cover" alt="Thumb 2">
         </div>
 
         <!-- 3: Bottom Right (Video 1) -->
         <div onclick="updateCenterMedia('video', 'https://www.w3schools.com/html/mov_bbb.mp4')" 
-             class="absolute top-[75%] left-[93.3%] transform -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border-2 border-white shadow-md cursor-pointer hover:scale-110 transition-transform duration-300 z-20 overflow-hidden group bg-gray-100 flex items-center justify-center">
+             class="absolute top-[75%] left-[93.3%] transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 md:w-20 md:h-20 rounded-full border-4 border-white shadow-md cursor-pointer hover:scale-110 hover:border-pink-200 transition-all duration-300 z-20 overflow-hidden group bg-gray-100 flex items-center justify-center">
              <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors z-10"></div>
-             <!-- Play Icon Indicator -->
+             <!-- Play Icon -->
              <svg class="w-6 h-6 text-white absolute z-20 drop-shadow-md" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
              <img src="https://images.unsplash.com/photo-1558285549-2a05f32b1ba6?q=80&w=150" class="w-full h-full object-cover blur-[1px]" alt="Video Thumb 1">
         </div>
 
         <!-- 4: Bottom Center (Image) -->
         <div onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=800')" 
-             class="absolute top-[100%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border-2 border-white shadow-md cursor-pointer hover:scale-110 transition-transform duration-300 z-20 overflow-hidden group">
+             class="absolute top-[100%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 md:w-20 md:h-20 rounded-full border-4 border-white shadow-md cursor-pointer hover:scale-110 hover:border-pink-200 transition-all duration-300 z-20 overflow-hidden group">
              <img src="https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=150" class="w-full h-full object-cover" alt="Thumb 4">
         </div>
 
         <!-- 5: Bottom Left (Image) -->
         <div onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1603539947678-cd3954edcb15?q=80&w=800')" 
-             class="absolute top-[75%] left-[6.7%] transform -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border-2 border-white shadow-md cursor-pointer hover:scale-110 transition-transform duration-300 z-20 overflow-hidden group">
+             class="absolute top-[75%] left-[6.7%] transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 md:w-20 md:h-20 rounded-full border-4 border-white shadow-md cursor-pointer hover:scale-110 hover:border-pink-200 transition-all duration-300 z-20 overflow-hidden group">
              <img src="https://images.unsplash.com/photo-1603539947678-cd3954edcb15?q=80&w=150" class="w-full h-full object-cover" alt="Thumb 5">
         </div>
 
         <!-- 6: Top Left (Video 2) -->
         <div onclick="updateCenterMedia('video', 'https://www.w3schools.com/html/mov_bbb.mp4')" 
-             class="absolute top-[25%] left-[6.7%] transform -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border-2 border-white shadow-md cursor-pointer hover:scale-110 transition-transform duration-300 z-20 overflow-hidden group bg-gray-100 flex items-center justify-center">
+             class="absolute top-[25%] left-[6.7%] transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 md:w-20 md:h-20 rounded-full border-4 border-white shadow-md cursor-pointer hover:scale-110 hover:border-pink-200 transition-all duration-300 z-20 overflow-hidden group bg-gray-100 flex items-center justify-center">
              <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors z-10"></div>
-             <!-- Play Icon Indicator -->
+             <!-- Play Icon -->
              <svg class="w-6 h-6 text-white absolute z-20 drop-shadow-md" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
              <img src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?q=80&w=150" class="w-full h-full object-cover blur-[1px]" alt="Video Thumb 2">
         </div>
 
         <!-- Center Display Area -->
-        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[70%] h-[70%] rounded-full overflow-hidden border-[6px] border-white shadow-xl bg-gray-50 flex items-center justify-center transition-transform duration-500 hover:scale-[1.02]">
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[72%] h-[72%] rounded-full overflow-hidden border-[6px] border-white shadow-xl bg-gray-50 flex items-center justify-center transition-transform duration-500 hover:scale-[1.02]">
             <!-- Center Image Container -->
             <img id="center-img" src="https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=800" class="w-full h-full object-cover fade-in" alt="Center Showcase">
             
@@ -225,8 +237,8 @@
             <h2 class="text-3xl md:text-4xl font-semibold mb-6 text-gray-900">More Than Just Toys.</h2>
             <p class="text-gray-600 mb-6 leading-relaxed">At Pepe Kun, every plushie is designed with a distinct personality. From our sleepy cats to our signature bamboo pandas, we focus on premium materials, unique cloud-tag branding, and unparalleled cloud-like softness.</p>
         </div>
-        <div class="h-[300px] md:h-[450px] rounded-[2rem] overflow-hidden shadow-md">
-            <img src="https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=800" class="w-full h-full object-cover" alt="About Pepe Kun">
+        <div class="h-[300px] md:h-[450px] rounded-[2rem] overflow-hidden shadow-md bg-gray-100">
+            <img src="https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=800" class="w-full h-full object-cover" alt="About Pepe Kun" onerror="this.style.display='none';">
         </div>
     </div>
 </section>
@@ -264,10 +276,15 @@
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
         
-        <!-- Left Side: Product Image -->
-        <div class="md:w-1/2 bg-gray-50 flex items-center justify-center p-6 border-b md:border-b-0 md:border-r border-gray-100">
-            <div class="w-full aspect-square overflow-hidden bg-white rounded-2xl shadow-sm">
+        <!-- Left Side: Product Images Gallery -->
+        <div class="md:w-1/2 bg-gray-50 flex flex-col p-6 border-b md:border-b-0 md:border-r border-gray-100">
+            <!-- Main Image -->
+            <div class="w-full aspect-square overflow-hidden bg-white rounded-2xl shadow-sm mb-4">
                 <img id="modal-main-img" src="" class="w-full h-full object-cover transition-transform duration-500" alt="Product Image">
+            </div>
+            <!-- 4 Clickable Thumbnails Grid -->
+            <div class="grid grid-cols-4 gap-3 mt-auto" id="modal-gallery">
+                <!-- Injected via JS -->
             </div>
         </div>
 
@@ -279,8 +296,8 @@
             
             <!-- TABS CONTROLS -->
             <div class="flex gap-6 border-b border-gray-200 mb-6">
-                <button id="tab-btn-desc" onclick="switchTab('desc')" class="pb-3 border-b-2 border-gray-900 font-medium text-gray-900 transition-colors">Description</button>
-                <button id="tab-btn-specs" onclick="switchTab('specs')" class="pb-3 border-b-2 border-transparent font-medium text-gray-500 hover:text-gray-900 transition-colors">Specifications</button>
+                <button id="tab-btn-desc" onclick="switchTab('desc')" class="pb-3 border-b-2 border-gray-900 font-medium text-gray-900 transition-colors focus:outline-none">Description</button>
+                <button id="tab-btn-specs" onclick="switchTab('specs')" class="pb-3 border-b-2 border-transparent font-medium text-gray-500 hover:text-gray-900 transition-colors focus:outline-none">Specifications</button>
             </div>
 
             <!-- TAB CONTENT: Description -->
@@ -303,18 +320,28 @@
 </div>
 
 <script>
-    // Robust Product Database Array (Simulated Backend Data)
+    // Product Database: Each product now has exactly 4 images for the gallery
     const sampleProducts = {
         "Signature Collection": [
             { 
                 id: 1, name: "Bamboo Panda Kun", price: "$38.00", 
-                image: "https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=600", 
+                images: [
+                    "https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=800",
+                    "https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=800",
+                    "https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=800",
+                    "https://images.unsplash.com/photo-1603539947678-cd3954edcb15?q=80&w=800"
+                ],
                 desc: "Meet Bamboo Panda Kun, our flagship plushie. Designed for the ultimate cuddle experience, this panda features ultra-soft faux fur and a perfectly squishy filling that feels like a warm hug.",
                 specs: "<ul class='list-disc pl-5 space-y-2'><li><strong>Dimensions:</strong> 14\" H x 10\" W</li><li><strong>Material:</strong> 100% Recycled Polyester Fiber</li><li><strong>Care:</strong> Machine washable on gentle cycle</li><li><strong>Weight:</strong> 1.2 lbs</li></ul>"
             },
             { 
                 id: 2, name: "Sleepy Cat Companion", price: "$32.00", 
-                image: "https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=600", 
+                images: [
+                    "https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=800",
+                    "https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=800",
+                    "https://images.unsplash.com/photo-1603539947678-cd3954edcb15?q=80&w=800",
+                    "https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=800"
+                ], 
                 desc: "The Sleepy Cat is specially weighted to provide deep pressure stimulation. Its closed-eye design promotes relaxation, making it the perfect bedtime companion.",
                 specs: "<ul class='list-disc pl-5 space-y-2'><li><strong>Dimensions:</strong> 12\" H x 8\" W</li><li><strong>Material:</strong> Minky plush with glass bead weighting</li><li><strong>Care:</strong> Spot clean only</li><li><strong>Weight:</strong> 2.5 lbs</li></ul>"
             }
@@ -322,7 +349,12 @@
         "Fantasy Series": [
             { 
                 id: 3, name: "Starlight Dragon", price: "$45.00", 
-                image: "https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=600", 
+                images: [
+                    "https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=800",
+                    "https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=800",
+                    "https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=800",
+                    "https://images.unsplash.com/photo-1603539947678-cd3954edcb15?q=80&w=800"
+                ],
                 desc: "Bring a touch of magic into your room with the Starlight Dragon. Featuring iridescent wings and embroidered star patterns, this dragon is built for both display and comfort.",
                 specs: "<ul class='list-disc pl-5 space-y-2'><li><strong>Dimensions:</strong> 18\" L x 9\" H</li><li><strong>Material:</strong> Premium Velboa with metallic thread</li><li><strong>Care:</strong> Surface wash</li><li><strong>Weight:</strong> 1.5 lbs</li></ul>"
             }
@@ -330,25 +362,28 @@
         "Mini Series": [
             { 
                 id: 5, name: "Pocket Pepe Bean", price: "$18.00", 
-                image: "https://images.unsplash.com/photo-1558285549-2a05f32b1ba6?q=80&w=600", 
+                images: [
+                    "https://images.unsplash.com/photo-1558285549-2a05f32b1ba6?q=80&w=800",
+                    "https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=800",
+                    "https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=800",
+                    "https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=800"
+                ],
                 desc: "Never go anywhere without comfort again. The Pocket Pepe Bean fits right in your hand or bag, filled with micro-beads for an addictive sensory experience.",
                 specs: "<ul class='list-disc pl-5 space-y-2'><li><strong>Dimensions:</strong> 4\" H x 3\" W</li><li><strong>Material:</strong> Spandex blend outer, EPS micro-beads</li><li><strong>Care:</strong> Hand wash gently</li><li><strong>Weight:</strong> 0.2 lbs</li></ul>"
             }
         ]
     };
 
-    // Flatten products into a lookup dictionary mapped by ID for reliable modal loading
     const productLookup = {};
     Object.keys(sampleProducts).forEach(category => {
         sampleProducts[category].forEach(product => {
-            product.category = category; // Inject category name into the product object
+            product.category = category;
             productLookup[product.id] = product;
         });
     });
 
     let cartCount = 0;
 
-    // Toast Notification System
     function showToast(message) {
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
@@ -358,14 +393,12 @@
         setTimeout(() => { if(toast.parentElement) toast.remove(); }, 3100);
     }
 
-    // Mobile Menu Toggle
     function toggleMobileMenu() {
         const menu = document.getElementById('mobile-menu');
         menu.classList.toggle('hidden');
         menu.classList.toggle('flex');
     }
 
-    // Category Grid Interaction
     function showCategory(categoryName) {
         const categoriesSec = document.getElementById('categories');
         const productSec = document.getElementById('product-display');
@@ -377,11 +410,10 @@
 
         const items = sampleProducts[categoryName] || [];
         items.forEach(item => {
-            // Passing simple IDs into the onclick handler guarantees it won't break on complex quotes
             grid.innerHTML += `
                 <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group cursor-pointer" onclick="openModal(${item.id})">
                     <div class="w-full aspect-square overflow-hidden bg-gray-50 relative">
-                        <img src="${item.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="${item.name}">
+                        <img src="${item.images[0]}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="${item.name}">
                         <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300"></div>
                         <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0">
                             <svg class="w-5 h-5 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
@@ -395,20 +427,19 @@
             `;
         });
 
-        // Smooth transition swapping the UI sections
         categoriesSec.style.opacity = '0';
         setTimeout(() => {
             categoriesSec.classList.add('hidden');
             productSec.classList.remove('hidden');
             setTimeout(() => {
                 productSec.style.opacity = '1';
-                // Scroll to the products view
-                productSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // Add an offset scroll so banner isn't fully hidden
+                const y = productSec.getBoundingClientRect().top + window.scrollY - 100;
+                window.scrollTo({top: y, behavior: 'smooth'});
             }, 50);
         }, 300);
     }
 
-    // Go Back to Categories View
     function hideProducts() {
         const categoriesSec = document.getElementById('categories');
         const productSec = document.getElementById('product-display');
@@ -424,24 +455,46 @@
         }, 300);
     }
 
-    // Modal Operations utilizing ID Lookup
     function openModal(productId) {
         const item = productLookup[productId];
-        if(!item) return; // safety catch
+        if(!item) return; 
         
-        document.getElementById('modal-main-img').src = item.image;
+        // Setup initial main image and text details
+        document.getElementById('modal-main-img').src = item.images[0];
         document.getElementById('modal-category').innerText = item.category;
         document.getElementById('modal-title').innerText = item.name;
         document.getElementById('modal-price').innerText = item.price;
         document.getElementById('tab-content-desc').innerHTML = `<p>${item.desc}</p>`;
         document.getElementById('tab-content-specs').innerHTML = item.specs;
         
-        switchTab('desc'); // Ensure Description tab is active by default
+        // Setup 4 thumbnails gallery
+        const gallery = document.getElementById('modal-gallery');
+        gallery.innerHTML = '';
+        item.images.forEach((imgSrc, index) => {
+            gallery.innerHTML += `
+                <div class="aspect-square rounded-lg overflow-hidden bg-white border-2 border-transparent hover:border-gray-300 cursor-pointer transition-colors" onclick="setModalMainImage('${imgSrc}')">
+                    <img src="${imgSrc}" class="w-full h-full object-cover" alt="Thumbnail ${index + 1}">
+                </div>
+            `;
+        });
+
+        // Ensure Description tab is active by default
+        switchTab('desc'); 
 
         const modal = document.getElementById('product-modal');
         modal.classList.remove('hidden');
         modal.classList.add('flex');
         setTimeout(() => { modal.style.opacity = '1'; }, 10);
+    }
+
+    function setModalMainImage(src) {
+        const mainImg = document.getElementById('modal-main-img');
+        // Quick fade effect
+        mainImg.style.opacity = 0.5;
+        setTimeout(() => {
+            mainImg.src = src;
+            mainImg.style.opacity = 1;
+        }, 150);
     }
 
     function closeModal() {
@@ -453,7 +506,6 @@
         }, 300);
     }
 
-    // Tab Switching Logic within the Product Modal
     function switchTab(tab) {
         const btnDesc = document.getElementById('tab-btn-desc');
         const btnSpecs = document.getElementById('tab-btn-specs');
@@ -461,16 +513,16 @@
         const contentSpecs = document.getElementById('tab-content-specs');
 
         if (tab === 'desc') {
-            btnDesc.className = "pb-3 border-b-2 border-gray-900 font-medium text-gray-900 transition-colors";
-            btnSpecs.className = "pb-3 border-b-2 border-transparent font-medium text-gray-500 hover:text-gray-900 transition-colors";
+            btnDesc.className = "pb-3 border-b-2 border-gray-900 font-medium text-gray-900 transition-colors focus:outline-none";
+            btnSpecs.className = "pb-3 border-b-2 border-transparent font-medium text-gray-500 hover:text-gray-900 transition-colors focus:outline-none";
             
             contentDesc.classList.remove('hidden');
             contentDesc.classList.add('block');
             contentSpecs.classList.remove('block');
             contentSpecs.classList.add('hidden');
         } else {
-            btnSpecs.className = "pb-3 border-b-2 border-gray-900 font-medium text-gray-900 transition-colors";
-            btnDesc.className = "pb-3 border-b-2 border-transparent font-medium text-gray-500 hover:text-gray-900 transition-colors";
+            btnSpecs.className = "pb-3 border-b-2 border-gray-900 font-medium text-gray-900 transition-colors focus:outline-none";
+            btnDesc.className = "pb-3 border-b-2 border-transparent font-medium text-gray-500 hover:text-gray-900 transition-colors focus:outline-none";
             
             contentSpecs.classList.remove('hidden');
             contentSpecs.classList.add('block');
@@ -479,17 +531,15 @@
         }
     }
 
-    // Media Switcher for the Spinning Wheel Section
     function updateCenterMedia(type, src) {
         const imgEl = document.getElementById('center-img');
         const vidContainer = document.getElementById('center-video-container');
         const vidEl = document.getElementById('center-video');
         const vidSrcEl = document.getElementById('center-video-src');
 
-        // Reset animations to re-trigger fade-in on each click
         imgEl.classList.remove('fade-in');
         vidContainer.classList.remove('fade-in');
-        void imgEl.offsetWidth; // force browser reflow to restart animation
+        void imgEl.offsetWidth; 
         void vidContainer.offsetWidth; 
 
         if (type === 'image') {
@@ -506,11 +556,10 @@
             vidEl.load();
             vidContainer.classList.remove('hidden');
             vidContainer.classList.add('fade-in');
-            vidEl.play().catch(e => console.log("Video auto-play block caught.", e));
+            vidEl.play().catch(e => console.log("Auto-play prevented.", e));
         }
     }
 
-    // Checkout Interactions
     function addToCart() {
         cartCount++;
         document.getElementById('cart-count').innerText = cartCount;
@@ -524,7 +573,6 @@
         showToast('Redirecting to checkout...');
     }
 
-    // Form Interactions
     function handleContact(e) {
         e.preventDefault();
         showToast('Thank you for reaching out! We have received your message.');
