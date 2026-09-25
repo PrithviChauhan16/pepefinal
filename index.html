@@ -148,21 +148,21 @@
     </div>
 </section>
 
-<section id="product-display" class="max-w-6xl mx-auto px-4 sm:px-6 mt-20 md:mt-24 pb-24 hidden opacity-0 transition-opacity duration-500 min-h-[60vh]">
-    <div class="flex items-center justify-between mb-8 pb-4 border-b border-gray-200">
-        <h3 id="active-category-title" class="text-2xl md:text-3xl font-bold text-gray-900">Products</h3>
-        <button onclick="hideProducts()" class="text-sm font-medium text-gray-700 hover:text-pink-500 transition-colors border border-gray-300 rounded-full px-5 py-2 bg-white shadow-sm">← Back to Categories</button>
-    </div>
-    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
-        <!-- Products injected here via JS -->
-    </div>
-</section>
-
-<section class="py-16 md:py-24 relative overflow-hidden flex flex-col items-center justify-center border-y border-gray-100 bg-white">
+<section class="py-16 md:py-24 relative overflow-hidden flex flex-col items-center justify-center border-y border-gray-100 bg-cover bg-center bg-fixed" style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2560');">
+    <!-- Soft overlay to ensure text and images pop against the background -->
+    <div class="absolute inset-0 bg-white/60 backdrop-blur-[2px] z-0"></div>
+    
     <div class="text-center mb-16 relative z-10 px-4">
         <h2 class="text-3xl md:text-4xl font-semibold text-gray-900">Featured Showcase</h2>
-        <p class="text-gray-500 mt-2">Explore our favorites up close</p>
+        <p class="text-gray-800 font-medium mt-2 drop-shadow-sm">Explore our favorites up close</p>
     </div>
+
+    <!-- Responsive Showcase Container -->
+    <div class="relative z-10 w-[300px] h-[300px] md:w-[500px] md:h-[500px] mx-auto mt-4 mb-8">
+        
+        <!-- Spinning Background Rings -->
+        <div class="absolute inset-0 rounded-full border border-dashed border-gray-400 spin-slow pointer-events-none opacity-50"></div>
+        <div class="absolute inset-6 md:inset-8 rounded-full border border-gray-400 spin-slow-reverse pointer-events-none opacity-50"></div>
 
     <!-- Responsive Showcase Container -->
     <div class="relative z-10 w-[300px] h-[300px] md:w-[500px] md:h-[500px] mx-auto mt-4 mb-8">
