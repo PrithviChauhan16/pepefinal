@@ -3,651 +3,349 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PEPE KUN | Admin Dashboard</title>
+    <title>Admin Dashboard | PEPE KUN</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Outfit', 'sans-serif'] }, colors: { brand: { 900: '#1a1a1a' } } } } }
+        if (window.tailwind) {
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        fontFamily: { sans: ['Outfit', 'sans-serif'] },
+                        colors: { brand: { 50: '#fdfbf7', 900: '#1a1a1a' } },
+                        keyframes: {
+                            fadeIn: {
+                                '0%': { opacity: '0', transform: 'scale(0.95)' },
+                                '100%': { opacity: '1', transform: 'scale(1)' }
+                            }
+                        }
+                    }
+                }
+            };
+        }
     </script>
-    <!-- Insert this line -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body class="text-brand-900 antialiased bg-gray-50 flex h-screen overflow-hidden selection:bg-pink-200">
+<body class="bg-gray-50 text-brand-900 antialiased font-sans flex h-screen overflow-hidden">
 
-    <!-- Sidebar -->
-    <aside class="w-64 bg-white border-r border-gray-200 flex flex-col hidden md:flex z-10">
-        <div class="h-16 flex items-center px-6 border-b border-gray-200">
-            <span class="text-xl font-bold tracking-wide text-pink-500">ADMIN PANEL</span>
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-white border-r border-gray-200 flex flex-col flex-shrink-0 z-20 shadow-sm">
+        <div class="h-20 flex items-center px-8 border-b border-gray-100">
+            <span class="text-xl font-bold tracking-widest uppercase">PEPE KUN <span class="text-pink-500 text-sm">ADMIN</span></span>
         </div>
-        <nav class="flex-1 p-4 space-y-2">
-            <button onclick="showTab('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 px-4 py-3 bg-gray-100 text-brand-900 rounded-xl font-medium transition-colors">📊 Overview</button>
-            <button onclick="showTab('categories')" id="nav-categories" class="w-full flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl font-medium transition-colors">🏷️ Categories</button>
-            <button onclick="showTab('products')" id="nav-products" class="w-full flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl font-medium transition-colors">🧸 Products</button>
-            <button onclick="showTab('orders')" id="nav-orders" class="w-full flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl font-medium transition-colors">📦 Orders</button>
-            <button onclick="showTab('messages')" id="nav-messages" class="w-full flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 rounded-xl font-medium transition-colors">✉️ Enquiries</button>
+        
+        <nav class="flex-grow py-6 flex flex-col gap-2 px-4">
+            <button onclick="switchTab('orders')" id="nav-orders" class="nav-btn w-full text-left px-4 py-3 rounded-xl font-medium text-gray-500 hover:bg-pink-50 hover:text-pink-600 transition-colors bg-pink-50 text-pink-600">
+                📦 Orders
+            </button>
+            <button onclick="switchTab('products')" id="nav-products" class="nav-btn w-full text-left px-4 py-3 rounded-xl font-medium text-gray-500 hover:bg-pink-50 hover:text-pink-600 transition-colors">
+                🧸 Products
+            </button>
+            <button onclick="switchTab('categories')" id="nav-categories" class="nav-btn w-full text-left px-4 py-3 rounded-xl font-medium text-gray-500 hover:bg-pink-50 hover:text-pink-600 transition-colors">
+                🏷️ Categories
+            </button>
+            <button onclick="switchTab('inquiries')" id="nav-inquiries" class="nav-btn w-full text-left px-4 py-3 rounded-xl font-medium text-gray-500 hover:bg-pink-50 hover:text-pink-600 transition-colors">
+                ✉️ Inquiries
+            </button>
         </nav>
-        <div class="p-4 border-t border-gray-200">
-            <a href="#" onclick="event.preventDefault();adminLogout()" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-brand-900 text-white rounded-xl font-medium hover:bg-pink-500 transition-colors">Log Out</a>
+
+        <div class="p-4 border-t border-gray-100">
+            <a href="index.html" class="flex items-center justify-center w-full py-2 text-sm text-gray-500 hover:text-gray-900 border border-gray-200 rounded-lg transition-colors">
+                Exit to Store
+            </a>
         </div>
     </aside>
 
-    <!-- Main Content Area -->
-    <main class="flex-1 flex flex-col h-screen overflow-y-auto relative">
-        
-        <!-- Mobile Header -->
-        <header class="h-16 bg-white border-b border-gray-200 flex md:hidden items-center justify-between px-4 sticky top-0 z-10">
-            <span class="font-bold text-pink-500">ADMIN</span>
-            <a href="#" onclick="event.preventDefault();adminLogout()" class="text-sm font-medium">Log Out</a>
-        </header>
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-grow overflow-y-auto bg-gray-50 relative">
+        <div class="p-8 max-w-7xl mx-auto">
 
-        <!-- Dashboard Content -->
-        <div class="p-4 md:p-8">
-            
-            <!-- OVERVIEW TAB -->
-            <div id="tab-dashboard" class="tab-content block">
-                <h1 class="text-3xl font-semibold mb-8">Dashboard Overview</h1>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                        <p class="text-sm text-gray-500 font-medium mb-1">Total Sales</p>
-                        <p class="text-3xl font-bold">₹0</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                        <p class="text-sm text-gray-500 font-medium mb-1">Pending Orders</p>
-                        <p class="text-3xl font-bold text-pink-500">0</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                        <p class="text-sm text-gray-500 font-medium mb-1">Unread Enquiries</p>
-                        <p class="text-3xl font-bold text-blue-500">0</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- CATEGORIES TAB -->
-            <div id="tab-categories" class="tab-content hidden">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-                    <h1 class="text-3xl font-semibold">Manage Categories</h1>
-                    <button onclick="openCategoryModal()" class="bg-brand-900 text-white px-5 py-2.5 rounded-full font-medium hover:bg-pink-500 transition-colors text-sm w-full md:w-auto">
-                        + Add New Category
-                    </button>
-                </div>
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
-                    <table class="w-full text-left border-collapse min-w-[500px]">
+            <!-- ORDERS TAB -->
+            <section id="tab-orders" class="tab-content block">
+                <h1 class="text-2xl font-semibold mb-6">Recent Orders</h1>
+                <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+                    <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="bg-gray-50 border-b border-gray-100 text-sm text-gray-500">
-                                <th class="p-4 font-medium">Category Name</th>
-                                <th class="p-4 font-medium text-right">Actions</th>
+                            <tr class="bg-gray-50 border-b border-gray-200 text-sm text-gray-500 uppercase tracking-wider">
+                                <th class="p-4 font-medium">Order ID</th>
+                                <th class="p-4 font-medium">Customer Details</th>
+                                <th class="p-4 font-medium">Items</th>
+                                <th class="p-4 font-medium">Total</th>
+                                <th class="p-4 font-medium">Status</th>
                             </tr>
                         </thead>
-                        <tbody id="admin-category-table" class="text-sm">
-                            <!-- JS will inject categories here -->
+                        <tbody id="orders-list" class="text-sm divide-y divide-gray-100">
+                            <tr>
+                                <td colspan="5" class="p-8 text-center text-gray-500">No recent orders found.</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </section>
 
             <!-- PRODUCTS TAB -->
-            <div id="tab-products" class="tab-content hidden">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-                    <h1 class="text-3xl font-semibold">Manage Products</h1>
-                    <button onclick="openAdminProductModal()" class="bg-brand-900 text-white px-5 py-2.5 rounded-full font-medium hover:bg-pink-500 transition-colors text-sm w-full md:w-auto">
+            <section id="tab-products" class="tab-content hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-2xl font-semibold">Manage Products</h1>
+                    <button onclick="openAddProduct()" class="bg-brand-900 text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors shadow-sm">
                         + Add New Product
                     </button>
                 </div>
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
-                    <table class="w-full text-left border-collapse min-w-[600px]">
+
+                <!-- Add/Edit Product Form -->
+                <div id="product-form-container" class="hidden bg-white p-6 md:p-8 rounded-3xl border border-gray-200 shadow-sm mb-8 transition-all">
+                    <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
+                        <h2 id="form-title" class="text-xl font-medium">Add New Product</h2>
+                        <button onclick="closeProductForm()" class="text-gray-400 hover:text-gray-900 text-xl font-bold">&times;</button>
+                    </div>
+                    <form id="product-form" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Product Title</label>
+                                <input type="text" id="prod-title" placeholder="e.g. Sleepy Cat Plush" class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:border-pink-400 text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                                <select id="prod-category" class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:border-pink-400 text-sm appearance-none">
+                                    <option value="Signature Collection">Signature Collection</option>
+                                    <option value="Fantasy Series">Fantasy Series</option>
+                                    <option value="Mini Series">Mini Series</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Price ($)</label>
+                                <input type="number" id="prod-price" placeholder="0.00" class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:border-pink-400 text-sm">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                            <textarea id="prod-desc" rows="3" placeholder="Enter product description..." class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:border-pink-400 text-sm"></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Specifications (One per line)</label>
+                            <textarea id="prod-specs" rows="3" placeholder="Height: 30cm&#10;Material: Premium Cotton&#10;Care: Hand wash only" class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:outline-none focus:border-pink-400 text-sm"></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Product Images (Up to 4)</label>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <label class="aspect-square bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl flex items-center justify-center hover:border-pink-400 cursor-pointer transition-colors relative overflow-hidden group">
+                                    <input type="file" class="hidden" accept="image/*" onchange="previewImage(this, 'prod-img-prev-1')">
+                                    <img id="prod-img-prev-1" src="" class="absolute inset-0 w-full h-full object-cover hidden">
+                                    <span class="text-2xl text-gray-300 group-hover:text-pink-400 z-10 drop-shadow-md">+</span>
+                                    <div class="absolute inset-0 bg-black/20 hidden group-hover:block z-0"></div>
+                                </label>
+                                <label class="aspect-square bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl flex items-center justify-center hover:border-pink-400 cursor-pointer transition-colors relative overflow-hidden group">
+                                    <input type="file" class="hidden" accept="image/*" onchange="previewImage(this, 'prod-img-prev-2')">
+                                    <img id="prod-img-prev-2" src="" class="absolute inset-0 w-full h-full object-cover hidden">
+                                    <span class="text-2xl text-gray-300 group-hover:text-pink-400 z-10 drop-shadow-md">+</span>
+                                    <div class="absolute inset-0 bg-black/20 hidden group-hover:block z-0"></div>
+                                </label>
+                                <label class="aspect-square bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl flex items-center justify-center hover:border-pink-400 cursor-pointer transition-colors relative overflow-hidden group">
+                                    <input type="file" class="hidden" accept="image/*" onchange="previewImage(this, 'prod-img-prev-3')">
+                                    <img id="prod-img-prev-3" src="" class="absolute inset-0 w-full h-full object-cover hidden">
+                                    <span class="text-2xl text-gray-300 group-hover:text-pink-400 z-10 drop-shadow-md">+</span>
+                                    <div class="absolute inset-0 bg-black/20 hidden group-hover:block z-0"></div>
+                                </label>
+                                <label class="aspect-square bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl flex items-center justify-center hover:border-pink-400 cursor-pointer transition-colors relative overflow-hidden group">
+                                    <input type="file" class="hidden" accept="image/*" onchange="previewImage(this, 'prod-img-prev-4')">
+                                    <img id="prod-img-prev-4" src="" class="absolute inset-0 w-full h-full object-cover hidden">
+                                    <span class="text-2xl text-gray-300 group-hover:text-pink-400 z-10 drop-shadow-md">+</span>
+                                    <div class="absolute inset-0 bg-black/20 hidden group-hover:block z-0"></div>
+                                </label>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-2">Upload square images for best results (Main image is first).</p>
+                        </div>
+
+                        <div class="flex justify-end gap-4 pt-4">
+                            <button type="button" onclick="closeProductForm()" class="px-6 py-2 rounded-full border border-gray-200 text-sm font-medium hover:bg-gray-50">Cancel</button>
+                            <button type="button" id="submit-btn" class="bg-pink-500 text-white px-8 py-2 rounded-full text-sm font-medium hover:bg-pink-600 shadow-sm">Save Product</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Existing Products List -->
+                <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="col-span-full p-8 text-center text-gray-500 bg-white border border-gray-200 rounded-2xl">
+                        No products added yet. Click "+ Add New Product" to get started.
+                    </div>
+                </div>
+            </section>
+
+            <!-- CATEGORIES TAB -->
+            <section id="tab-categories" class="tab-content hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-2xl font-semibold">Categories</h1>
+                    <button onclick="addNewCategory()" class="bg-brand-900 text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors shadow-sm">
+                        + New Category
+                    </button>
+                </div>
+                
+                <div id="categories-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Categories will be added here via JS -->
+                    <div id="empty-categories-state" class="col-span-full p-8 text-center text-gray-500 bg-white border border-gray-200 rounded-2xl">
+                        No categories created yet. Click "+ New Category" to add one.
+                    </div>
+                </div>
+            </section>
+
+            <!-- INQUIRIES TAB -->
+            <section id="tab-inquiries" class="tab-content hidden">
+                <h1 class="text-2xl font-semibold mb-6">Customer Inquiries</h1>
+                <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+                    <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="bg-gray-50 border-b border-gray-100 text-sm text-gray-500">
-                                <th class="p-4 font-medium">Product Name</th>
-                                <th class="p-4 font-medium">Category</th>
-                                <th class="p-4 font-medium">Price</th>
-                                <th class="p-4 font-medium">Actions</th>
+                            <tr class="bg-gray-50 border-b border-gray-200 text-sm text-gray-500 uppercase tracking-wider">
+                                <th class="p-4 font-medium">Date</th>
+                                <th class="p-4 font-medium">Name</th>
+                                <th class="p-4 font-medium">Email</th>
+                                <th class="p-4 font-medium">Message</th>
+                                <th class="p-4 font-medium">Action</th>
                             </tr>
                         </thead>
-                        <tbody id="admin-product-table" class="text-sm">
-                            <!-- JS will inject functional products here -->
+                        <tbody id="inquiries-list" class="text-sm divide-y divide-gray-100">
+                            <tr>
+                                <td colspan="5" class="p-8 text-center text-gray-500">No customer inquiries found.</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
-            </div>
-
-            <!-- ORDERS TAB -->
-            <div id="tab-orders" class="tab-content hidden">
-                <h1 class="text-3xl font-semibold mb-8">Recent Orders</h1>
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
-    <table class="w-full text-left border-collapse min-w-[600px]">
-        <thead>
-            <tr class="bg-gray-50 border-b border-gray-100 text-sm text-gray-500">
-                <th class="p-4 font-medium">Date</th>
-                <th class="p-4 font-medium">Total</th>
-                <th class="p-4 font-medium">Status</th>
-                <th class="p-4 font-medium">Actions</th>
-            </tr>
-        </thead>
-        <tbody id="admin-orders-table" class="text-sm">
-            <!-- Supabase orders inject here -->
-        </tbody>
-    </table>
-</div>
-            </div>
-
-            <!-- MESSAGES TAB -->
-            <div id="tab-messages" class="tab-content hidden">
-                <h1 class="text-3xl font-semibold mb-8">Customer Enquiries</h1>
-               <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
-    <table class="w-full text-left border-collapse min-w-[600px]">
-        <thead>
-            <tr class="bg-gray-50 border-b border-gray-100 text-sm text-gray-500">
-                <th class="p-4 font-medium">Date</th>
-                <th class="p-4 font-medium">Name</th>
-                <th class="p-4 font-medium">Email</th>
-                <th class="p-4 font-medium">Message</th>
-            </tr>
-        </thead>
-        <tbody id="admin-messages-table" class="text-sm">
-            <!-- Supabase enquiries inject here -->
-        </tbody>
-    </table>
-</div>
-            </div>
+            </section>
 
         </div>
     </main>
 
-    <!-- ADMIN CATEGORY MODAL -->
-    <div id="admin-category-modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-        <div class="bg-white w-full max-w-sm rounded-3xl p-6 md:p-8 shadow-2xl relative">
-            <button onclick="closeCategoryModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-            <h2 id="category-modal-title" class="text-2xl font-semibold mb-6">Add Category</h2>
-            <form onsubmit="saveCategory(event)" class="space-y-4">
-                <input type="hidden" id="admin-cat-id">
-                <div>
-                    <label class="block text-sm text-gray-500 mb-1">Category Name</label>
-                    <input type="text" id="admin-cat-name" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:border-pink-500" required>
-                </div>
-                <button type="submit" class="w-full bg-brand-900 text-white py-3 rounded-xl font-medium hover:bg-pink-500 transition-colors mt-4">
-                    Save Category
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- ADMIN PRODUCT ADD/EDIT MODAL -->
-    <div id="admin-product-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-        <div class="bg-white w-full max-w-lg rounded-3xl p-6 md:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-            <button onclick="closeAdminProductModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-            
-            <h2 id="modal-form-title" class="text-2xl font-semibold mb-6">Add Product</h2>
-            
-            <form id="admin-product-form" onsubmit="saveProduct(event)" class="space-y-4">
-                <input type="hidden" id="admin-prod-id">
-                
-                <div>
-                    <label class="block text-sm text-gray-500 mb-1">Product Name</label>
-                    <input type="text" id="admin-prod-name" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:border-pink-500" required>
-                </div>
-                
-                <div>
-                    <label class="block text-sm text-gray-500 mb-1">Price (₹)</label>
-                    <input type="number" id="admin-prod-price" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:border-pink-500" required>
-                </div>
-                
-                <div>
-                    <label class="block text-sm text-gray-500 mb-1">Category</label>
-                    <select id="admin-prod-category" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:border-pink-500">
-                        <!-- JS injects dynamic categories here -->
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-sm text-gray-500 mb-1">Status Tag (e.g., Best Seller)</label>
-                    <input type="text" id="admin-prod-tag" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:border-pink-500" required>
-                </div>
-
-                <div>
-                    <label class="block text-sm text-gray-500 mb-1">Image URL</label>
-                    <input type="url" id="admin-prod-image" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:border-pink-500" placeholder="https://..." required>
-                </div>
-<div>
-    <label class="block text-sm text-gray-500 mb-1">Description</label>
-    <textarea id="admin-prod-desc" rows="3" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:border-pink-500" placeholder="A beautifully crafted..."></textarea>
-</div>
-<div>
-    <label class="block text-sm text-gray-500 mb-1">Specifications (One per line)</label>
-    <textarea id="admin-prod-specs" rows="3" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:border-pink-500" placeholder="Height: 30cm&#10;Material: Recycled Polyester"></textarea>
-</div>
-                <button type="submit" class="w-full bg-brand-900 text-white py-3 rounded-xl font-medium hover:bg-pink-500 transition-colors mt-4">
-                    Save Product
-                </button>
-            </form>
-        </div>
-    </div>
-
     <script>
-const supabaseUrl = 'https://cmxhngjykgoqblobyefh.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjbXhobmdqa2dvcWJsb2J5ZWZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkyNDAwNTMsImV4cCI6MjEwNDgxNjA1M30.puMa5Ty4NTWxzTM9gnSHzqAVMzgMhgAfTPu-8sIVgPM';
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-const ADMIN_EMAIL = 'admin@pepekun.com';
+        // --- TAB SWITCHING ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block');
+            });
+            
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                el.classList.remove('bg-pink-50', 'text-pink-600');
+                el.classList.add('text-gray-500');
+            });
 
-let adminProducts = [];
-let adminCategories = [];
-let categoriesTableAvailable = true;
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+            document.getElementById('tab-' + tabId).classList.add('block');
 
-function escapeHtml(value = '') {
-    return String(value).replace(/[&<>'"]/g, ch => ({
-        '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;'
-    }[ch]));
-}
-
-function localCategories() {
-    try {
-        const saved = JSON.parse(localStorage.getItem('pepekun_categories') || 'null');
-        if (Array.isArray(saved) && saved.length) return saved;
-    } catch (_) {}
-    return ['Signature Collection', 'Fantasy Series', 'Mini Series'];
-}
-
-async function requireAdmin() {
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user || user.email?.toLowerCase() !== ADMIN_EMAIL) {
-        alert('Admin login required.');
-        window.location.href = 'login.html';
-        return false;
-    }
-
-    return true;
-}
-
-function showTab(name) {
-    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
-    const target = document.getElementById('tab-' + name);
-    if (target) target.classList.remove('hidden');
-
-    document.querySelectorAll('aside nav button').forEach(button =>
-        button.classList.remove('bg-gray-100', 'text-brand-900'));
-
-    document.getElementById('nav-' + name)?.classList.add('bg-gray-100', 'text-brand-900');
-
-    if (name === 'orders') loadOrders();
-    if (name === 'messages') loadMessages();
-}
-
-async function loadProducts() {
-    const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-    if (error) {
-        console.error('Products:', error);
-        alert('Products could not be loaded: ' + error.message);
-        return;
-    }
-
-    adminProducts = data || [];
-    renderAdminProducts();
-}
-
-async function loadCategories() {
-    const { data, error } = await supabase
-        .from('categories')
-        .select('*')
-        .order('name', { ascending: true });
-
-    if (!error && Array.isArray(data)) {
-        categoriesTableAvailable = true;
-        adminCategories = data.map(row => row.name).filter(Boolean);
-        if (!adminCategories.length) adminCategories = localCategories();
-        localStorage.setItem('pepekun_categories', JSON.stringify(adminCategories));
-    } else {
-        // The category table is an optional addition. Existing product management
-        // still works if the older database has not been migrated yet.
-        categoriesTableAvailable = false;
-        adminCategories = localCategories();
-        console.warn('categories table unavailable; using local category fallback.');
-    }
-
-    renderAdminCategories();
-}
-
-async function loadDashboard() {
-    const [ordersResult, enquiriesResult] = await Promise.all([
-        supabase.from('orders').select('order_total,status'),
-        supabase.from('enquiries').select('*', { count: 'exact', head: true })
-    ]);
-
-    const orders = ordersResult.data || [];
-    const totalSales = orders.reduce((sum, order) => sum + Number(order.order_total || 0), 0);
-    const pending = orders.filter(order => order.status === 'pending').length;
-    const enquiries = enquiriesResult.count || 0;
-
-    const cards = document.querySelectorAll('#tab-dashboard .grid > div');
-    if (cards[0]) cards[0].querySelector('p:last-child').textContent = '₹' + totalSales;
-    if (cards[1]) cards[1].querySelector('p:last-child').textContent = pending;
-    if (cards[2]) cards[2].querySelector('p:last-child').textContent = enquiries;
-}
-
-function renderAdminCategories() {
-    const table = document.getElementById('admin-category-table');
-    const select = document.getElementById('admin-prod-category');
-
-    select.innerHTML = adminCategories.length
-        ? adminCategories.map(name => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join('')
-        : '<option value="">No categories</option>';
-
-    table.innerHTML = adminCategories.length
-        ? adminCategories.map((name, index) => `
-            <tr class="border-b">
-                <td class="p-4">${escapeHtml(name)}</td>
-                <td class="p-4 text-right">
-                    <button onclick="deleteCategory(${index})" class="text-red-500 hover:text-red-700">Delete</button>
-                </td>
-            </tr>`).join('')
-        : '<tr><td colspan="2" class="p-8 text-center">No categories yet.</td></tr>';
-}
-
-function openCategoryModal() {
-    document.getElementById('admin-cat-id').value = '';
-    document.getElementById('admin-cat-name').value = '';
-    document.getElementById('category-modal-title').textContent = 'Add Category';
-
-    const modal = document.getElementById('admin-category-modal');
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-}
-
-function closeCategoryModal() {
-    const modal = document.getElementById('admin-category-modal');
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-}
-
-async function saveCategory(event) {
-    event.preventDefault();
-
-    const input = document.getElementById('admin-cat-name');
-    const name = input.value.trim();
-    if (!name) return;
-
-    if (adminCategories.some(item => item.toLowerCase() === name.toLowerCase())) {
-        alert('This category already exists.');
-        return;
-    }
-
-    if (categoriesTableAvailable) {
-        const { error } = await supabase.from('categories').insert([{ name }]);
-        if (error) {
-            // If the database has not been migrated, keep the feature usable locally.
-            console.warn('Category database save failed:', error.message);
-            categoriesTableAvailable = false;
+            const activeBtn = document.getElementById('nav-' + tabId);
+            activeBtn.classList.remove('text-gray-500');
+            activeBtn.classList.add('bg-pink-50', 'text-pink-600');
         }
-    }
 
-    adminCategories.push(name);
-    localStorage.setItem('pepekun_categories', JSON.stringify(adminCategories));
-    renderAdminCategories();
-    closeCategoryModal();
-    event.target.reset();
-}
+        // --- PRODUCT FORM LOGIC ---
+        const formContainer = document.getElementById('product-form-container');
+        const form = document.getElementById('product-form');
 
-async function deleteCategory(index) {
-    const name = adminCategories[index];
-    if (!name) return;
+        function openAddProduct() {
+            form.reset();
+            document.getElementById('form-title').innerText = 'Add New Product';
+            document.getElementById('submit-btn').innerText = 'Save Product';
+            
+            for(let i=1; i<=4; i++) {
+                const imgEl = document.getElementById('prod-img-prev-' + i);
+                if(imgEl) {
+                    imgEl.src = '';
+                    imgEl.classList.add('hidden');
+                }
+            }
 
-    const inUse = adminProducts.some(product => product.category === name);
-    if (inUse) {
-        alert('This category is being used by a product. Change the product category first.');
-        return;
-    }
-
-    if (!confirm('Delete this category?')) return;
-
-    if (categoriesTableAvailable) {
-        const { error } = await supabase.from('categories').delete().eq('name', name);
-        if (error) {
-            console.warn('Category database delete failed:', error.message);
-            categoriesTableAvailable = false;
+            formContainer.classList.remove('hidden');
+            formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-    }
 
-    adminCategories.splice(index, 1);
-    localStorage.setItem('pepekun_categories', JSON.stringify(adminCategories));
-    renderAdminCategories();
-}
+        function editProduct(title, category, price, desc, specs, mainImgUrl) {
+            document.getElementById('prod-title').value = title;
+            document.getElementById('prod-category').value = category;
+            document.getElementById('prod-price').value = price;
+            document.getElementById('prod-desc').value = desc;
+            document.getElementById('prod-specs').value = specs;
 
-function renderAdminProducts() {
-    const table = document.getElementById('admin-product-table');
+            document.getElementById('form-title').innerText = 'Edit Product';
+            document.getElementById('submit-btn').innerText = 'Update Product';
 
-    if (!adminProducts.length) {
-        table.innerHTML = '<tr><td colspan="4" class="p-8 text-center">No products yet.</td></tr>';
-        return;
-    }
+            const imgEl = document.getElementById('prod-img-prev-1');
+            if (mainImgUrl) {
+                imgEl.src = mainImgUrl;
+                imgEl.classList.remove('hidden');
+            }
 
-    table.innerHTML = adminProducts.map(product => `
-        <tr class="border-b">
-            <td class="p-4 flex items-center gap-3">
-                <img src="${escapeHtml(product.image || '')}" class="w-10 h-10 rounded-lg object-cover" alt="">
-                <span>${escapeHtml(product.name || '')}</span>
-            </td>
-            <td class="p-4">${escapeHtml(product.category || '')}</td>
-            <td class="p-4">₹${Number(product.price || 0)}</td>
-            <td class="p-4">
-                <button onclick="openAdminProductModal('${escapeHtml(product.id)}')" class="text-blue-500 mr-3 hover:text-blue-700">Edit</button>
-                <button onclick="deleteProduct('${escapeHtml(product.id)}')" class="text-red-500 hover:text-red-700">Delete</button>
-            </td>
-        </tr>`).join('');
-}
+            formContainer.classList.remove('hidden');
+            formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
 
-function openAdminProductModal(id = null) {
-    const form = document.getElementById('admin-product-form');
-    const categorySelect = document.getElementById('admin-prod-category');
+        function closeProductForm() {
+            formContainer.classList.add('hidden');
+        }
 
-    if (id !== null) {
-        const product = adminProducts.find(item => String(item.id) === String(id));
-        if (!product) return;
+        // --- CATEGORY LOGIC ---
+        let categoryCount = 0; 
 
-        document.getElementById('modal-form-title').textContent = 'Edit Product';
-        document.getElementById('admin-prod-id').value = product.id;
-        document.getElementById('admin-prod-name').value = product.name || '';
-        document.getElementById('admin-prod-price').value = product.price ?? '';
-        document.getElementById('admin-prod-category').value = product.category || '';
-        document.getElementById('admin-prod-tag').value = product.tag || '';
-        document.getElementById('admin-prod-image').value = product.image || '';
-        document.getElementById('admin-prod-desc').value = product.description || '';
-        document.getElementById('admin-prod-specs').value =
-            Array.isArray(product.specs) ? product.specs.join('\n') : '';
-    } else {
-        form.reset();
-        document.getElementById('modal-form-title').textContent = 'Add Product';
-        document.getElementById('admin-prod-id').value = '';
-        if (adminCategories.length) categorySelect.value = adminCategories[0];
-    }
+        function addNewCategory() {
+            // Remove empty state message if it exists
+            const emptyState = document.getElementById('empty-categories-state');
+            if(emptyState) {
+                emptyState.remove();
+            }
 
-    const modal = document.getElementById('admin-product-modal');
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-}
+            categoryCount++;
+            const grid = document.getElementById('categories-grid');
+            const newId = 'cat-img-' + categoryCount;
+            
+            const newCard = document.createElement('div');
+            newCard.className = 'bg-white border border-gray-200 rounded-3xl p-6 text-center shadow-sm relative group/card animate-[fadeIn_0.3s_ease-in]';
+            
+            newCard.innerHTML = `
+                <label class="block relative w-20 h-20 bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl mx-auto mb-4 overflow-hidden cursor-pointer group hover:border-pink-400 transition-colors">
+                    <input type="file" class="hidden" accept="image/*" onchange="previewImage(this, '${newId}')">
+                    <img id="${newId}" src="" class="absolute inset-0 w-full h-full object-cover hidden">
+                    <span class="absolute inset-0 flex items-center justify-center text-2xl text-gray-300 group-hover:text-pink-400 transition-colors">+</span>
+                    <div class="absolute inset-0 bg-black/50 hidden group-hover:flex items-center justify-center transition-all z-10">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </div>
+                </label>
+                <input type="text" placeholder="New Category Name" class="w-full text-center font-medium bg-transparent border-b border-gray-200 focus:outline-none focus:border-pink-400 mb-4 pb-1 transition-colors">
+                <button class="text-xs font-medium text-white bg-gray-900 px-6 py-2 rounded-full hover:bg-gray-700 transition-colors w-full mt-2">Save Changes</button>
+                <button onclick="this.parentElement.remove(); checkEmptyCategories();" class="absolute top-3 right-3 text-red-400 hover:text-red-600 hidden group-hover/card:block bg-red-50 rounded-full p-1 transition-colors">
+                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                </button>
+            `;
+            
+            grid.appendChild(newCard);
+        }
 
-function closeAdminProductModal() {
-    const modal = document.getElementById('admin-product-modal');
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-}
+        function checkEmptyCategories() {
+            const grid = document.getElementById('categories-grid');
+            if (grid.children.length === 0) {
+                grid.innerHTML = `
+                    <div id="empty-categories-state" class="col-span-full p-8 text-center text-gray-500 bg-white border border-gray-200 rounded-2xl">
+                        No categories created yet. Click "+ New Category" to add one.
+                    </div>
+                `;
+            }
+        }
 
-async function saveProduct(event) {
-    event.preventDefault();
-
-    const id = document.getElementById('admin-prod-id').value;
-    const data = {
-        name: document.getElementById('admin-prod-name').value.trim(),
-        price: Number(document.getElementById('admin-prod-price').value),
-        category: document.getElementById('admin-prod-category').value,
-        tag: document.getElementById('admin-prod-tag').value.trim(),
-        image: document.getElementById('admin-prod-image').value.trim(),
-        description: document.getElementById('admin-prod-desc').value.trim(),
-        specs: document.getElementById('admin-prod-specs').value
-            .split('\n').map(value => value.trim()).filter(Boolean)
-    };
-
-    if (!data.name || !data.category || !data.image || !Number.isFinite(data.price)) {
-        alert('Please complete all required product fields.');
-        return;
-    }
-
-    const button = event.target.querySelector('button[type="submit"]');
-    if (button) {
-        button.disabled = true;
-        button.textContent = 'Saving...';
-    }
-
-    const result = id
-        ? await supabase.from('products').update(data).eq('id', id)
-        : await supabase.from('products').insert([data]);
-
-    if (button) {
-        button.disabled = false;
-        button.textContent = 'Save Product';
-    }
-
-    if (result.error) {
-        alert('Save failed: ' + result.error.message);
-        return;
-    }
-
-    closeAdminProductModal();
-    await loadProducts();
-    await loadDashboard();
-}
-
-async function deleteProduct(id) {
-    if (!confirm('Delete this product permanently?')) return;
-
-    const { error } = await supabase.from('products').delete().eq('id', id);
-    if (error) {
-        alert('Delete failed: ' + error.message);
-        return;
-    }
-
-    await loadProducts();
-}
-
-async function loadOrders() {
-    const { data, error } = await supabase
-        .from('orders')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-    const table = document.getElementById('admin-orders-table');
-
-    if (error) {
-        table.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-red-500">${escapeHtml(error.message)}</td></tr>`;
-        return;
-    }
-
-    table.innerHTML = (data || []).length
-        ? data.map(order => `
-            <tr class="border-b">
-                <td class="p-4">${new Date(order.created_at || Date.now()).toLocaleString()}</td>
-                <td class="p-4 font-semibold">₹${Number(order.order_total || 0)}</td>
-                <td class="p-4">
-                    <select onchange="updateOrderStatus('${escapeHtml(order.id)}', this.value)"
-                            class="border rounded-lg px-2 py-1">
-                        ${['pending','confirmed','shipped','delivered','cancelled'].map(status =>
-                            `<option value="${status}" ${order.status === status ? 'selected' : ''}>${status}</option>`
-                        ).join('')}
-                    </select>
-                </td>
-                <td class="p-4">
-                    <button onclick="viewOrder('${escapeHtml(order.id)}')" class="text-blue-500 hover:text-blue-700">View</button>
-                </td>
-            </tr>`).join('')
-        : '<tr><td colspan="4" class="p-8 text-center">No orders yet.</td></tr>';
-}
-
-async function updateOrderStatus(id, status) {
-    const { error } = await supabase
-        .from('orders')
-        .update({status})
-        .eq('id', id);
-
-    if (error) {
-        alert('Could not update order: ' + error.message);
-        await loadOrders();
-        return;
-    }
-
-    await loadDashboard();
-}
-
-async function viewOrder(id) {
-    const { data, error } = await supabase
-        .from('orders')
-        .select('*')
-        .eq('id', id)
-        .single();
-
-    if (error) {
-        alert('Could not load order: ' + error.message);
-        return;
-    }
-
-    const shipping = data.shipping_details || {};
-    const items = Array.isArray(data.items) ? data.items : [];
-    const itemText = items.map(item =>
-        `${item.name || 'Product'} x ${Number(item.quantity) || 1}`
-    ).join('\n');
-
-    alert(
-        'Order Details\n\n' +
-        'Customer: ' + (shipping.name || '') + '\n' +
-        'Phone: ' + (shipping.phone || '') + '\n' +
-        'Address: ' + (shipping.address || '') + ', ' +
-            (shipping.city || '') + ' - ' + (shipping.pincode || '') + '\n\n' +
-        'Items:\n' + (itemText || 'No item details') + '\n\n' +
-        'Total: ₹' + Number(data.order_total || 0) + '\n' +
-        'Status: ' + (data.status || 'pending')
-    );
-}
-
-async function loadMessages() {
-    const { data, error } = await supabase
-        .from('enquiries')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-    const table = document.getElementById('admin-messages-table');
-
-    if (error) {
-        table.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-red-500">${escapeHtml(error.message)}</td></tr>`;
-        return;
-    }
-
-    table.innerHTML = (data || []).length
-        ? data.map(message => `
-            <tr class="border-b">
-                <td class="p-4">${new Date(message.created_at || Date.now()).toLocaleString()}</td>
-                <td class="p-4">${escapeHtml(message.name || '')}</td>
-                <td class="p-4">${escapeHtml(message.email || '')}</td>
-                <td class="p-4 whitespace-pre-wrap">${escapeHtml(message.message || '')}</td>
-            </tr>`).join('')
-        : '<tr><td colspan="4" class="p-8 text-center">No enquiries yet.</td></tr>';
-}
-
-async function adminLogout() {
-    await supabase.auth.signOut();
-    window.location.href = 'index.html';
-}
-
-document.addEventListener('DOMContentLoaded', async () => {
-    if (!(await requireAdmin())) return;
-    await loadProducts();
-    await loadCategories();
-    await loadDashboard();
-});
-</script>
+        // --- IMAGE PREVIEW LOGIC ---
+        function previewImage(input, targetImgId) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imgElement = document.getElementById(targetImgId);
+                    imgElement.src = e.target.result;
+                    imgElement.classList.remove('hidden');
+                    
+                    const plusIcon = imgElement.nextElementSibling;
+                    if(plusIcon && plusIcon.tagName === 'SPAN') {
+                        plusIcon.classList.add('hidden');
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
 </body>
 </html>
