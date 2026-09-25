@@ -40,8 +40,6 @@
             animation: float 4s ease-in-out infinite; 
         }
     </style>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body class="text-brand-900 antialiased selection:bg-pink-200 flex items-center justify-center min-h-screen p-4">
@@ -137,37 +135,11 @@
 
 
 <script>
-
-const supabaseUrl = 'https://cmxhngjykgoqblobyefh.supabase.co';
-
-/*
- IMPORTANT:
- Replace the value below with your CURRENT Supabase publishable key.
- It should start with:
-
- sb_publishable_
-
-Do NOT use the old eyJhbGci... key.
-*/
-const supabaseKey = 'sb_publishable_05GBhGfDMBLN009-tv5soQ_XkQ_7jPc';
-
-
-/* 
-   Use a unique variable name.
-   DO NOT change window.supabase.
-*/
-const supabaseClient = window.supabase?.createClient(
-    supabaseUrl,
-    supabaseKey
-);
-
-
 /* =========================
    LOGIN / SIGNUP TABS
    ========================= */
 
 function toggleForm(type) {
-
     const loginForm = document.getElementById('form-login');
     const signupForm = document.getElementById('form-signup');
 
@@ -188,366 +160,76 @@ function toggleForm(type) {
     signupTab.classList.toggle('text-gray-500', type !== 'signup');
 }
 
-
 /* =========================
-   LOCAL CART
+   LOGIN MOCKUP
    ========================= */
 
-function readLocalCart() {
-
-    try {
-
-        const v = JSON.parse(
-            localStorage.getItem('pepekun_cart') || '[]'
-        );
-
-        return Array.isArray(v) ? v : [];
-
-    } catch (_) {
-
-        return [];
-
-    }
-}
-
-
-/* =========================
-   COMPARE CARTS
-   ========================= */
-
-function cartsSame(a, b) {
-
-    const n = x => (x || [])
-        .map(i => ({
-            id: String(i.id),
-            q: Number(i.quantity) || 1
-        }))
-        .sort((x, y) => x.id.localeCompare(y.id));
-
-    return JSON.stringify(n(a)) === JSON.stringify(n(b));
-}
-
-
-/* =========================
-   MERGE GUEST CART
-   ========================= */
-
-function mergeGuestCart(saved, local) {
-
-    if (!local.length) {
-        return saved || [];
-    }
-
-    if (!saved?.length) {
-        return local;
-    }
-
-    if (cartsSame(saved, local)) {
-        return saved;
-    }
-
-    const out = (saved || []).map(i => ({
-        ...i,
-        quantity: Number(i.quantity) || 1
-    }));
-
-    for (const item of local) {
-
-        const q = Number(item.quantity) || 1;
-
-        const e = out.find(
-            x => String(x.id) === String(item.id)
-        );
-
-        if (e) {
-
-            e.quantity += q;
-
-        } else {
-
-            out.push({
-                ...item,
-                quantity: q
-            });
-
-        }
-    }
-
-    return out;
-}
-
-
-/* =========================
-   PRESERVE GUEST CART
-   ========================= */
-
-async function preserveGuestCart(user) {
-
-    if (!user || !supabaseClient) {
-        return;
-    }
-
-    const local = readLocalCart();
-
-    if (!local.length) {
-        return;
-    }
-
-    const { data: saved } = await supabaseClient
-        .from('carts')
-        .select('items')
-        .eq('user_id', user.id)
-        .maybeSingle();
-
-    const merged = mergeGuestCart(
-        Array.isArray(saved?.items) ? saved.items : [],
-        local
-    );
-
-    const { error } = await supabaseClient
-        .from('carts')
-        .upsert(
-            {
-                user_id: user.id,
-                items: merged,
-                updated_at: new Date().toISOString()
-            },
-            {
-                onConflict: 'user_id'
-            }
-        );
-
-    if (!error) {
-
-        localStorage.setItem(
-            'pepekun_cart',
-            JSON.stringify(merged)
-        );
-
-    }
-}
-
-
-/* =========================
-   LOGIN
-   ========================= */
-
-async function handleLogin(event) {
-
+function handleLogin(event) {
     event.preventDefault();
 
-    if (!supabaseClient) {
-
-        alert(
-            'Supabase could not be loaded. Please refresh the page.'
-        );
-
-        return;
-    }
-
-    const email = document
-        .getElementById('login-email')
-        .value
-        .trim();
-
-    const password = document
-        .getElementById('login-password')
-        .value;
-
-    const button = event.target.querySelector(
-        'button[type="submit"]'
-    );
+    const email = document.getElementById('login-email').value.trim();
+    const button = event.target.querySelector('button[type="submit"]');
 
     if (button) {
-
         button.disabled = true;
         button.textContent = 'Signing In...';
-
     }
 
-
-    const { data, error } =
-        await supabaseClient.auth.signInWithPassword({
-            email,
-            password
-        });
-
-
-    if (error) {
-
-        if (button) {
-
-            button.disabled = false;
-            button.textContent = 'Sign In';
-
+    // Simulate network delay for effect
+    setTimeout(() => {
+        // Simple routing logic based on email
+        if (email.toLowerCase() === 'admin@pepekun.com') {
+            window.location.href = 'admin.html';
+        } else {
+            window.location.href = 'index.html';
         }
-
-        alert('Login failed: ' + error.message);
-
-        return;
-    }
-
-
-    await preserveGuestCart(data.user);
-
-
-    window.location.href =
-        email.toLowerCase() === 'admin@pepekun.com'
-            ? 'admin.html'
-            : 'index.html';
+    }, 800);
 }
 
-
 /* =========================
-   SIGN UP
+   SIGN UP MOCKUP
    ========================= */
 
-document.addEventListener(
-    'DOMContentLoaded',
-    () => {
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('form-signup');
 
-        const form =
-            document.getElementById('form-signup');
+    if (!form) return;
 
-        if (!form) {
+    form.addEventListener('submit', event => {
+        event.preventDefault();
+
+        const inputs = form.querySelectorAll('input');
+        const password = inputs[2].value;
+        const button = form.querySelector('button[type="submit"]');
+
+        if (password.length < 6) {
+            alert('Password must be at least 6 characters.');
             return;
         }
 
+        if (button) {
+            button.disabled = true;
+            button.textContent = 'Creating Account...';
+        }
 
-        form.addEventListener(
-            'submit',
-            async event => {
-
-                event.preventDefault();
-
-
-                if (!supabaseClient) {
-
-                    alert(
-                        'Supabase could not be loaded. Please refresh the page.'
-                    );
-
-                    return;
-                }
-
-
-                const inputs =
-                    form.querySelectorAll('input');
-
-
-                const fullName =
-                    inputs[0].value.trim();
-
-                const email =
-                    inputs[1].value.trim();
-
-                const password =
-                    inputs[2].value;
-
-
-                const button =
-                    form.querySelector(
-                        'button[type="submit"]'
-                    );
-
-
-                if (password.length < 6) {
-
-                    alert(
-                        'Password must be at least 6 characters.'
-                    );
-
-                    return;
-                }
-
-
-                if (button) {
-
-                    button.disabled = true;
-                    button.textContent =
-                        'Creating Account...';
-
-                }
-
-
-                const { data, error } =
-                    await supabaseClient.auth.signUp({
-
-                        email,
-
-                        password,
-
-                        options: {
-
-                            data: {
-                                full_name: fullName
-                            },
-
-                            emailRedirectTo:
-                                new URL(
-                                    'index.html',
-                                    window.location.href
-                                ).href
-                        }
-
-                    });
-
-
-                if (button) {
-
-                    button.disabled = false;
-                    button.textContent =
-                        'Create Account';
-
-                }
-
-
-                if (error) {
-
-                    alert(
-                        'Sign up failed: ' +
-                        error.message
-                    );
-
-                    return;
-                }
-
-
-                if (data.session) {
-
-                    alert(
-                        'Account created successfully!'
-                    );
-
-                    window.location.href =
-                        'index.html';
-
-                } else {
-
-                    alert(
-                        'Account created. Please confirm your email, then log in.'
-                    );
-
-                    toggleForm('login');
-
-                }
-
+        // Simulate network delay for effect
+        setTimeout(() => {
+            alert('Account created successfully! Please log in.');
+            
+            if (button) {
+                button.disabled = false;
+                button.textContent = 'Create Account';
             }
-        );
-
-    }
-);
-
-
-/* =========================
-   MAKE INLINE FUNCTIONS
-   AVAILABLE
-   ========================= */
+            
+            form.reset();
+            toggleForm('login');
+        }, 800);
+    });
+});
 
 window.toggleForm = toggleForm;
 window.handleLogin = handleLogin;
 
 </script>
-
 </body>
 </html>
