@@ -38,27 +38,32 @@
             scrollbar-width: none;
         }
 
-       /* ========================================================
+     /* ========================================================
            ⬇️ ADD YOUR BACKGROUND IMAGES HERE ⬇️ 
            ======================================================== */
            
-        /* Background for Spinning Wheel & Contact Us */
+        /* Base styles (Mobile First - This guarantees they are visible on phones!) */
         .bg-section-1 {
             background-image: url('spinning2.png'); 
             background-size: cover;
             background-position: center;
-            background-attachment: fixed; /* <-- Changed to fixed for mobile */
-            -webkit-background-size: cover; /* Added for better iPhone support */
+            background-repeat: no-repeat;
+            background-attachment: scroll; /* Prevents the mobile zoom bug */
         }
 
-        /* Background for About Us */
         .bg-section-2 {
             background-image: url('spinning1.png'); 
             background-size: cover;
             background-position: center;
-            background-attachment: fixed; /* <-- Changed to fixed for mobile */
-            -webkit-background-size: cover; /* Added for better iPhone support */
+            background-repeat: no-repeat;
+            background-attachment: scroll; /* Prevents the mobile zoom bug */
         }
+
+        /* Adds the cool fixed parallax effect ONLY on tablets and desktops */
+        @media (min-width: 768px) {
+            .bg-section-1, .bg-section-2 {
+                background-attachment: fixed;
+            }
         }
     </style>
 </head>
