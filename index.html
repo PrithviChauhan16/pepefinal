@@ -44,7 +44,7 @@
            
         /* Background for Spinning Wheel & Contact Us */
         .bg-section-1 {
-            background-image: url('spinning1.png'); /* Paste your image URL here */
+            background-image: url('spinning2.png'); 
             background-size: cover;
             background-position: center;
             background-attachment: scroll; 
@@ -52,7 +52,7 @@
 
         /* Background for About Us */
         .bg-section-2 {
-            background-image: url('spinning2.png'); /* Paste your image URL here */
+            background-image: url('spinning1.png'); 
             background-size: cover;
             background-position: center;
             background-attachment: scroll; 
@@ -110,8 +110,9 @@
 
 <!-- BANNER (Auto-sliding images, un-cropped) -->
 <header id="home" class="relative w-full max-w-7xl mx-auto mt-6 md:mt-8 rounded-[2rem] md:rounded-[3rem] overflow-hidden bg-transparent flex justify-center">
-    <!-- Banner Image Slider -->
-    <img id="banner.png" src="https://images.unsplash.com/photo-1557682250-33bd709cbe85?q=80&w=2000" class="w-full h-auto object-contain transition-opacity duration-500" alt="Pepe Kun Banner">
+    <!-- ⬇️ CHANGE YOUR FIRST BANNER IMAGE HERE ⬇️ -->
+    <!-- The JavaScript will automatically read this link to use as the first slide! -->
+    <img id="banner-slider" src="banner.png" class="w-full h-auto object-contain transition-opacity duration-500" alt="Pepe Kun Banner">
 </header>
 
 <!-- CATEGORIES SECTION -->
@@ -167,10 +168,9 @@
 </section>
 
 <!-- SPINNING SHOWCASE SECTION -->
-<!-- Removed bounded card to match screenshot (spans full width over bg-section-1) -->
 <section class="bg-section-1 relative overflow-hidden py-24 my-12 flex flex-col justify-center items-center w-full">
-    <!-- Very subtle overlay to make tracks visible without hiding the background image -->
-    <div class="absolute inset-0 bg-white/40 z-0 pointer-events-none"></div>
+    <!-- Frosted overlay to create the blur effect -->
+    <div class="absolute inset-0 bg-white/50 backdrop-blur-md z-0 pointer-events-none"></div>
 
     <div class="relative z-10 w-full max-w-[300px] md:max-w-[400px] aspect-square flex items-center justify-center animate-float mt-8">
         <!-- Spinning tracks -->
@@ -219,8 +219,8 @@
 
 <!-- ABOUT US SECTION -->
 <section id="about" class="bg-section-2 relative overflow-hidden py-16 md:py-24 border border-gray-200 shadow-sm my-8">
-    <!-- Frosted overlay for readability -->
-    <div class="absolute inset-0 bg-white/70 backdrop-blur-md z-0 pointer-events-none"></div>
+    <!-- Frosted overlay for the blur effect -->
+    <div class="absolute inset-0 bg-white/50 backdrop-blur-md z-0 pointer-events-none"></div>
     
     <div class="relative z-10 max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
         <div class="text-center md:text-left">
@@ -235,8 +235,8 @@
 
 <!-- CONTACT SECTION -->
 <section id="contact" class="bg-section-1 relative py-16 md:py-24 w-full">
-    <!-- Subtle overlay -->
-    <div class="absolute inset-0 bg-white/40 z-0 pointer-events-none"></div>
+    <!-- Frosted overlay for the blur effect -->
+    <div class="absolute inset-0 bg-white/50 backdrop-blur-md z-0 pointer-events-none"></div>
     
     <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
         <div class="bg-white/95 backdrop-blur p-8 md:p-12 rounded-[3rem] border border-gray-200 shadow-xl">
@@ -345,23 +345,30 @@
     });
 
     // --- AUTO IMAGE SLIDER (BANNER ONLY) ---
+    // Make sure your HTML banner img tag has an id of "banner-slider"
+    const bannerImgElement = document.getElementById('banner-slider');
+    
     // ⬇️ ADD YOUR BANNER IMAGES HERE ⬇️
     const bannerPhotos = [
-        'banner.png',
-        'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2000',
-        'https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?q=80&w=2000'
+        bannerImgElement ? bannerImgElement.src : '', // This grabs whatever image link you pasted in the HTML!
+        'banner2.png',     // Replace with your 2nd image
+        'PASTE_YOUR_THIRD_BANNER_LINK_HERE.jpg'       // Replace with your 3rd image
     ];
 
     let bannerIndex = 0;
 
     setInterval(() => {
-        const bannerImg = document.getElementById('banner-slider');
-        if(bannerImg) {
-            bannerImg.classList.add('opacity-0');
+        if(bannerImgElement && bannerPhotos.length > 1) {
+            bannerImgElement.classList.add('opacity-0');
             setTimeout(() => {
                 bannerIndex = (bannerIndex + 1) % bannerPhotos.length;
-                bannerImg.src = bannerPhotos[bannerIndex];
-                bannerImg.classList.remove('opacity-0');
+                
+                // Only update the source if the array slot isn't empty or placeholder
+                if(bannerPhotos[bannerIndex] && !bannerPhotos[bannerIndex].includes('PASTE_YOUR')) {
+                    bannerImgElement.src = bannerPhotos[bannerIndex];
+                }
+                
+                bannerImgElement.classList.remove('opacity-0');
             }, 500);
         }
     }, 4000);
@@ -516,7 +523,7 @@
             tabDesc.classList.add('hidden');
             
             btnSpecs.className = "pb-2 font-medium text-gray-900 border-b-2 border-gray-900";
-            btnDesc.className = "pb-2 font-medium text-gray-400 hover:text-gray-900 border-b-2 border-transparent transition-colors";
+            btnSpecs.className = "pb-2 font-medium text-gray-400 hover:text-gray-900 border-b-2 border-transparent transition-colors";
         }
     }
 
