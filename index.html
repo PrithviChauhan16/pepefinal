@@ -39,43 +39,79 @@
         }
 
         /* ========================================================
-           ⬇️ CHANGE YOUR SPINNING WHEEL BACKGROUND IMAGE HERE ⬇️ 
+           ⬇️ ADD YOUR BACKGROUND IMAGES HERE ⬇️ 
            ======================================================== */
-        #spinning-showcase {
-            background-image: url('spinning1.png');
+           
+        /* Background for Spinning Wheel & Contact Us */
+        .bg-section-1 {
+            background-image: url('spinning1.png'); /* Paste your image URL here */
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
+            background-attachment: scroll; 
+        }
+
+        /* Background for About Us */
+        .bg-section-2 {
+            background-image: url('spinning2.png'); /* Paste your image URL here */
+            background-size: cover;
+            background-position: center;
+            background-attachment: scroll; 
+        }
+
+        /* Apply fixed parallax effect only on tablets & desktops */
+        @media (min-width: 768px) {
+            .bg-section-1, .bg-section-2 {
+                background-attachment: fixed;
+            }
         }
     </style>
 </head>
 <body class="text-brand-900 antialiased selection:bg-pink-200 bg-gray-50">
 
-<!-- FLOATING PILL NAVBAR -->
-<nav class="sticky top-4 z-50 w-[95%] max-w-6xl mx-auto bg-white/60 backdrop-blur-md border border-white/50 px-6 py-4 shadow-lg rounded-full">
+<!-- FLOATING NAVBAR -->
+<nav class="sticky top-4 z-50 w-[95%] max-w-6xl mx-auto bg-white/80 backdrop-blur-md border border-white/50 px-6 py-4 shadow-lg rounded-3xl transition-all duration-300">
     <div class="flex items-center justify-between">
+        
         <a href="#home" class="flex items-center ml-2">
-            <!-- LOGO PLACEHOLDER -->
-            <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold text-gray-500">LOGO</div>
+            <!-- ⬇️ YOUR STATIC LOGO HERE ⬇️ -->
+            <img src="pepe-black1.png" alt="PEPE KUN Logo" class="h-10 md:h-12 w-auto object-contain">
         </a>
+        
+        <!-- Desktop Links -->
         <div class="hidden md:flex gap-8 text-sm font-medium items-center absolute left-1/2 -translate-x-1/2">
             <a href="#home" class="hover:text-pink-500 transition-colors">Home</a>
             <a href="#about" class="hover:text-pink-500 transition-colors">About Us</a>
             <a href="#contact" class="hover:text-pink-500 transition-colors">Contact</a>
         </div>
+        
+        <!-- Desktop Actions -->
         <div class="hidden md:flex gap-4 text-sm font-medium items-center mr-2">
             <button onclick="window.location.href='cart.html'" class="hover:text-pink-500 transition-colors flex items-center gap-1">
                 Cart
             </button>
             <a href="login.html" id="auth-login-btn" class="bg-brand-900 text-white px-6 py-2 rounded-full hover:bg-pink-500 transition-colors shadow-md text-center min-w-[100px]">Log In</a>
         </div>
+
+        <!-- Mobile Hamburger Button -->
+        <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-gray-600 hover:text-pink-500 focus:outline-none transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+    </div>
+
+    <!-- Mobile Dropdown Menu -->
+    <div id="mobile-menu" class="hidden flex-col gap-4 pt-6 pb-4 border-t border-gray-200 mt-4 text-center text-base font-medium md:hidden animate-[fadeIn_0.2s_ease-in]">
+        <a href="#home" onclick="toggleMobileMenu()" class="hover:text-pink-500 transition-colors">Home</a>
+        <a href="#about" onclick="toggleMobileMenu()" class="hover:text-pink-500 transition-colors">About Us</a>
+        <a href="#contact" onclick="toggleMobileMenu()" class="hover:text-pink-500 transition-colors">Contact</a>
+        <a href="cart.html" class="hover:text-pink-500 transition-colors py-2">Cart</a>
+        <a href="login.html" id="mobile-auth-btn" class="bg-brand-900 text-white px-6 py-3 rounded-full mx-auto inline-block w-[80%] max-w-[200px] mt-2 shadow-sm">Log In</a>
     </div>
 </nav>      
 
-<!-- BANNER -->
-<header id="home" class="relative max-w-[95%] md:max-w-[90%] mx-auto mt-6 md:mt-8 rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-sm border border-gray-200 bg-white">
-    <!-- Replace with your own banner image -->
-    <img src="banner.png" class="w-full h-auto max-h-[60vh] object-cover block" alt="Pepe Kun Banner">
+<!-- BANNER (Auto-sliding images, un-cropped) -->
+<header id="home" class="relative w-full max-w-7xl mx-auto mt-6 md:mt-8 rounded-[2rem] md:rounded-[3rem] overflow-hidden bg-transparent flex justify-center">
+    <!-- Banner Image Slider -->
+    <img id="banner.png" src="https://images.unsplash.com/photo-1557682250-33bd709cbe85?q=80&w=2000" class="w-full h-auto object-contain transition-opacity duration-500" alt="Pepe Kun Banner">
 </header>
 
 <!-- CATEGORIES SECTION -->
@@ -131,44 +167,46 @@
 </section>
 
 <!-- SPINNING SHOWCASE SECTION -->
-<section id="spinning-showcase" class="py-24 relative overflow-hidden flex justify-center items-center px-4 shadow-inner my-12">
-    <div class="absolute inset-0 bg-white/60 backdrop-blur-sm z-0"></div>
+<!-- Removed bounded card to match screenshot (spans full width over bg-section-1) -->
+<section class="bg-section-1 relative overflow-hidden py-24 my-12 flex flex-col justify-center items-center w-full">
+    <!-- Very subtle overlay to make tracks visible without hiding the background image -->
+    <div class="absolute inset-0 bg-white/40 z-0 pointer-events-none"></div>
 
-    <div class="relative z-10 w-full max-w-[320px] md:max-w-md aspect-square flex items-center justify-center animate-float">
+    <div class="relative z-10 w-full max-w-[300px] md:max-w-[400px] aspect-square flex items-center justify-center animate-float mt-8">
         <!-- Spinning tracks -->
-        <div class="absolute inset-0 rounded-full border border-dashed border-gray-800/20 pointer-events-none animate-[spin_40s_linear_infinite]"></div>
-        <div class="absolute inset-8 rounded-full border border-gray-800/10 pointer-events-none animate-[spin_25s_linear_infinite_reverse]"></div>
+        <div class="absolute inset-0 rounded-full border border-dashed border-gray-400 pointer-events-none animate-[spin_40s_linear_infinite]"></div>
+        <div class="absolute inset-8 rounded-full border border-gray-300 pointer-events-none animate-[spin_25s_linear_infinite_reverse]"></div>
 
-        <!-- 6 Perfectly Spaced Media Items (Hexagonal Layout) -->
+        <!-- 6 Perfectly Spaced Media Items: 4 Photos, 2 Videos (Hexagonal Layout) -->
         
         <!-- Image 1 (Top / 12 o'clock) -->
-        <img onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=800')" src="https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=150" class="absolute left-[50%] top-[0%] -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border border-gray-800 object-cover shadow-sm cursor-pointer hover:scale-110 hover:border-pink-400 transition-all duration-300 z-20" alt="Thumb">
+        <img onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=800')" src="https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=150" class="absolute left-[50%] top-[0%] -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border-2 border-white object-cover shadow-lg cursor-pointer hover:scale-110 hover:border-pink-400 transition-all duration-300 z-20" alt="Thumb">
         
         <!-- Image 2 (Top Right / 2 o'clock) -->
-        <img onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=800')" src="https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=150" class="absolute left-[93.3%] top-[25%] -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border border-gray-800 object-cover shadow-sm cursor-pointer hover:scale-110 hover:border-pink-400 transition-all duration-300 z-20" alt="Thumb">
+        <img onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=800')" src="https://images.unsplash.com/photo-1589487391730-58f20eb2c308?q=80&w=150" class="absolute left-[93.3%] top-[25%] -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border-2 border-white object-cover shadow-lg cursor-pointer hover:scale-110 hover:border-pink-400 transition-all duration-300 z-20" alt="Thumb">
         
         <!-- Video 1 (Bottom Right / 4 o'clock) -->
-        <div onclick="updateCenterMedia('video', 'your-video-1.mp4')" class="absolute left-[93.3%] top-[75%] -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border border-gray-800 overflow-hidden shadow-sm cursor-pointer hover:scale-110 hover:border-pink-400 transition-all duration-300 bg-gray-100 flex items-center justify-center z-20 group">
+        <div onclick="updateCenterMedia('video', 'your-video-1.mp4')" class="absolute left-[93.3%] top-[75%] -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border-2 border-white overflow-hidden shadow-lg cursor-pointer hover:scale-110 hover:border-pink-400 transition-all duration-300 bg-gray-100 flex items-center justify-center z-20 group">
             <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors z-10"></div>
             <svg class="w-6 h-6 text-white absolute z-20 drop-shadow-md" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             <img src="https://images.unsplash.com/photo-1558285549-2a05f32b1ba6?q=80&w=150" class="w-full h-full object-cover" alt="Video Thumb">
         </div>
         
         <!-- Image 3 (Bottom / 6 o'clock) -->
-        <img onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=800')" src="https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=150" class="absolute left-[50%] top-[100%] -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border border-gray-800 object-cover shadow-sm cursor-pointer hover:scale-110 hover:border-pink-400 transition-all duration-300 z-20" alt="Thumb">
+        <img onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=800')" src="https://images.unsplash.com/photo-1596522354195-e84ae3c98731?q=80&w=150" class="absolute left-[50%] top-[100%] -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border-2 border-white object-cover shadow-lg cursor-pointer hover:scale-110 hover:border-pink-400 transition-all duration-300 z-20" alt="Thumb">
         
         <!-- Video 2 (Bottom Left / 8 o'clock) -->
-        <div onclick="updateCenterMedia('video', 'your-video-2.mp4')" class="absolute left-[6.7%] top-[75%] -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border border-gray-800 overflow-hidden shadow-sm cursor-pointer hover:scale-110 hover:border-pink-400 transition-all duration-300 bg-gray-100 flex items-center justify-center z-20 group">
+        <div onclick="updateCenterMedia('video', 'your-video-2.mp4')" class="absolute left-[6.7%] top-[75%] -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border-2 border-white overflow-hidden shadow-lg cursor-pointer hover:scale-110 hover:border-pink-400 transition-all duration-300 bg-gray-100 flex items-center justify-center z-20 group">
             <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors z-10"></div>
             <svg class="w-6 h-6 text-white absolute z-20 drop-shadow-md" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=150" class="w-full h-full object-cover" alt="Video Thumb">
         </div>
 
         <!-- Image 4 (Top Left / 10 o'clock) -->
-        <img onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?q=80&w=800')" src="https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?q=80&w=150" class="absolute left-[6.7%] top-[25%] -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border border-gray-800 object-cover shadow-sm cursor-pointer hover:scale-110 hover:border-pink-400 transition-all duration-300 z-20" alt="Thumb">
+        <img onclick="updateCenterMedia('image', 'https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?q=80&w=800')" src="https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?q=80&w=150" class="absolute left-[6.7%] top-[25%] -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 rounded-full border-2 border-white object-cover shadow-lg cursor-pointer hover:scale-110 hover:border-pink-400 transition-all duration-300 z-20" alt="Thumb">
 
         <!-- Center Display -->
-        <div class="relative z-10 w-[65%] h-[65%] rounded-full overflow-hidden border border-gray-800 bg-white shadow-xl flex items-center justify-center transition-transform duration-500 hover:scale-[1.02]">
+        <div class="relative z-10 w-[65%] h-[65%] rounded-full overflow-hidden border border-gray-200 bg-white shadow-xl flex items-center justify-center transition-transform duration-500 hover:scale-[1.02]">
             <img id="center-img" src="https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=800" class="w-full h-full object-cover" alt="Center Showcase">
             <div id="center-video-container" class="w-full h-full relative hidden">
                 <video id="center-video" autoplay loop muted playsinline class="w-full h-full object-cover">
@@ -180,36 +218,44 @@
 </section>
 
 <!-- ABOUT US SECTION -->
-<section id="about" class="bg-white py-16 md:py-24 border-y border-gray-200 my-8 mx-4 sm:mx-6 rounded-[3rem]">
-    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+<section id="about" class="bg-section-2 relative overflow-hidden py-16 md:py-24 border border-gray-200 shadow-sm my-8">
+    <!-- Frosted overlay for readability -->
+    <div class="absolute inset-0 bg-white/70 backdrop-blur-md z-0 pointer-events-none"></div>
+    
+    <div class="relative z-10 max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
         <div class="text-center md:text-left">
-            <h2 class="text-3xl md:text-4xl font-semibold mb-6">More Than Just Toys.</h2>
-            <p class="text-gray-600 mb-6 leading-relaxed">At Pepe Kun, every plushie is designed with a personality. From our sleepy cats to our signature bamboo pandas, we focus on premium materials, unique branding, and unparalleled softness.</p>
+            <h2 class="text-3xl md:text-4xl font-semibold mb-6 text-gray-900">More Than Just Toys.</h2>
+            <p class="text-gray-700 mb-6 leading-relaxed font-medium text-lg">At Pepe Kun, every plushie is designed with a personality. From our sleepy cats to our signature bamboo pandas, we focus on premium materials, unique branding, and unparalleled softness.</p>
         </div>
-        <div class="h-[300px] md:h-[450px] rounded-[2rem] overflow-hidden border border-gray-100 shadow-sm">
+        <div class="h-[300px] md:h-[450px] rounded-[2rem] overflow-hidden border border-white/50 shadow-lg">
             <img src="https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=800" class="w-full h-full object-cover" alt="About Pepe Kun">
         </div>
     </div>
 </section>
 
 <!-- CONTACT SECTION -->
-<section id="contact" class="py-12 md:py-24 max-w-3xl mx-auto px-4 sm:px-6 text-center">
-    <div class="bg-white p-8 md:p-12 rounded-[3rem] border border-gray-200 shadow-sm">
-        <h2 class="text-2xl md:text-3xl font-medium mb-4">Say Hello</h2>
-        <p class="text-gray-500 mb-8 text-sm md:text-base">Have questions about an order or our materials? Reach out below.</p>
-        <form id="contact-form" class="space-y-6 text-left">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <input name="name" type="text" placeholder="Name" class="w-full px-5 py-4 rounded-2xl border border-gray-200 focus:outline-none focus:border-pink-300 bg-gray-50 text-sm" required>
-                <input name="email" type="email" placeholder="Email" class="w-full px-5 py-4 rounded-2xl border border-gray-200 focus:outline-none focus:border-pink-300 bg-gray-50 text-sm" required>
-            </div>
-            <textarea name="message" rows="4" placeholder="Message" class="w-full px-5 py-4 rounded-2xl border border-gray-200 focus:outline-none focus:border-pink-300 bg-gray-50 text-sm" required></textarea>
-            <button type="submit" class="w-full px-8 py-4 bg-gray-900 text-white rounded-full font-medium hover:bg-pink-500 transition-colors shadow-md">Send Message</button>
-        </form>
+<section id="contact" class="bg-section-1 relative py-16 md:py-24 w-full">
+    <!-- Subtle overlay -->
+    <div class="absolute inset-0 bg-white/40 z-0 pointer-events-none"></div>
+    
+    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
+        <div class="bg-white/95 backdrop-blur p-8 md:p-12 rounded-[3rem] border border-gray-200 shadow-xl">
+            <h2 class="text-2xl md:text-3xl font-medium mb-4">Say Hello</h2>
+            <p class="text-gray-500 mb-8 text-sm md:text-base">Have questions about an order or our materials? Reach out below.</p>
+            <form id="contact-form" class="space-y-6 text-left">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <input name="name" type="text" placeholder="Name" class="w-full px-5 py-4 rounded-2xl border border-gray-200 focus:outline-none focus:border-pink-300 bg-white text-sm" required>
+                    <input name="email" type="email" placeholder="Email" class="w-full px-5 py-4 rounded-2xl border border-gray-200 focus:outline-none focus:border-pink-300 bg-white text-sm" required>
+                </div>
+                <textarea name="message" rows="4" placeholder="Message" class="w-full px-5 py-4 rounded-2xl border border-gray-200 focus:outline-none focus:border-pink-300 bg-white text-sm" required></textarea>
+                <button type="submit" class="w-full px-8 py-4 bg-gray-900 text-white rounded-full font-medium hover:bg-pink-500 transition-colors shadow-md">Send Message</button>
+            </form>
+        </div>
     </div>
 </section>
 
 <!-- Footer -->
-<footer class="text-center py-8 text-gray-400 text-sm font-medium mt-12 mb-4">
+<footer class="text-center py-8 text-gray-400 text-sm font-medium">
     &copy; 2026 PEPE KUN. All rights reserved.
 </footer>
 
@@ -260,21 +306,66 @@
 </div>
 
 <script>
+    // --- MOBILE MENU LOGIC ---
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobile-menu');
+        menu.classList.toggle('hidden');
+        menu.classList.toggle('flex');
+    }
+
     // --- AUTHENTICATION UI LOGIC ---
     document.addEventListener('DOMContentLoaded', () => {
         const userRole = localStorage.getItem('pepe_user_role'); 
-        const loginBtn = document.getElementById('auth-login-btn');
         
-        if (userRole === 'admin') {
-            loginBtn.textContent = 'Workspace';
-            loginBtn.href = 'admin.html';
-            loginBtn.classList.replace('bg-brand-900', 'bg-pink-500');
-        } else if (userRole === 'user') {
-            loginBtn.textContent = 'My Account';
-            loginBtn.href = '#'; 
-            loginBtn.classList.replace('bg-brand-900', 'bg-pink-500');
+        const loginBtn = document.getElementById('auth-login-btn');
+        if (loginBtn) {
+            if (userRole === 'admin') {
+                loginBtn.textContent = 'Workspace';
+                loginBtn.href = 'admin.html';
+                loginBtn.classList.replace('bg-brand-900', 'bg-pink-500');
+            } else if (userRole === 'user') {
+                loginBtn.textContent = 'My Account';
+                loginBtn.href = '#'; 
+                loginBtn.classList.replace('bg-brand-900', 'bg-pink-500');
+            }
+        }
+        
+        const mobLoginBtn = document.getElementById('mobile-auth-btn');
+        if (mobLoginBtn) {
+            if (userRole === 'admin') {
+                mobLoginBtn.textContent = 'Workspace';
+                mobLoginBtn.href = 'admin.html';
+                mobLoginBtn.classList.replace('bg-brand-900', 'bg-pink-500');
+            } else if (userRole === 'user') {
+                mobLoginBtn.textContent = 'My Account';
+                mobLoginBtn.href = '#'; 
+                mobLoginBtn.classList.replace('bg-brand-900', 'bg-pink-500');
+            }
         }
     });
+
+    // --- AUTO IMAGE SLIDER (BANNER ONLY) ---
+    // ⬇️ ADD YOUR BANNER IMAGES HERE ⬇️
+    const bannerPhotos = [
+        'banner.png',
+        'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2000',
+        'https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?q=80&w=2000'
+    ];
+
+    let bannerIndex = 0;
+
+    setInterval(() => {
+        const bannerImg = document.getElementById('banner-slider');
+        if(bannerImg) {
+            bannerImg.classList.add('opacity-0');
+            setTimeout(() => {
+                bannerIndex = (bannerIndex + 1) % bannerPhotos.length;
+                bannerImg.src = bannerPhotos[bannerIndex];
+                bannerImg.classList.remove('opacity-0');
+            }, 500);
+        }
+    }, 4000);
+
 
     // --- MOCK PRODUCT DATA ---
     const productsData = [
