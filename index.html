@@ -38,7 +38,7 @@
             scrollbar-width: none;
         }
 
-        /* ========================================================
+       /* ========================================================
            ⬇️ ADD YOUR BACKGROUND IMAGES HERE ⬇️ 
            ======================================================== */
            
@@ -47,7 +47,8 @@
             background-image: url('spinning2.png'); 
             background-size: cover;
             background-position: center;
-            background-attachment: scroll; 
+            background-attachment: fixed; /* <-- Changed to fixed for mobile */
+            -webkit-background-size: cover; /* Added for better iPhone support */
         }
 
         /* Background for About Us */
@@ -55,14 +56,9 @@
             background-image: url('spinning1.png'); 
             background-size: cover;
             background-position: center;
-            background-attachment: scroll; 
+            background-attachment: fixed; /* <-- Changed to fixed for mobile */
+            -webkit-background-size: cover; /* Added for better iPhone support */
         }
-
-        /* Apply fixed parallax effect only on tablets & desktops */
-        @media (min-width: 768px) {
-            .bg-section-1, .bg-section-2 {
-                background-attachment: fixed;
-            }
         }
     </style>
 </head>
