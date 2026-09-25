@@ -81,10 +81,10 @@
         
         <!-- Right side actions -->
         <div class="hidden md:flex gap-4 text-sm font-medium items-center mr-2">
-            <button onclick="showToast('Cart functionality coming soon!')" class="hover:text-pink-500 transition-colors flex items-center gap-1">
+            <button onclick="window.location.href='cart.html'" class="hover:text-pink-500 transition-colors flex items-center gap-1">
                 Cart (<span id="cart-count">0</span>)
             </button>
-            <button onclick="showToast('Login portal coming soon!')" class="bg-brand-900 text-white px-6 py-2 rounded-full hover:bg-pink-500 transition-colors shadow-md">Log In</button>
+            <a href="login.html" id="desktop-auth-btn" class="bg-brand-900 text-white px-6 py-2 rounded-full hover:bg-pink-500 transition-colors shadow-md">Log In</a>
         </div>
         
         <!-- Mobile menu button -->
@@ -97,13 +97,13 @@
         <a href="#home" onclick="toggleMobileMenu()" class="hover:text-pink-500">Home</a>
         <a href="#categories" onclick="toggleMobileMenu()" class="hover:text-pink-500">Collections</a>
         <a href="#about" onclick="toggleMobileMenu()" class="hover:text-pink-500">About Us</a>
-        <button onclick="showToast('Cart coming soon!')" class="hover:text-pink-500 w-full text-center py-2">Cart (<span id="cart-count-mobile">0</span>)</button>
-        <button onclick="showToast('Login portal coming soon!')" class="bg-brand-900 text-white px-5 py-2 rounded-full mx-auto inline-block">Log In</button>
+        <button onclick="window.location.href='cart.html'" class="hover:text-pink-500 w-full text-center py-2">Cart (<span id="cart-count-mobile">0</span>)</button>
+        <a href="login.html" id="mobile-auth-btn" class="bg-brand-900 text-white px-5 py-2 rounded-full mx-auto inline-block">Log In</a>
     </div>
 </nav>      
 
 <header id="home" class="relative max-w-[95%] md:max-w-[90%] mx-auto mt-6 md:mt-8 rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-sm border border-gray-200">
-    <img src="ChatGPT Image Sep 13, 2026, 02_19_44 AM.png" class="w-full h-auto block" alt="PEPE KUN Banner" onerror="this.src='https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=1200'; this.onerror=null;">
+    <img src="banner.png" class="w-full h-auto block" alt="PEPE KUN Banner" onerror="this.src='https://images.unsplash.com/photo-1525253013412-55c1a69a5738?q=80&w=1200'; this.onerror=null;">
 </header>
 
 <section id="categories" class="max-w-6xl mx-auto px-4 sm:px-6 py-16 md:py-24 transition-all duration-500">
@@ -320,7 +320,7 @@
 </div>
 
 <script>
-    // Product Database: Each product now has exactly 4 images for the gallery
+    // Product Database: 4 images per product for the modal gallery
     const sampleProducts = {
         "Signature Collection": [
             { 
@@ -382,8 +382,50 @@
         });
     });
 
-    let cartCount = 0;
+    // Handle cart display
+    function getCartCount() {
+        try {
+            const storedCart = localStorage.getItem('pepe_cart');
+            const cartItems = storedCart ? JSON.parse(storedCart) : [];
+            let count = 0;
+            cartItems.forEach(item => count += item.quantity || 1);
+            return count;
+        } catch(e) {
+            return 0;
+        }
+    }
 
+    function updateCartCountUI() {
+        const count = getCartCount();
+        document.getElementById('cart-count').innerText = count;
+        document.getElementById('cart-count-mobile').innerText = count;
+    }
+
+    // AUTH UI UPDATER LOGIC
+    function updateAuthUI() {
+        const role = localStorage.getItem('pepe_user_role');
+        const desktopBtn = document.getElementById('desktop-auth-btn');
+        const mobileBtn = document.getElementById('mobile-auth-btn');
+
+        if (role === 'admin') {
+            desktopBtn.innerText = 'Workspace';
+            desktopBtn.href = 'admin.html';
+            mobileBtn.innerText = 'Workspace';
+            mobileBtn.href = 'admin.html';
+        } else if (role === 'user') {
+            desktopBtn.innerText = 'My Account';
+            desktopBtn.href = 'account.html';
+            mobileBtn.innerText = 'My Account';
+            mobileBtn.href = 'account.html';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        updateCartCountUI();
+        updateAuthUI(); // Run auth check on load
+    });
+
+    // Helper functions
     function showToast(message) {
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
@@ -399,6 +441,7 @@
         menu.classList.toggle('flex');
     }
 
+    // UI View Transitions
     function showCategory(categoryName) {
         const categoriesSec = document.getElementById('categories');
         const productSec = document.getElementById('product-display');
@@ -433,7 +476,6 @@
             productSec.classList.remove('hidden');
             setTimeout(() => {
                 productSec.style.opacity = '1';
-                // Add an offset scroll so banner isn't fully hidden
                 const y = productSec.getBoundingClientRect().top + window.scrollY - 100;
                 window.scrollTo({top: y, behavior: 'smooth'});
             }, 50);
@@ -455,9 +497,14 @@
         }, 300);
     }
 
+    // Modal Logic
+    let currentProductId = null;
+
     function openModal(productId) {
         const item = productLookup[productId];
         if(!item) return; 
+        
+        currentProductId = productId;
         
         // Setup initial main image and text details
         document.getElementById('modal-main-img').src = item.images[0];
@@ -489,7 +536,6 @@
 
     function setModalMainImage(src) {
         const mainImg = document.getElementById('modal-main-img');
-        // Quick fade effect
         mainImg.style.opacity = 0.5;
         setTimeout(() => {
             mainImg.src = src;
@@ -503,6 +549,7 @@
         setTimeout(() => {
             modal.classList.remove('flex');
             modal.classList.add('hidden');
+            currentProductId = null;
         }, 300);
     }
 
@@ -531,6 +578,7 @@
         }
     }
 
+    // Media Showcase Logic
     function updateCenterMedia(type, src) {
         const imgEl = document.getElementById('center-img');
         const vidContainer = document.getElementById('center-video-container');
@@ -560,19 +608,47 @@
         }
     }
 
+    // Cart Logic
     function addToCart() {
-        cartCount++;
-        document.getElementById('cart-count').innerText = cartCount;
-        document.getElementById('cart-count-mobile').innerText = cartCount;
+        if (!currentProductId) return;
+        const item = productLookup[currentProductId];
+        if(!item) return;
+
+        let cartItems = [];
+        try {
+            const storedCart = localStorage.getItem('pepe_cart');
+            if (storedCart) cartItems = JSON.parse(storedCart);
+        } catch(e) {}
+
+        const existingItemIndex = cartItems.findIndex(i => i.id === item.id);
+        if (existingItemIndex > -1) {
+            cartItems[existingItemIndex].quantity = (cartItems[existingItemIndex].quantity || 1) + 1;
+        } else {
+            // copy item details to cart
+            const cartItem = {
+                id: item.id,
+                name: item.name,
+                category: item.category,
+                price: item.price,
+                images: item.images, // to use in cart preview
+                quantity: 1
+            };
+            cartItems.push(cartItem);
+        }
+
+        localStorage.setItem('pepe_cart', JSON.stringify(cartItems));
+        updateCartCountUI();
         showToast('Successfully added to cart!');
     }
     
     function buyNow() {
         addToCart();
         closeModal();
-        showToast('Redirecting to checkout...');
+        showToast('Redirecting to cart...');
+        setTimeout(() => window.location.href = 'cart.html', 800);
     }
 
+    // Contact Logic
     function handleContact(e) {
         e.preventDefault();
         showToast('Thank you for reaching out! We have received your message.');
